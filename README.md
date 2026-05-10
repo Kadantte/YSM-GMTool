@@ -54,6 +54,21 @@ powershell -ExecutionPolicy Bypass -File .\scripts\publish-release.ps1
 
 ---
 
+## 📦 Offline Snapshot Mode
+
+The tool can run fully offline against a pre-baked snapshot file, with no live database connection.
+
+### Producing a snapshot (admin)
+1. Configure the tool against your live DB as usual.
+2. Open **Settings → General**, click **Export Database to Snapshot…**
+3. Save `gmtool-snapshot.db` next to `GM Tool.exe` (or anywhere; copy it there before shipping).
+4. When prompted, also pack icons — produces `gmtool-icons.db` next to the snapshot.
+
+### Using a snapshot (recipient)
+Place `gmtool-snapshot.db` (and optionally `gmtool-icons.db`) next to `GM Tool.exe`. Launch — the app boots in offline mode automatically (window title shows "Offline Snapshot"). PlayerChecker, Inventory, and Warehouse features are hidden because they require a live DB; all browsing and Lua command generation works as in live mode.
+
+---
+
 ## 🌟 Functionality & Features
 
 ### Playerchecker
