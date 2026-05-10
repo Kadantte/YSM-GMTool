@@ -6,11 +6,10 @@ using System.Windows.Forms;
 partial class NpcsActionsControl
 {
     private System.ComponentModel.IContainer components = null;
-    private TableLayoutPanel _tlpRoot;
+
     private GroupBox gbNpcActions;
     private TableLayoutPanel tlpRoot;
     private GroupBox gbSelectedNpc;
-    private GroupBox gbCommands;
     private TableLayoutPanel tlpSelected;
     private Label lblNpcId;
     private NumericUpDown nudNpcId;
@@ -25,6 +24,7 @@ partial class NpcsActionsControl
     private Label lblLayer;
     private NumericUpDown nudLayer;
     private CheckBox chkHideNpc;
+    private GroupBox gbCommands;
     private TableLayoutPanel tlpCommands;
     private Button btnAddNpcToWorld;
     private Button btnShowNpc;
@@ -32,17 +32,12 @@ partial class NpcsActionsControl
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing && (components != null))
-        {
-            components.Dispose();
-        }
-
+        if (disposing && components != null) components.Dispose();
         base.Dispose(disposing);
     }
 
     private void InitializeComponent()
     {
-        _tlpRoot = new TableLayoutPanel();
         gbNpcActions = new GroupBox();
         tlpRoot = new TableLayoutPanel();
         gbSelectedNpc = new GroupBox();
@@ -66,7 +61,6 @@ partial class NpcsActionsControl
         btnShowNpc = new Button();
         btnWarpToNpc = new Button();
 
-        _tlpRoot.SuspendLayout();
         gbNpcActions.SuspendLayout();
         tlpRoot.SuspendLayout();
         gbSelectedNpc.SuspendLayout();
@@ -79,141 +73,138 @@ partial class NpcsActionsControl
         tlpCommands.SuspendLayout();
         SuspendLayout();
 
-        // _tlpRoot
-        _tlpRoot.Dock = DockStyle.Fill;
-        _tlpRoot.ColumnCount = 1;
-        _tlpRoot.RowCount = 1;
-        _tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        _tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        _tlpRoot.Controls.Add(gbNpcActions, 0, 0);
-
-        // gbNpcActions
-        gbNpcActions.Text = "NPC Commands";
-        gbNpcActions.AutoSize = false;
+        // gbNpcActions (outer wrapper)
+        gbNpcActions.Text = "NPCs";
+        gbNpcActions.AutoSize = true;
+        gbNpcActions.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        gbNpcActions.Dock = DockStyle.Top;
         gbNpcActions.Padding = new Padding(8, 18, 8, 8);
-        gbNpcActions.Dock = DockStyle.Fill;
+        gbNpcActions.Margin = new Padding(0);
         gbNpcActions.Controls.Add(tlpRoot);
 
         // tlpRoot
-        tlpRoot.Dock = DockStyle.Fill;
+        tlpRoot.AutoSize = true;
+        tlpRoot.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        tlpRoot.Dock = DockStyle.Top;
         tlpRoot.ColumnCount = 1;
-        tlpRoot.RowCount = 2;
         tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        tlpRoot.RowCount = 2;
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         tlpRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         tlpRoot.Controls.Add(gbSelectedNpc, 0, 0);
         tlpRoot.Controls.Add(gbCommands, 0, 1);
 
         // gbSelectedNpc
         gbSelectedNpc.Text = "Selected NPC";
-        gbSelectedNpc.AutoSize = false;
+        gbSelectedNpc.AutoSize = true;
+        gbSelectedNpc.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        gbSelectedNpc.Dock = DockStyle.Top;
         gbSelectedNpc.Padding = new Padding(8, 18, 8, 8);
-        gbSelectedNpc.Dock = DockStyle.Fill;
+        gbSelectedNpc.Margin = new Padding(3, 3, 3, 6);
         gbSelectedNpc.Controls.Add(tlpSelected);
 
         // tlpSelected
-        tlpSelected.Dock = DockStyle.Fill;
-        tlpSelected.ColumnCount = 2;
-        tlpSelected.RowCount = 7;
-        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130F));
-        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        for (int i = 0; i < 7; i++)
+        tlpSelected.AutoSize = true;
+        tlpSelected.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        tlpSelected.Dock = DockStyle.Top;
+        tlpSelected.ColumnCount = 4;
+        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110F));
+        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
+        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tlpSelected.RowCount = 5;
+        for (int i = 0; i < 5; i++)
         {
             tlpSelected.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
         }
+
         tlpSelected.Controls.Add(lblNpcId, 0, 0);
         tlpSelected.Controls.Add(nudNpcId, 1, 0);
         tlpSelected.Controls.Add(lblNpcName, 0, 1);
         tlpSelected.Controls.Add(txtNpcName, 1, 1);
+        tlpSelected.SetColumnSpan(txtNpcName, 3);
         tlpSelected.Controls.Add(lblContactScript, 0, 2);
         tlpSelected.Controls.Add(txtContactScript, 1, 2);
+        tlpSelected.SetColumnSpan(txtContactScript, 3);
         tlpSelected.Controls.Add(lblX, 0, 3);
         tlpSelected.Controls.Add(nudX, 1, 3);
-        tlpSelected.Controls.Add(lblY, 0, 4);
-        tlpSelected.Controls.Add(nudY, 1, 4);
-        tlpSelected.Controls.Add(lblLayer, 0, 5);
-        tlpSelected.Controls.Add(nudLayer, 1, 5);
-        tlpSelected.Controls.Add(chkHideNpc, 1, 6);
+        tlpSelected.Controls.Add(lblY, 2, 3);
+        tlpSelected.Controls.Add(nudY, 3, 3);
+        tlpSelected.Controls.Add(lblLayer, 0, 4);
+        tlpSelected.Controls.Add(nudLayer, 1, 4);
+        tlpSelected.Controls.Add(chkHideNpc, 2, 4);
+        tlpSelected.SetColumnSpan(chkHideNpc, 2);
 
-        ConfigureLabel(lblNpcId, "NPC ID");
-        ConfigureLabel(lblNpcName, "Name");
-        ConfigureLabel(lblContactScript, "Contact script");
-        ConfigureLabel(lblX, "X");
-        ConfigureLabel(lblY, "Y");
-        ConfigureLabel(lblLayer, "Layer");
+        ConfigureLabel(lblNpcId, "NPC ID:");
+        ConfigureLabel(lblNpcName, "Name:");
+        ConfigureLabel(lblContactScript, "Contact script:");
+        ConfigureLabel(lblX, "X:");
+        ConfigureLabel(lblY, "Y:");
+        ConfigureLabel(lblLayer, "Layer:");
 
-        // nudNpcId
-        nudNpcId.Dock = DockStyle.Fill;
-        nudNpcId.Margin = new Padding(3, 4, 3, 4);
-        nudNpcId.Maximum = new decimal(new int[] { 2000000000, 0, 0, 0 });
-
-        // txtNpcName
-        txtNpcName.Dock = DockStyle.Fill;
-        txtNpcName.Margin = new Padding(3, 4, 3, 4);
-        txtNpcName.ReadOnly = true;
-
-        // txtContactScript
-        txtContactScript.Dock = DockStyle.Fill;
-        txtContactScript.Margin = new Padding(3, 4, 3, 4);
-        txtContactScript.ReadOnly = true;
-
-        // nudX
+        ConfigureNumeric(nudNpcId, 1, 1_000_000_000, 1);
         nudX.Dock = DockStyle.Fill;
         nudX.Margin = new Padding(3, 4, 3, 4);
-        nudX.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
-        nudX.Minimum = new decimal(new int[] { 1000000, 0, 0, int.MinValue });
-
-        // nudY
+        nudX.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+        nudX.Minimum = new decimal(new int[] { 100000, 0, 0, int.MinValue });
         nudY.Dock = DockStyle.Fill;
         nudY.Margin = new Padding(3, 4, 3, 4);
-        nudY.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
-        nudY.Minimum = new decimal(new int[] { 1000000, 0, 0, int.MinValue });
-
-        // nudLayer
+        nudY.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+        nudY.Minimum = new decimal(new int[] { 100000, 0, 0, int.MinValue });
         nudLayer.Dock = DockStyle.Fill;
         nudLayer.Margin = new Padding(3, 4, 3, 4);
         nudLayer.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
         nudLayer.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
 
-        // chkHideNpc
-        chkHideNpc.AutoSize = true;
-        chkHideNpc.Anchor = AnchorStyles.Left;
-        chkHideNpc.Text = "Hide (visible = 1)";
+        txtNpcName.Dock = DockStyle.Fill;
+        txtNpcName.Margin = new Padding(3, 4, 3, 4);
+        txtNpcName.ReadOnly = true;
+        txtContactScript.Dock = DockStyle.Fill;
+        txtContactScript.Margin = new Padding(3, 4, 3, 4);
+        txtContactScript.ReadOnly = true;
+
+        chkHideNpc.AutoSize = false;
+        chkHideNpc.Dock = DockStyle.Fill;
+        chkHideNpc.Margin = new Padding(3, 0, 3, 0);
+        chkHideNpc.Text = "Hide NPC";
         chkHideNpc.UseVisualStyleBackColor = true;
 
         // gbCommands
-        gbCommands.Text = "Actions";
+        gbCommands.Text = "Commands";
         gbCommands.AutoSize = true;
         gbCommands.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        gbCommands.Padding = new Padding(8, 18, 8, 8);
         gbCommands.Dock = DockStyle.Top;
+        gbCommands.Padding = new Padding(8, 18, 8, 8);
+        gbCommands.Margin = new Padding(3, 3, 3, 6);
         gbCommands.Controls.Add(tlpCommands);
 
         // tlpCommands
         tlpCommands.AutoSize = true;
         tlpCommands.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         tlpCommands.Dock = DockStyle.Top;
-        tlpCommands.ColumnCount = 3;
-        tlpCommands.RowCount = 1;
-        tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
-        tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
-        tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.34F));
+        tlpCommands.ColumnCount = 1;
+        tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        tlpCommands.RowCount = 3;
+        tlpCommands.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
+        tlpCommands.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
         tlpCommands.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
         tlpCommands.Controls.Add(btnAddNpcToWorld, 0, 0);
-        tlpCommands.Controls.Add(btnShowNpc, 1, 0);
-        tlpCommands.Controls.Add(btnWarpToNpc, 2, 0);
+        tlpCommands.Controls.Add(btnShowNpc, 0, 1);
+        tlpCommands.Controls.Add(btnWarpToNpc, 0, 2);
 
-        ConfigureGridButton(btnAddNpcToWorld, "Add NPC to world", btnAddNpcToWorld_Click);
-        ConfigureGridButton(btnShowNpc, "Show/Hide NPC", btnShowNpc_Click);
-        ConfigureGridButton(btnWarpToNpc, "Warp to NPC", btnWarpToNpc_Click);
+        ConfigureFillButton(btnAddNpcToWorld, "Add NPC to world", btnAddNpcToWorld_Click);
+        ConfigureFillButton(btnShowNpc, "Show NPC", btnShowNpc_Click);
+        ConfigureFillButton(btnWarpToNpc, "Warp to NPC", btnWarpToNpc_Click);
 
         // NpcsActionsControl
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        Controls.Add(_tlpRoot);
-        MinimumSize = new Size(400, 360);
+        AutoSize = true;
+        AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        Padding = Padding.Empty;
+        Margin = Padding.Empty;
+        Controls.Add(gbNpcActions);
         Name = "NpcsActionsControl";
-        Size = new Size(580, 360);
 
         tlpCommands.ResumeLayout(false);
         gbCommands.ResumeLayout(false);
@@ -222,24 +213,31 @@ partial class NpcsActionsControl
         ((System.ComponentModel.ISupportInitialize)nudX).EndInit();
         ((System.ComponentModel.ISupportInitialize)nudNpcId).EndInit();
         tlpSelected.ResumeLayout(false);
-        tlpSelected.PerformLayout();
         gbSelectedNpc.ResumeLayout(false);
         tlpRoot.ResumeLayout(false);
         gbNpcActions.ResumeLayout(false);
-        _tlpRoot.ResumeLayout(false);
         ResumeLayout(false);
     }
 
     private static void ConfigureLabel(Label label, string text)
     {
         label.Text = text;
+        label.AutoSize = false;
         label.Dock = DockStyle.Fill;
         label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-        label.AutoSize = false;
         label.Margin = new Padding(3, 0, 3, 0);
     }
 
-    private static void ConfigureGridButton(Button button, string text, EventHandler handler)
+    private static void ConfigureNumeric(NumericUpDown nud, int min, int max, int value)
+    {
+        nud.Dock = DockStyle.Fill;
+        nud.Margin = new Padding(3, 4, 3, 4);
+        nud.Minimum = min;
+        nud.Maximum = max;
+        nud.Value = value;
+    }
+
+    private static void ConfigureFillButton(Button button, string text, EventHandler handler)
     {
         button.Text = text;
         button.AutoSize = false;
