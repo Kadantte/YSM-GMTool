@@ -3,6 +3,8 @@ using App.Core.Interfaces;
 using App.Core.Models;
 using App.Core.Models.Entities;
 using App.Core.Services;
+using App.Data.Infrastructure;
+using App.Data.Services;
 using App.WinForms.Controls;
 using App.WinForms.Forms;
 using App.WinForms.Layout;
@@ -26,6 +28,11 @@ public partial class MainForm : Form
     private readonly ICommandHistoryService _commandHistoryService;
     private readonly INameNormalizer _nameNormalizer;
     private readonly ILocalCacheService _localCacheService;
+    private readonly AppMode _mode;
+    private readonly string _snapshotPath;
+    private readonly IIconSource? _offlineIconSource;
+    private readonly ISnapshotExportService _exportService;
+    private readonly IIconPackService _iconPackService;
 
     private readonly PlayerCheckerActionsControl _playerCheckerActions = new();
     private readonly MonsterActionsControl _monsterActions = new();
@@ -67,7 +74,12 @@ public partial class MainForm : Form
         ILuaCommandBuilder luaCommandBuilder,
         ICommandHistoryService commandHistoryService,
         INameNormalizer nameNormalizer,
-        ILocalCacheService localCacheService)
+        ILocalCacheService localCacheService,
+        AppMode mode,
+        string snapshotPath,
+        IIconSource? offlineIconSource,
+        ISnapshotExportService exportService,
+        IIconPackService iconPackService)
     {
         _repository = repository;
         _settingsService = settingsService;
@@ -76,6 +88,11 @@ public partial class MainForm : Form
         _commandHistoryService = commandHistoryService;
         _nameNormalizer = nameNormalizer;
         _localCacheService = localCacheService;
+        _mode = mode;
+        _snapshotPath = snapshotPath;
+        _offlineIconSource = offlineIconSource;
+        _exportService = exportService;
+        _iconPackService = iconPackService;
 
         InitializeComponent();
         ApplyReadabilityPalette();
@@ -392,8 +409,10 @@ public partial class MainForm : Form
 
     private void ConfigureBrowserColumns()
     {
-        var iconsEnabled = AreEntityIconsEnabled();
-        _iconSource = iconsEnabled ? new DirectoryIconSource(_settings.EntityIconsPath?.Trim()) : null;
+        _iconSource = _mode == AppMode.OfflineSnapshot
+            ? _offlineIconSource
+            : (AreEntityIconsEnabled() ? new DirectoryIconSource(_settings.EntityIconsPath?.Trim()) : null);
+        var iconsEnabled = _iconSource is not null;
 
         browserPlayerchecker.ConfigureIconLookup((IIconSource?)null);
         browserMonster.ConfigureIconLookup((IIconSource?)null);

@@ -1,7 +1,9 @@
+using App.Core.Enums;
 using App.Core.Interfaces;
 using App.Core.Services;
 using App.Data.Infrastructure;
 using App.Data.Repositories;
+using App.Data.Services;
 using Serilog;
 
 namespace App.WinForms;
@@ -31,6 +33,15 @@ internal static class Program
             ApplyNativeDarkMode();
             RegisterUnhandledExceptionHandlers();
 
+            var snapshotPath = Path.Combine(AppContext.BaseDirectory, "gmtool-snapshot.db");
+            var iconsDbPath  = Path.Combine(AppContext.BaseDirectory, "gmtool-icons.db");
+            var mode = File.Exists(snapshotPath) ? AppMode.OfflineSnapshot : AppMode.LiveDb;
+            Log.Information("App started in {Mode} mode", mode);
+
+            IIconSource? offlineIconSource = mode == AppMode.OfflineSnapshot && File.Exists(iconsDbPath)
+                ? new SqliteIconSource(iconsDbPath)
+                : null;
+
             var queryFile = Path.Combine(AppContext.BaseDirectory, "Config", "queries.json");
             var luaFile = Path.Combine(AppContext.BaseDirectory, "Config", "lua_commands.json");
             var settingsFile = Path.Combine(appDirectory, "settings.json");
@@ -44,6 +55,8 @@ internal static class Program
             ICommandHistoryService commandHistory = new CommandHistoryService();
             IGameDataRepository repository = new GameDataRepository(queryStore, new DbConnectionFactory());
             ILocalCacheService localCache = new LocalCacheService(appDirectory);
+            ISnapshotExportService exportService = new SnapshotExportService(repository);
+            IIconPackService iconPackService = new IconPackService();
 
             Application.Run(new MainForm(
                 repository,
@@ -52,7 +65,12 @@ internal static class Program
                 commandBuilder,
                 commandHistory,
                 normalizer,
-                localCache));
+                localCache,
+                mode,
+                snapshotPath,
+                offlineIconSource,
+                exportService,
+                iconPackService));
         }
         catch (Exception ex)
         {
