@@ -57,7 +57,7 @@ internal static class Program
             IGameDataRepository repository = new GameDataRepository(queryStore, new DbConnectionFactory());
             ILocalCacheService localCache = new LocalCacheService(appDirectory);
             ISnapshotExportService exportService = new SnapshotExportService(repository);
-            IIconPackService iconPackService = new IconPackService();
+            IIconPackService iconPackService = new IconPackService(new App.WinForms.Services.SystemDrawingIconEncoder());
 
             Application.Run(new MainForm(
                 repository,

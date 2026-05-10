@@ -18,10 +18,11 @@ public class IconPackServiceTests
             File.WriteAllBytes(Path.Combine(srcDir, "a.png"), aBytes);
             File.WriteAllBytes(Path.Combine(srcDir, "b.png"), bBytes);
 
-            var service = new IconPackService();
-            var packed = await service.PackAsync(srcDir, dbPath, null, CancellationToken.None);
+            var service = new IconPackService(encoder: null);
+            var result = await service.PackAsync(srcDir, dbPath, allowList: null, progress: null, CancellationToken.None);
 
-            Assert.Equal(2, packed);
+            Assert.Equal(2, result.Packed);
+            Assert.Equal(0, result.Skipped);
 
             using var conn = new SqliteConnection($"Data Source={dbPath}");
             conn.Open();

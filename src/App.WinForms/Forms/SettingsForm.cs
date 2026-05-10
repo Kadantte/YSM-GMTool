@@ -625,14 +625,20 @@ public partial class SettingsForm : Form
         }
 
         var iconsDb = Path.Combine(Path.GetDirectoryName(dlg.FileName)!, "gmtool-icons.db");
+        var allowList = ReadIconAllowListFromSnapshot(dlg.FileName);
         using var iconProgressForm = new ExportProgressForm();
         iconProgressForm.Text = "Pack Icons";
         var iconProgress = new Progress<IconPackProgress>(p => iconProgressForm.Report("Packing icons", p.Current, p.Total));
         iconProgressForm.Show(this);
         try
         {
-            var packed = await _iconPackService.PackAsync(_workingSettings.EntityIconsPath!, iconsDb, iconProgress, CancellationToken.None);
-            MessageBox.Show(this, $"Packed {packed} icons.", "Pack Icons", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var result = await _iconPackService.PackAsync(_workingSettings.EntityIconsPath!, iconsDb, allowList, iconProgress, CancellationToken.None);
+            var sizeMb = result.TotalBytes / 1024.0 / 1024.0;
+            MessageBox.Show(this,
+                $"Packed {result.Packed:N0} icons ({sizeMb:N2} MB).{Environment.NewLine}" +
+                $"Skipped (decode failed): {result.Skipped:N0}{Environment.NewLine}" +
+                $"Filtered to icons referenced in snapshot: {(allowList is null ? "no" : $"yes ({allowList.Count:N0} unique names)")}",
+                "Pack Icons", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {
@@ -642,6 +648,41 @@ public partial class SettingsForm : Form
         finally
         {
             iconProgressForm.Close();
+        }
+    }
+
+    private static IReadOnlySet<string>? ReadIconAllowListFromSnapshot(string snapshotPath)
+    {
+        try
+        {
+            using var conn = new Microsoft.Data.Sqlite.SqliteConnection($"Data Source={snapshotPath};Mode=ReadOnly");
+            conn.Open();
+            var set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            string[] queries =
+            [
+                "SELECT DISTINCT icon_file_name FROM Items   WHERE icon_file_name IS NOT NULL AND icon_file_name <> ''",
+                "SELECT DISTINCT icon_file_name FROM Skills  WHERE icon_file_name IS NOT NULL AND icon_file_name <> ''",
+                "SELECT DISTINCT icon_file_name FROM States  WHERE icon_file_name IS NOT NULL AND icon_file_name <> ''",
+                "SELECT DISTINCT icon_file_name FROM Summons WHERE icon_file_name IS NOT NULL AND icon_file_name <> ''"
+            ];
+            foreach (var sql in queries)
+            {
+                using var cmd = conn.CreateCommand();
+                cmd.CommandText = sql;
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    var raw = reader.GetString(0).Trim();
+                    if (raw.Length == 0) continue;
+                    set.Add(Path.GetFileNameWithoutExtension(raw).ToLowerInvariant());
+                }
+            }
+            return set;
+        }
+        catch (Exception ex)
+        {
+            Serilog.Log.Warning(ex, "Could not build icon allow-list from snapshot — packing all icons.");
+            return null;
         }
     }
 
