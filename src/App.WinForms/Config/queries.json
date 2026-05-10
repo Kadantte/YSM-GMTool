@@ -28,5 +28,13 @@
         "NPC": "SELECT nrc.id AS NPC_id, CONCAT_WS(\u0027 \u0027, n1.value, n2.value) AS npc_title, nrc.x, nrc.y, nrc.contact_script FROM `{{ArcadiaName}}`.`{{NpcResource}}` nrc LEFT JOIN `{{ArcadiaName}}`.`{{StringResource}}` n1 ON nrc.text_id = n1.code LEFT JOIN `{{ArcadiaName}}`.`{{StringResource}}` n2 ON nrc.name_text_id = n2.code ORDER BY nrc.id ASC;",
         "States": "SELECT sr.state_id, n.value AS buff_name, sr.icon_file_name AS icon_file_name FROM `{{ArcadiaName}}`.`{{StateResource}}` sr LEFT JOIN `{{ArcadiaName}}`.`{{StringResource}}` n ON sr.text_id = n.code ORDER BY sr.state_id ASC;",
         "Monsters": "SELECT m.id, n.value AS name, m.level, v.value AS location FROM `{{ArcadiaName}}`.`{{MonsterResource}}` m LEFT JOIN `{{ArcadiaName}}`.`{{StringResource}}` n ON m.name_id = n.code LEFT JOIN `{{ArcadiaName}}`.`{{StringResource}}` v ON m.location_id = v.code ORDER BY m.id ASC;"
+    },
+    "Sqlite": {
+        "Items": "SELECT item_id, name_en, icon_file_name FROM Items ORDER BY name_en;",
+        "Monsters": "SELECT id, name, level, location FROM Monsters ORDER BY name;",
+        "Skills": "SELECT skill_id, skillname, icon_file_name FROM Skills ORDER BY skillname;",
+        "States": "SELECT state_id, buff_name, icon_file_name FROM States ORDER BY buff_name;",
+        "NPC": "SELECT npc_id, npc_title, x, y, contact_script FROM Npcs ORDER BY npc_title;",
+        "Summons": "SELECT summon_id, summon_name, card_name, icon_file_name FROM Summons ORDER BY summon_name;"
     }
 }
