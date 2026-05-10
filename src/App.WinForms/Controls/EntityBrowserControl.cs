@@ -1,3 +1,4 @@
+using App.Core.Interfaces;
 using App.WinForms.Models;
 using System.Reflection;
 using System.Drawing;
@@ -8,15 +9,12 @@ namespace App.WinForms.Controls;
 
 public partial class EntityBrowserControl : UserControl
 {
-    private static readonly string[] IconExtensions = [".png", ".jpg", ".jpeg", ".bmp", ".gif", ".webp"];
-
     private List<BrowserRow> _rows = [];
     private int _sortColumnIndex = -1;
     private SortOrder _sortOrder = SortOrder.None;
     private readonly Dictionary<int, int> _imageColumnSizes = [];
     private readonly Dictionary<string, Image?> _iconCache = new(StringComparer.OrdinalIgnoreCase);
-    private string? _iconsRootPath;
-    private bool _iconsEnabled;
+    private IIconSource? _iconSource;
     private CancellationTokenSource? _debounceCts;
     private bool _splitterInitialized;
     private bool _splitterUserAdjusted;
@@ -111,25 +109,15 @@ public partial class EntityBrowserControl : UserControl
         }
     }
 
-    public void ConfigureIconLookup(bool enabled, string? iconsRootPath)
+    public void ConfigureIconLookup(IIconSource? iconSource)
     {
-        var normalizedPath = string.IsNullOrWhiteSpace(iconsRootPath)
-            ? null
-            : iconsRootPath.Trim();
-
-        var configChanged = _iconsEnabled != enabled
-            || !string.Equals(_iconsRootPath, normalizedPath, StringComparison.OrdinalIgnoreCase);
-
-        _iconsEnabled = enabled;
-        _iconsRootPath = normalizedPath;
-
-        if (!configChanged)
+        var changed = !ReferenceEquals(_iconSource, iconSource);
+        _iconSource = iconSource;
+        if (changed)
         {
-            return;
+            ClearIconCache();
+            gridRecords.Invalidate();
         }
-
-        ClearIconCache();
-        gridRecords.Invalidate();
     }
 
     public void ConfigureColumns(IReadOnlyList<BrowserColumnDefinition> columns)
@@ -499,9 +487,7 @@ public partial class EntityBrowserControl : UserControl
 
     private Image? ResolveIcon(string? iconKey, int iconSize)
     {
-        if (!_iconsEnabled
-            || string.IsNullOrWhiteSpace(_iconsRootPath)
-            || string.IsNullOrWhiteSpace(iconKey))
+        if (_iconSource is null || string.IsNullOrWhiteSpace(iconKey))
         {
             return null;
         }
@@ -513,8 +499,8 @@ public partial class EntityBrowserControl : UserControl
             return cached;
         }
 
-        var path = ResolveIconFilePath(normalizedKey);
-        if (string.IsNullOrWhiteSpace(path))
+        var bytes = _iconSource.TryGetIconBytes(normalizedKey);
+        if (bytes is null)
         {
             _iconCache[cacheKey] = null;
             return null;
@@ -522,7 +508,8 @@ public partial class EntityBrowserControl : UserControl
 
         try
         {
-            using var source = Image.FromFile(path);
+            using var ms = new MemoryStream(bytes);
+            using var source = Image.FromStream(ms);
             var resized = ResizeWithLetterboxing(source, iconSize);
             _iconCache[cacheKey] = resized;
             return resized;
@@ -532,36 +519,6 @@ public partial class EntityBrowserControl : UserControl
             _iconCache[cacheKey] = null;
             return null;
         }
-    }
-
-    private string? ResolveIconFilePath(string iconKey)
-    {
-        if (string.IsNullOrWhiteSpace(_iconsRootPath) || !Directory.Exists(_iconsRootPath))
-        {
-            return null;
-        }
-
-        if (Path.IsPathRooted(iconKey))
-        {
-            return File.Exists(iconKey) ? iconKey : null;
-        }
-
-        if (Path.HasExtension(iconKey))
-        {
-            var direct = Path.Combine(_iconsRootPath, iconKey);
-            return File.Exists(direct) ? direct : null;
-        }
-
-        foreach (var extension in IconExtensions)
-        {
-            var candidate = Path.Combine(_iconsRootPath, iconKey + extension);
-            if (File.Exists(candidate))
-            {
-                return candidate;
-            }
-        }
-
-        return null;
     }
 
     private static Image ResizeWithLetterboxing(Image source, int iconSize)

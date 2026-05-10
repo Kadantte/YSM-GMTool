@@ -2,6 +2,7 @@ using App.Core.Enums;
 using App.Core.Interfaces;
 using App.Core.Models;
 using App.Core.Models.Entities;
+using App.Core.Services;
 using App.WinForms.Controls;
 using App.WinForms.Forms;
 using App.WinForms.Layout;
@@ -53,6 +54,7 @@ public partial class MainForm : Form
     private WarpLocationSettings? _selectedWarp;
 
     private AppSettings _settings = new();
+    private IIconSource? _iconSource;
     private int _inventorySortColumnIndex = -1;
     private SortOrder _inventorySortOrder = SortOrder.None;
     private readonly System.Windows.Forms.Timer _layoutDebounceTimer = new() { Interval = 140 };
@@ -391,16 +393,16 @@ public partial class MainForm : Form
     private void ConfigureBrowserColumns()
     {
         var iconsEnabled = AreEntityIconsEnabled();
-        var iconsPath = iconsEnabled ? _settings.EntityIconsPath.Trim() : null;
+        _iconSource = iconsEnabled ? new DirectoryIconSource(_settings.EntityIconsPath?.Trim()) : null;
 
-        browserPlayerchecker.ConfigureIconLookup(false, null);
-        browserMonster.ConfigureIconLookup(false, null);
-        browserNpcs.ConfigureIconLookup(false, null);
-        browserWarp.ConfigureIconLookup(false, null);
-        browserItems.ConfigureIconLookup(iconsEnabled, iconsPath);
-        browserSkills.ConfigureIconLookup(iconsEnabled, iconsPath);
-        browserBuffs.ConfigureIconLookup(iconsEnabled, iconsPath);
-        browserSummons.ConfigureIconLookup(iconsEnabled, iconsPath);
+        browserPlayerchecker.ConfigureIconLookup((IIconSource?)null);
+        browserMonster.ConfigureIconLookup((IIconSource?)null);
+        browserNpcs.ConfigureIconLookup((IIconSource?)null);
+        browserWarp.ConfigureIconLookup((IIconSource?)null);
+        browserItems.ConfigureIconLookup(_iconSource);
+        browserSkills.ConfigureIconLookup(_iconSource);
+        browserBuffs.ConfigureIconLookup(_iconSource);
+        browserSummons.ConfigureIconLookup(_iconSource);
 
         browserPlayerchecker.ConfigureColumns(
         [
