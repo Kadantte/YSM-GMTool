@@ -595,8 +595,12 @@ public partial class SettingsForm : Form
         progressForm.Show(this);
         try
         {
-            await task;
-            MessageBox.Show(this, "Snapshot exported successfully.", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var result = await task;
+            var total = result.EntityCounts.Sum(c => c.RowCount);
+            var perEntity = string.Join(Environment.NewLine, result.EntityCounts.Select(c => $"  {c.EntityName}: {c.RowCount:N0}"));
+            MessageBox.Show(this,
+                $"Snapshot exported successfully.{Environment.NewLine}{Environment.NewLine}Rows per table:{Environment.NewLine}{perEntity}{Environment.NewLine}{Environment.NewLine}Total: {total:N0}",
+                "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         catch (Exception ex)
         {
