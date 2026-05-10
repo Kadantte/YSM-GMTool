@@ -21,28 +21,44 @@ public partial class SettingsForm : Form
     private readonly IConnectionStringBuilderService _connectionStringBuilder;
     private readonly ILocalCacheService _localCacheService;
     private readonly AppSettings _workingSettings;
+    private readonly AppMode _mode;
     private bool _isLoading;
     private CheckBox? _chkEnableEntityIcons;
     private TextBox? _txtEntityIconsPath;
     private Button? _btnBrowseEntityIconsPath;
+    private Label? _lblIconsPath;
 
     public SettingsForm(
         IGameDataRepository repository,
         IConnectionStringBuilderService connectionStringBuilder,
         ILocalCacheService localCacheService,
-        AppSettings currentSettings)
+        AppSettings currentSettings,
+        AppMode mode = AppMode.LiveDb)
     {
         _repository = repository;
         _connectionStringBuilder = connectionStringBuilder;
         _localCacheService = localCacheService;
         _workingSettings = currentSettings.Clone();
+        _mode = mode;
 
         InitializeComponent();
         InitializeIconSettingsSection();
         ApplyDialogIcon();
         LoadSettingsIntoControls();
         RefreshCacheStatus();
+        ApplyOfflineModeUi();
         Shown += SettingsForm_Shown;
+    }
+
+    private void ApplyOfflineModeUi()
+    {
+        if (_mode != AppMode.OfflineSnapshot) return;
+
+        if (tabConnection is not null) tabSettings.TabPages.Remove(tabConnection);
+        if (tabTables is not null) tabSettings.TabPages.Remove(tabTables);
+        if (_lblIconsPath is not null) _lblIconsPath.Visible = false;
+        if (_txtEntityIconsPath is not null) _txtEntityIconsPath.Visible = false;
+        if (_btnBrowseEntityIconsPath is not null) _btnBrowseEntityIconsPath.Visible = false;
     }
 
     public AppSettings UpdatedSettings => _workingSettings.Clone();
@@ -447,14 +463,14 @@ public partial class SettingsForm : Form
         iconPathRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
         iconPathRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 110F));
 
-        var lblIconsPath = new Label
+        _lblIconsPath = new Label
         {
             AutoSize = true,
             Anchor = AnchorStyles.Left,
             Text = "Icons folder"
         };
 
-        iconPathRow.Controls.Add(lblIconsPath, 0, 0);
+        iconPathRow.Controls.Add(_lblIconsPath, 0, 0);
         iconPathRow.Controls.Add(_txtEntityIconsPath, 1, 0);
         iconPathRow.Controls.Add(_btnBrowseEntityIconsPath, 2, 0);
 

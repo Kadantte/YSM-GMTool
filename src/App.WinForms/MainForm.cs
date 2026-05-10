@@ -103,6 +103,21 @@ public partial class MainForm : Form
         InitializePresenters();
         WireActionEvents();
         WireLayoutPolicy();
+        ApplyOfflineModeUi();
+    }
+
+    private void ApplyOfflineModeUi()
+    {
+        if (_mode != AppMode.OfflineSnapshot) return;
+
+        Text = "GM Tool (Offline Snapshot)";
+
+        if (tabMain.TabPages.Contains(tabPlayerchecker))
+        {
+            tabMain.TabPages.Remove(tabPlayerchecker);
+        }
+
+        _playerCheckerActions.Visible = false;
     }
 
     private void WireLayoutPolicy()
@@ -523,7 +538,7 @@ public partial class MainForm : Form
     {
         _playerPresenter = new EntityBrowserPresenter<PlayerRecord>(
             browserPlayerchecker,
-            ct => _repository.GetPlayersAsync(_settings.Provider, GetConfiguredConnectionString(), GetQueryTokens(), ct),
+            ct => _repository.GetPlayersAsync(GetActiveProvider(), GetConfiguredConnectionString(), GetQueryTokens(), ct),
             x => x.PlayerId,
             x => x.PlayerName,
             x =>
@@ -537,7 +552,7 @@ public partial class MainForm : Form
             ],
             _nameNormalizer,
             sqlSearchAsync: (term, mode, ct) => _repository.GetCharactersBySearchAsync(
-                _settings.Provider,
+                GetActiveProvider(),
                 GetConfiguredConnectionString(),
                 term,
                 searchByAccount: mode == SearchMode.ById,
@@ -549,7 +564,7 @@ public partial class MainForm : Form
             browserMonster,
             ct => _settings.UseLocalCache
                 ? _localCacheService.LoadAsync<MonsterRecord>("monsters", ct)
-                : _repository.GetMonstersAsync(_settings.Provider, GetConfiguredConnectionString(), GetQueryTokens(), ct),
+                : _repository.GetMonstersAsync(GetActiveProvider(), GetConfiguredConnectionString(), GetQueryTokens(), ct),
             x => x.Id,
             x => x.Name,
             x =>
@@ -570,7 +585,7 @@ public partial class MainForm : Form
             browserItems,
             ct => _settings.UseLocalCache
                 ? _localCacheService.LoadAsync<ItemRecord>("items", ct)
-                : _repository.GetItemsAsync(_settings.Provider, GetConfiguredConnectionString(), GetQueryTokens(), ct),
+                : _repository.GetItemsAsync(GetActiveProvider(), GetConfiguredConnectionString(), GetQueryTokens(), ct),
             x => x.ItemId,
             x => x.NameEn,
             x => AreEntityIconsEnabled()
@@ -582,7 +597,7 @@ public partial class MainForm : Form
             browserSkills,
             ct => _settings.UseLocalCache
                 ? _localCacheService.LoadAsync<SkillRecord>("skills", ct)
-                : _repository.GetSkillsAsync(_settings.Provider, GetConfiguredConnectionString(), GetQueryTokens(), ct),
+                : _repository.GetSkillsAsync(GetActiveProvider(), GetConfiguredConnectionString(), GetQueryTokens(), ct),
             x => x.SkillId,
             x => x.Skillname,
             x => AreEntityIconsEnabled()
@@ -594,7 +609,7 @@ public partial class MainForm : Form
             browserBuffs,
             ct => _settings.UseLocalCache
                 ? _localCacheService.LoadAsync<StateRecord>("states", ct)
-                : _repository.GetStatesAsync(_settings.Provider, GetConfiguredConnectionString(), GetQueryTokens(), ct),
+                : _repository.GetStatesAsync(GetActiveProvider(), GetConfiguredConnectionString(), GetQueryTokens(), ct),
             x => x.StateId,
             x => x.BuffName,
             x => AreEntityIconsEnabled()
@@ -606,7 +621,7 @@ public partial class MainForm : Form
             browserNpcs,
             ct => _settings.UseLocalCache
                 ? _localCacheService.LoadAsync<NpcRecord>("npcs", ct)
-                : _repository.GetNpcsAsync(_settings.Provider, GetConfiguredConnectionString(), GetQueryTokens(), ct),
+                : _repository.GetNpcsAsync(GetActiveProvider(), GetConfiguredConnectionString(), GetQueryTokens(), ct),
             x => x.NpcId,
             x => x.NpcTitle,
             x =>
@@ -629,7 +644,7 @@ public partial class MainForm : Form
             browserSummons,
             ct => _settings.UseLocalCache
                 ? _localCacheService.LoadAsync<SummonRecord>("summons", ct)
-                : _repository.GetSummonsAsync(_settings.Provider, GetConfiguredConnectionString(), GetQueryTokens(), ct),
+                : _repository.GetSummonsAsync(GetActiveProvider(), GetConfiguredConnectionString(), GetQueryTokens(), ct),
             x => x.SummonId,
             x => x.SummonName,
             x => AreEntityIconsEnabled()
@@ -856,8 +871,14 @@ public partial class MainForm : Form
         ScheduleLayoutPass();
     }
 
+    private DatabaseProvider GetActiveProvider()
+        => _mode == AppMode.OfflineSnapshot ? DatabaseProvider.Sqlite : _settings.Provider;
+
     private string GetConfiguredConnectionString()
     {
+        if (_mode == AppMode.OfflineSnapshot)
+            return $"Data Source={_snapshotPath};Mode=ReadOnly";
+
         if (!string.IsNullOrWhiteSpace(_settings.Connection.Server)
             && !string.IsNullOrWhiteSpace(_settings.Connection.Database))
         {
@@ -876,6 +897,8 @@ public partial class MainForm : Form
 
     private IReadOnlyDictionary<string, string> GetQueryTokens()
     {
+        if (_mode == AppMode.OfflineSnapshot)
+            return new Dictionary<string, string>();
         return _settings.TableNames.ToTokenMap();
     }
 
@@ -895,7 +918,7 @@ public partial class MainForm : Form
         try
         {
             var items = await _repository.GetInventoryAsync(
-                _settings.Provider,
+                GetActiveProvider(),
                 GetConfiguredConnectionString(),
                 _selectedPlayerRecord.PlayerId,
                 GetQueryTokens());
@@ -919,7 +942,7 @@ public partial class MainForm : Form
         try
         {
             var items = await _repository.GetWarehouseAsync(
-                _settings.Provider,
+                GetActiveProvider(),
                 GetConfiguredConnectionString(),
                 _selectedPlayerRecord.Account,
                 GetQueryTokens());
@@ -959,7 +982,7 @@ public partial class MainForm : Form
         try
         {
             await _playerPresenter.LoadExternalAsync(
-                ct => _repository.GetAllCharactersAsync(_settings.Provider, GetConfiguredConnectionString(), GetQueryTokens(), ct));
+                ct => _repository.GetAllCharactersAsync(GetActiveProvider(), GetConfiguredConnectionString(), GetQueryTokens(), ct));
         }
         catch (Exception ex)
         {
@@ -977,7 +1000,7 @@ public partial class MainForm : Form
         try
         {
             await _playerPresenter.LoadExternalAsync(
-                ct => _repository.GetOnlineCharactersAsync(_settings.Provider, GetConfiguredConnectionString(), GetQueryTokens(), ct));
+                ct => _repository.GetOnlineCharactersAsync(GetActiveProvider(), GetConfiguredConnectionString(), GetQueryTokens(), ct));
         }
         catch (Exception ex)
         {
@@ -2009,7 +2032,7 @@ public partial class MainForm : Form
 
     private async void btnSettings_Click(object sender, EventArgs e)
     {
-        using var settingsForm = new SettingsForm(_repository, _connectionStringBuilder, _localCacheService, _settings);
+        using var settingsForm = new SettingsForm(_repository, _connectionStringBuilder, _localCacheService, _settings, _mode);
         settingsForm.Icon = Icon;
         if (settingsForm.ShowDialog(this) != DialogResult.OK)
         {
