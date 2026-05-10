@@ -1,8 +1,12 @@
 namespace App.WinForms.Controls;
 
+using System.Drawing;
+using System.Windows.Forms;
+
 partial class NpcsActionsControl
 {
     private System.ComponentModel.IContainer components = null;
+    private TableLayoutPanel _tlpRoot;
     private GroupBox gbNpcActions;
     private TableLayoutPanel tlpRoot;
     private GroupBox gbSelectedNpc;
@@ -38,6 +42,7 @@ partial class NpcsActionsControl
 
     private void InitializeComponent()
     {
+        _tlpRoot = new TableLayoutPanel();
         gbNpcActions = new GroupBox();
         tlpRoot = new TableLayoutPanel();
         gbSelectedNpc = new GroupBox();
@@ -60,6 +65,8 @@ partial class NpcsActionsControl
         btnAddNpcToWorld = new Button();
         btnShowNpc = new Button();
         btnWarpToNpc = new Button();
+
+        _tlpRoot.SuspendLayout();
         gbNpcActions.SuspendLayout();
         tlpRoot.SuspendLayout();
         gbSelectedNpc.SuspendLayout();
@@ -71,49 +78,49 @@ partial class NpcsActionsControl
         gbCommands.SuspendLayout();
         tlpCommands.SuspendLayout();
         SuspendLayout();
-        // 
+
+        // _tlpRoot
+        _tlpRoot.Dock = DockStyle.Fill;
+        _tlpRoot.ColumnCount = 1;
+        _tlpRoot.RowCount = 1;
+        _tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        _tlpRoot.Controls.Add(gbNpcActions, 0, 0);
+
         // gbNpcActions
-        // 
-        gbNpcActions.Controls.Add(tlpRoot);
-        gbNpcActions.Dock = DockStyle.Fill;
-        gbNpcActions.Location = new Point(0, 0);
-        gbNpcActions.Name = "gbNpcActions";
-        gbNpcActions.Size = new Size(580, 360);
-        gbNpcActions.TabIndex = 0;
-        gbNpcActions.TabStop = false;
         gbNpcActions.Text = "NPC Commands";
-        // 
+        gbNpcActions.AutoSize = false;
+        gbNpcActions.Padding = new Padding(8, 18, 8, 8);
+        gbNpcActions.Dock = DockStyle.Fill;
+        gbNpcActions.Controls.Add(tlpRoot);
+
         // tlpRoot
-        // 
+        tlpRoot.Dock = DockStyle.Fill;
         tlpRoot.ColumnCount = 1;
+        tlpRoot.RowCount = 2;
         tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 70F));
         tlpRoot.Controls.Add(gbSelectedNpc, 0, 0);
         tlpRoot.Controls.Add(gbCommands, 0, 1);
-        tlpRoot.Dock = DockStyle.Fill;
-        tlpRoot.Location = new Point(3, 23);
-        tlpRoot.Name = "tlpRoot";
-        tlpRoot.RowCount = 2;
-        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        tlpRoot.RowStyles.Add(new RowStyle());
-        tlpRoot.Size = new Size(574, 334);
-        tlpRoot.TabIndex = 0;
-        // 
+
         // gbSelectedNpc
-        // 
-        gbSelectedNpc.Controls.Add(tlpSelected);
-        gbSelectedNpc.Dock = DockStyle.Fill;
-        gbSelectedNpc.Location = new Point(3, 3);
-        gbSelectedNpc.Name = "gbSelectedNpc";
-        gbSelectedNpc.Size = new Size(568, 256);
-        gbSelectedNpc.TabIndex = 0;
-        gbSelectedNpc.TabStop = false;
         gbSelectedNpc.Text = "Selected NPC";
-        // 
+        gbSelectedNpc.AutoSize = false;
+        gbSelectedNpc.Padding = new Padding(8, 18, 8, 8);
+        gbSelectedNpc.Dock = DockStyle.Fill;
+        gbSelectedNpc.Controls.Add(tlpSelected);
+
         // tlpSelected
-        // 
+        tlpSelected.Dock = DockStyle.Fill;
         tlpSelected.ColumnCount = 2;
-        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
+        tlpSelected.RowCount = 7;
+        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130F));
         tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        for (int i = 0; i < 7; i++)
+        {
+            tlpSelected.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
+        }
         tlpSelected.Controls.Add(lblNpcId, 0, 0);
         tlpSelected.Controls.Add(nudNpcId, 1, 0);
         tlpSelected.Controls.Add(lblNpcName, 0, 1);
@@ -127,227 +134,115 @@ partial class NpcsActionsControl
         tlpSelected.Controls.Add(lblLayer, 0, 5);
         tlpSelected.Controls.Add(nudLayer, 1, 5);
         tlpSelected.Controls.Add(chkHideNpc, 1, 6);
-        tlpSelected.Dock = DockStyle.Fill;
-        tlpSelected.Location = new Point(3, 23);
-        tlpSelected.Name = "tlpSelected";
-        tlpSelected.RowCount = 7;
-        tlpSelected.RowStyles.Add(new RowStyle());
-        tlpSelected.RowStyles.Add(new RowStyle());
-        tlpSelected.RowStyles.Add(new RowStyle());
-        tlpSelected.RowStyles.Add(new RowStyle());
-        tlpSelected.RowStyles.Add(new RowStyle());
-        tlpSelected.RowStyles.Add(new RowStyle());
-        tlpSelected.RowStyles.Add(new RowStyle());
-        tlpSelected.Size = new Size(562, 230);
-        tlpSelected.TabIndex = 0;
-        // 
-        // lblNpcId
-        // 
-        lblNpcId.Anchor = AnchorStyles.Left;
-        lblNpcId.AutoSize = true;
-        lblNpcId.Location = new Point(3, 7);
-        lblNpcId.Name = "lblNpcId";
-        lblNpcId.Size = new Size(54, 20);
-        lblNpcId.TabIndex = 0;
-        lblNpcId.Text = "NPC ID";
-        // 
+
+        ConfigureLabel(lblNpcId, "NPC ID");
+        ConfigureLabel(lblNpcName, "Name");
+        ConfigureLabel(lblContactScript, "Contact script");
+        ConfigureLabel(lblX, "X");
+        ConfigureLabel(lblY, "Y");
+        ConfigureLabel(lblLayer, "Layer");
+
         // nudNpcId
-        // 
         nudNpcId.Dock = DockStyle.Fill;
-        nudNpcId.Location = new Point(123, 3);
+        nudNpcId.Margin = new Padding(3, 4, 3, 4);
         nudNpcId.Maximum = new decimal(new int[] { 2000000000, 0, 0, 0 });
-        nudNpcId.Name = "nudNpcId";
-        nudNpcId.Size = new Size(436, 27);
-        nudNpcId.TabIndex = 1;
-        // 
-        // lblNpcName
-        // 
-        lblNpcName.Anchor = AnchorStyles.Left;
-        lblNpcName.AutoSize = true;
-        lblNpcName.Location = new Point(3, 41);
-        lblNpcName.Name = "lblNpcName";
-        lblNpcName.Size = new Size(49, 20);
-        lblNpcName.TabIndex = 2;
-        lblNpcName.Text = "Name";
-        // 
+
         // txtNpcName
-        // 
         txtNpcName.Dock = DockStyle.Fill;
-        txtNpcName.Location = new Point(123, 37);
-        txtNpcName.Name = "txtNpcName";
+        txtNpcName.Margin = new Padding(3, 4, 3, 4);
         txtNpcName.ReadOnly = true;
-        txtNpcName.Size = new Size(436, 27);
-        txtNpcName.TabIndex = 3;
-        // 
-        // lblContactScript
-        // 
-        lblContactScript.Anchor = AnchorStyles.Left;
-        lblContactScript.AutoSize = true;
-        lblContactScript.Location = new Point(3, 75);
-        lblContactScript.Name = "lblContactScript";
-        lblContactScript.Size = new Size(98, 20);
-        lblContactScript.TabIndex = 4;
-        lblContactScript.Text = "Contact script";
-        // 
+
         // txtContactScript
-        // 
         txtContactScript.Dock = DockStyle.Fill;
-        txtContactScript.Location = new Point(123, 71);
-        txtContactScript.Name = "txtContactScript";
+        txtContactScript.Margin = new Padding(3, 4, 3, 4);
         txtContactScript.ReadOnly = true;
-        txtContactScript.Size = new Size(436, 27);
-        txtContactScript.TabIndex = 5;
-        // 
-        // lblX
-        // 
-        lblX.Anchor = AnchorStyles.Left;
-        lblX.AutoSize = true;
-        lblX.Location = new Point(3, 109);
-        lblX.Name = "lblX";
-        lblX.Size = new Size(17, 20);
-        lblX.TabIndex = 6;
-        lblX.Text = "X";
-        // 
+
         // nudX
-        // 
         nudX.Dock = DockStyle.Fill;
-        nudX.Location = new Point(123, 105);
+        nudX.Margin = new Padding(3, 4, 3, 4);
         nudX.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
         nudX.Minimum = new decimal(new int[] { 1000000, 0, 0, int.MinValue });
-        nudX.Name = "nudX";
-        nudX.Size = new Size(436, 27);
-        nudX.TabIndex = 7;
-        // 
-        // lblY
-        // 
-        lblY.Anchor = AnchorStyles.Left;
-        lblY.AutoSize = true;
-        lblY.Location = new Point(3, 143);
-        lblY.Name = "lblY";
-        lblY.Size = new Size(16, 20);
-        lblY.TabIndex = 8;
-        lblY.Text = "Y";
-        // 
+
         // nudY
-        // 
         nudY.Dock = DockStyle.Fill;
-        nudY.Location = new Point(123, 139);
+        nudY.Margin = new Padding(3, 4, 3, 4);
         nudY.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
         nudY.Minimum = new decimal(new int[] { 1000000, 0, 0, int.MinValue });
-        nudY.Name = "nudY";
-        nudY.Size = new Size(436, 27);
-        nudY.TabIndex = 9;
-        // 
-        // lblLayer
-        // 
-        lblLayer.Anchor = AnchorStyles.Left;
-        lblLayer.AutoSize = true;
-        lblLayer.Location = new Point(3, 177);
-        lblLayer.Name = "lblLayer";
-        lblLayer.Size = new Size(44, 20);
-        lblLayer.TabIndex = 10;
-        lblLayer.Text = "Layer";
-        // 
+
         // nudLayer
-        // 
         nudLayer.Dock = DockStyle.Fill;
-        nudLayer.Location = new Point(123, 173);
+        nudLayer.Margin = new Padding(3, 4, 3, 4);
         nudLayer.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
         nudLayer.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
-        nudLayer.Name = "nudLayer";
-        nudLayer.Size = new Size(436, 27);
-        nudLayer.TabIndex = 11;
-        // 
+
         // chkHideNpc
-        // 
         chkHideNpc.AutoSize = true;
-        chkHideNpc.Location = new Point(123, 207);
-        chkHideNpc.Name = "chkHideNpc";
-        chkHideNpc.Size = new Size(138, 24);
-        chkHideNpc.TabIndex = 12;
+        chkHideNpc.Anchor = AnchorStyles.Left;
         chkHideNpc.Text = "Hide (visible = 1)";
         chkHideNpc.UseVisualStyleBackColor = true;
-        // 
+
         // gbCommands
-        // 
-        gbCommands.Controls.Add(tlpCommands);
-        gbCommands.Dock = DockStyle.Fill;
-        gbCommands.Location = new Point(3, 203);
-        gbCommands.Name = "gbCommands";
-        gbCommands.Size = new Size(568, 68);
-        gbCommands.TabIndex = 1;
-        gbCommands.TabStop = false;
         gbCommands.Text = "Actions";
-        // 
+        gbCommands.AutoSize = false;
+        gbCommands.Padding = new Padding(8, 18, 8, 8);
+        gbCommands.Dock = DockStyle.Fill;
+        gbCommands.Controls.Add(tlpCommands);
+
         // tlpCommands
-        // 
+        tlpCommands.Dock = DockStyle.Fill;
         tlpCommands.ColumnCount = 3;
-        tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-        tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
-        tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+        tlpCommands.RowCount = 1;
+        tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+        tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));
+        tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.34F));
+        tlpCommands.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
         tlpCommands.Controls.Add(btnAddNpcToWorld, 0, 0);
         tlpCommands.Controls.Add(btnShowNpc, 1, 0);
         tlpCommands.Controls.Add(btnWarpToNpc, 2, 0);
-        tlpCommands.Dock = DockStyle.Fill;
-        tlpCommands.Location = new Point(3, 23);
-        tlpCommands.Name = "tlpCommands";
-        tlpCommands.RowCount = 1;
-        tlpCommands.RowStyles.Add(new RowStyle());
-        tlpCommands.Size = new Size(562, 42);
-        tlpCommands.TabIndex = 0;
-        // 
-        // btnAddNpcToWorld
-        // 
-        btnAddNpcToWorld.Dock = DockStyle.Top;
-        btnAddNpcToWorld.Location = new Point(3, 3);
-        btnAddNpcToWorld.Name = "btnAddNpcToWorld";
-        btnAddNpcToWorld.Size = new Size(181, 36);
-        btnAddNpcToWorld.TabIndex = 0;
-        btnAddNpcToWorld.Text = "Add NPC to world";
-        btnAddNpcToWorld.UseVisualStyleBackColor = true;
-        btnAddNpcToWorld.Click += btnAddNpcToWorld_Click;
-        // 
-        // btnShowNpc
-        // 
-        btnShowNpc.Dock = DockStyle.Top;
-        btnShowNpc.Location = new Point(190, 3);
-        btnShowNpc.Name = "btnShowNpc";
-        btnShowNpc.Size = new Size(181, 36);
-        btnShowNpc.TabIndex = 1;
-        btnShowNpc.Text = "Show/Hide NPC";
-        btnShowNpc.UseVisualStyleBackColor = true;
-        btnShowNpc.Click += btnShowNpc_Click;
-        // 
-        // btnWarpToNpc
-        // 
-        btnWarpToNpc.Dock = DockStyle.Top;
-        btnWarpToNpc.Location = new Point(377, 3);
-        btnWarpToNpc.Name = "btnWarpToNpc";
-        btnWarpToNpc.Size = new Size(182, 36);
-        btnWarpToNpc.TabIndex = 2;
-        btnWarpToNpc.Text = "Warp to NPC";
-        btnWarpToNpc.UseVisualStyleBackColor = true;
-        btnWarpToNpc.Click += btnWarpToNpc_Click;
-        // 
+
+        ConfigureGridButton(btnAddNpcToWorld, "Add NPC to world", btnAddNpcToWorld_Click);
+        ConfigureGridButton(btnShowNpc, "Show/Hide NPC", btnShowNpc_Click);
+        ConfigureGridButton(btnWarpToNpc, "Warp to NPC", btnWarpToNpc_Click);
+
         // NpcsActionsControl
-        // 
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        Controls.Add(gbNpcActions);
+        Controls.Add(_tlpRoot);
         MinimumSize = new Size(400, 360);
         Name = "NpcsActionsControl";
         Size = new Size(580, 360);
-        gbNpcActions.ResumeLayout(false);
-        tlpRoot.ResumeLayout(false);
-        gbSelectedNpc.ResumeLayout(false);
+
+        tlpCommands.ResumeLayout(false);
+        gbCommands.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)nudLayer).EndInit();
+        ((System.ComponentModel.ISupportInitialize)nudY).EndInit();
+        ((System.ComponentModel.ISupportInitialize)nudX).EndInit();
+        ((System.ComponentModel.ISupportInitialize)nudNpcId).EndInit();
         tlpSelected.ResumeLayout(false);
         tlpSelected.PerformLayout();
-        ((System.ComponentModel.ISupportInitialize)nudNpcId).EndInit();
-        ((System.ComponentModel.ISupportInitialize)nudX).EndInit();
-        ((System.ComponentModel.ISupportInitialize)nudY).EndInit();
-        ((System.ComponentModel.ISupportInitialize)nudLayer).EndInit();
-        gbCommands.ResumeLayout(false);
-        tlpCommands.ResumeLayout(false);
+        gbSelectedNpc.ResumeLayout(false);
+        tlpRoot.ResumeLayout(false);
+        gbNpcActions.ResumeLayout(false);
+        _tlpRoot.ResumeLayout(false);
         ResumeLayout(false);
+    }
+
+    private static void ConfigureLabel(Label label, string text)
+    {
+        label.Text = text;
+        label.Dock = DockStyle.Fill;
+        label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+        label.AutoSize = false;
+        label.Margin = new Padding(3, 0, 3, 0);
+    }
+
+    private static void ConfigureGridButton(Button button, string text, EventHandler handler)
+    {
+        button.Text = text;
+        button.AutoSize = false;
+        button.Dock = DockStyle.Fill;
+        button.Margin = new Padding(3);
+        button.UseVisualStyleBackColor = true;
+        button.Click += handler;
     }
 }
