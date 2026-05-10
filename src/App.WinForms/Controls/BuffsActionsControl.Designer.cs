@@ -1,8 +1,12 @@
 namespace App.WinForms.Controls;
 
+using System.Drawing;
+using System.Windows.Forms;
+
 partial class BuffsActionsControl
 {
     private System.ComponentModel.IContainer components = null;
+    private TableLayoutPanel _tlpRoot;
     private GroupBox gbBuffActions;
     private TableLayoutPanel tlpRoot;
     private GroupBox gbSelected;
@@ -18,7 +22,7 @@ partial class BuffsActionsControl
     private Label lblDurationUnit;
     private TableLayoutPanel tlpBottom;
     private GroupBox gbGlobalBuffs;
-    private FlowLayoutPanel flpGlobalButtons;
+    private TableLayoutPanel tlpGlobalButtons;
     private Button btnAddTimedWorldState;
     private Button btnAddEventState;
     private Button btnRemoveEventState;
@@ -41,6 +45,7 @@ partial class BuffsActionsControl
 
     private void InitializeComponent()
     {
+        _tlpRoot = new TableLayoutPanel();
         gbBuffActions = new GroupBox();
         tlpRoot = new TableLayoutPanel();
         gbSelected = new GroupBox();
@@ -56,7 +61,7 @@ partial class BuffsActionsControl
         lblDurationUnit = new Label();
         tlpBottom = new TableLayoutPanel();
         gbGlobalBuffs = new GroupBox();
-        flpGlobalButtons = new FlowLayoutPanel();
+        tlpGlobalButtons = new TableLayoutPanel();
         btnAddTimedWorldState = new Button();
         btnAddEventState = new Button();
         btnRemoveEventState = new Button();
@@ -66,6 +71,8 @@ partial class BuffsActionsControl
         rbSummon = new RadioButton();
         btnAddBuff = new Button();
         btnRemoveBuff = new Button();
+
+        _tlpRoot.SuspendLayout();
         gbBuffActions.SuspendLayout();
         tlpRoot.SuspendLayout();
         gbSelected.SuspendLayout();
@@ -75,56 +82,54 @@ partial class BuffsActionsControl
         ((System.ComponentModel.ISupportInitialize)nudDurationMinutes).BeginInit();
         tlpBottom.SuspendLayout();
         gbGlobalBuffs.SuspendLayout();
-        flpGlobalButtons.SuspendLayout();
+        tlpGlobalButtons.SuspendLayout();
         gbPlayerCreature.SuspendLayout();
         tlpPlayerCreature.SuspendLayout();
         SuspendLayout();
-        // 
+
+        // _tlpRoot
+        _tlpRoot.Dock = DockStyle.Fill;
+        _tlpRoot.ColumnCount = 1;
+        _tlpRoot.RowCount = 1;
+        _tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        _tlpRoot.Controls.Add(gbBuffActions, 0, 0);
+
         // gbBuffActions
-        // 
-        gbBuffActions.Controls.Add(tlpRoot);
-        gbBuffActions.Dock = DockStyle.Fill;
-        gbBuffActions.Location = new Point(0, 0);
-        gbBuffActions.Name = "gbBuffActions";
-        gbBuffActions.Size = new Size(430, 330);
-        gbBuffActions.TabIndex = 0;
-        gbBuffActions.TabStop = false;
         gbBuffActions.Text = "Buffs";
-        // 
+        gbBuffActions.AutoSize = false;
+        gbBuffActions.Padding = new Padding(8, 18, 8, 8);
+        gbBuffActions.Dock = DockStyle.Fill;
+        gbBuffActions.Controls.Add(tlpRoot);
+
         // tlpRoot
-        // 
+        tlpRoot.Dock = DockStyle.Fill;
         tlpRoot.ColumnCount = 1;
+        tlpRoot.RowCount = 2;
         tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 140F));
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
         tlpRoot.Controls.Add(gbSelected, 0, 0);
         tlpRoot.Controls.Add(tlpBottom, 0, 1);
-        tlpRoot.Dock = DockStyle.Fill;
-        tlpRoot.Location = new Point(3, 23);
-        tlpRoot.Name = "tlpRoot";
-        tlpRoot.RowCount = 3;
-        tlpRoot.RowStyles.Add(new RowStyle());
-        tlpRoot.RowStyles.Add(new RowStyle());
-        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        tlpRoot.Size = new Size(424, 304);
-        tlpRoot.TabIndex = 0;
-        // 
+
         // gbSelected
-        // 
-        gbSelected.Controls.Add(tlpSelected);
-        gbSelected.Dock = DockStyle.Top;
-        gbSelected.Location = new Point(3, 3);
-        gbSelected.Name = "gbSelected";
-        gbSelected.Size = new Size(418, 120);
-        gbSelected.TabIndex = 0;
-        gbSelected.TabStop = false;
         gbSelected.Text = "Selected";
-        // 
+        gbSelected.AutoSize = false;
+        gbSelected.Padding = new Padding(8, 18, 8, 8);
+        gbSelected.Dock = DockStyle.Fill;
+        gbSelected.Controls.Add(tlpSelected);
+
         // tlpSelected
-        // 
+        tlpSelected.Dock = DockStyle.Fill;
         tlpSelected.ColumnCount = 4;
-        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        tlpSelected.RowCount = 3;
+        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
         tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
         tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tlpSelected.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
+        tlpSelected.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
+        tlpSelected.RowStyles.Add(new RowStyle(SizeType.Absolute, 24F));
         tlpSelected.Controls.Add(lblStateId, 0, 0);
         tlpSelected.Controls.Add(nudStateId, 1, 0);
         tlpSelected.Controls.Add(lblBuffName, 0, 1);
@@ -134,273 +139,151 @@ partial class BuffsActionsControl
         tlpSelected.Controls.Add(lblDuration, 2, 1);
         tlpSelected.Controls.Add(nudDurationMinutes, 3, 1);
         tlpSelected.Controls.Add(lblDurationUnit, 3, 2);
-        tlpSelected.Dock = DockStyle.Fill;
-        tlpSelected.Location = new Point(3, 23);
-        tlpSelected.Name = "tlpSelected";
-        tlpSelected.RowCount = 3;
-        tlpSelected.RowStyles.Add(new RowStyle());
-        tlpSelected.RowStyles.Add(new RowStyle());
-        tlpSelected.RowStyles.Add(new RowStyle());
-        tlpSelected.Size = new Size(412, 94);
-        tlpSelected.TabIndex = 0;
-        // 
-        // lblStateId
-        // 
-        lblStateId.Anchor = AnchorStyles.Left;
-        lblStateId.AutoSize = true;
-        lblStateId.Location = new Point(3, 8);
-        lblStateId.Name = "lblStateId";
-        lblStateId.Size = new Size(51, 20);
-        lblStateId.TabIndex = 0;
-        lblStateId.Text = "Buff-ID:";
-        // 
+
+        ConfigureLabel(lblStateId, "Buff-ID:");
+        ConfigureLabel(lblBuffName, "Buffname:");
+        ConfigureLabel(lblBuffLevel, "Bufflevel:");
+        ConfigureLabel(lblDuration, "Duration:");
+        ConfigureLabel(lblDurationUnit, "Min");
+
         // nudStateId
-        // 
         nudStateId.Dock = DockStyle.Fill;
-        nudStateId.Location = new Point(60, 3);
+        nudStateId.Margin = new Padding(3, 4, 3, 4);
         nudStateId.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
         nudStateId.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-        nudStateId.Name = "nudStateId";
-        nudStateId.Size = new Size(145, 27);
-        nudStateId.TabIndex = 1;
         nudStateId.Value = new decimal(new int[] { 1, 0, 0, 0 });
-        // 
-        // lblBuffName
-        // 
-        lblBuffName.Anchor = AnchorStyles.Left;
-        lblBuffName.AutoSize = true;
-        lblBuffName.Location = new Point(3, 42);
-        lblBuffName.Name = "lblBuffName";
-        lblBuffName.Size = new Size(71, 20);
-        lblBuffName.TabIndex = 2;
-        lblBuffName.Text = "Buffname:";
-        // 
+
         // txtBuffName
-        // 
         txtBuffName.Dock = DockStyle.Fill;
-        txtBuffName.Location = new Point(80, 37);
-        txtBuffName.Name = "txtBuffName";
+        txtBuffName.Margin = new Padding(3, 4, 3, 4);
         txtBuffName.ReadOnly = true;
-        txtBuffName.Size = new Size(125, 27);
-        txtBuffName.TabIndex = 3;
-        // 
-        // lblBuffLevel
-        // 
-        lblBuffLevel.Anchor = AnchorStyles.Left;
-        lblBuffLevel.AutoSize = true;
-        lblBuffLevel.Location = new Point(211, 8);
-        lblBuffLevel.Name = "lblBuffLevel";
-        lblBuffLevel.Size = new Size(70, 20);
-        lblBuffLevel.TabIndex = 4;
-        lblBuffLevel.Text = "Bufflevel:";
-        // 
+
         // nudBuffLevel
-        // 
         nudBuffLevel.Dock = DockStyle.Fill;
-        nudBuffLevel.Location = new Point(287, 3);
+        nudBuffLevel.Margin = new Padding(3, 4, 3, 4);
         nudBuffLevel.Maximum = new decimal(new int[] { 999, 0, 0, 0 });
         nudBuffLevel.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-        nudBuffLevel.Name = "nudBuffLevel";
-        nudBuffLevel.Size = new Size(122, 27);
-        nudBuffLevel.TabIndex = 5;
         nudBuffLevel.Value = new decimal(new int[] { 1, 0, 0, 0 });
-        // 
-        // lblDuration
-        // 
-        lblDuration.Anchor = AnchorStyles.Left;
-        lblDuration.AutoSize = true;
-        lblDuration.Location = new Point(211, 42);
-        lblDuration.Name = "lblDuration";
-        lblDuration.Size = new Size(67, 20);
-        lblDuration.TabIndex = 6;
-        lblDuration.Text = "Duration:";
-        // 
+
         // nudDurationMinutes
-        // 
         nudDurationMinutes.Dock = DockStyle.Fill;
-        nudDurationMinutes.Location = new Point(287, 37);
+        nudDurationMinutes.Margin = new Padding(3, 4, 3, 4);
         nudDurationMinutes.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
         nudDurationMinutes.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-        nudDurationMinutes.Name = "nudDurationMinutes";
-        nudDurationMinutes.Size = new Size(122, 27);
-        nudDurationMinutes.TabIndex = 7;
         nudDurationMinutes.Value = new decimal(new int[] { 1, 0, 0, 0 });
-        // 
-        // lblDurationUnit
-        // 
-        lblDurationUnit.Anchor = AnchorStyles.Left;
-        lblDurationUnit.AutoSize = true;
-        lblDurationUnit.Location = new Point(287, 69);
-        lblDurationUnit.Name = "lblDurationUnit";
-        lblDurationUnit.Size = new Size(30, 20);
-        lblDurationUnit.TabIndex = 8;
-        lblDurationUnit.Text = "Min";
-        // 
+
         // tlpBottom
-        // 
+        tlpBottom.Dock = DockStyle.Fill;
         tlpBottom.ColumnCount = 2;
+        tlpBottom.RowCount = 1;
         tlpBottom.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
         tlpBottom.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tlpBottom.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
         tlpBottom.Controls.Add(gbGlobalBuffs, 0, 0);
         tlpBottom.Controls.Add(gbPlayerCreature, 1, 0);
-        tlpBottom.Dock = DockStyle.Top;
-        tlpBottom.Location = new Point(3, 129);
-        tlpBottom.Name = "tlpBottom";
-        tlpBottom.RowCount = 1;
-        tlpBottom.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        tlpBottom.Size = new Size(418, 176);
-        tlpBottom.TabIndex = 1;
-        // 
+
         // gbGlobalBuffs
-        // 
-        gbGlobalBuffs.Controls.Add(flpGlobalButtons);
-        gbGlobalBuffs.Dock = DockStyle.Fill;
-        gbGlobalBuffs.Location = new Point(3, 3);
-        gbGlobalBuffs.Name = "gbGlobalBuffs";
-        gbGlobalBuffs.Size = new Size(203, 170);
-        gbGlobalBuffs.TabIndex = 0;
-        gbGlobalBuffs.TabStop = false;
         gbGlobalBuffs.Text = "Global Buffs";
-        // 
-        // flpGlobalButtons
-        // 
-        flpGlobalButtons.Controls.Add(btnAddTimedWorldState);
-        flpGlobalButtons.Controls.Add(btnAddEventState);
-        flpGlobalButtons.Controls.Add(btnRemoveEventState);
-        flpGlobalButtons.Dock = DockStyle.Fill;
-        flpGlobalButtons.FlowDirection = FlowDirection.TopDown;
-        flpGlobalButtons.Location = new Point(3, 23);
-        flpGlobalButtons.Name = "flpGlobalButtons";
-        flpGlobalButtons.Size = new Size(197, 144);
-        flpGlobalButtons.TabIndex = 0;
-        flpGlobalButtons.WrapContents = false;
-        // 
-        // btnAddTimedWorldState
-        // 
-        btnAddTimedWorldState.Location = new Point(3, 3);
-        btnAddTimedWorldState.Name = "btnAddTimedWorldState";
-        btnAddTimedWorldState.Size = new Size(190, 36);
-        btnAddTimedWorldState.TabIndex = 0;
-        btnAddTimedWorldState.Text = "Add Timed World State";
-        btnAddTimedWorldState.UseVisualStyleBackColor = true;
-        btnAddTimedWorldState.Click += btnAddTimedWorldState_Click;
-        // 
-        // btnAddEventState
-        // 
-        btnAddEventState.Location = new Point(3, 39);
-        btnAddEventState.Name = "btnAddEventState";
-        btnAddEventState.Size = new Size(190, 36);
-        btnAddEventState.TabIndex = 1;
-        btnAddEventState.Text = "Add Event State";
-        btnAddEventState.UseVisualStyleBackColor = true;
-        btnAddEventState.Click += btnAddEventState_Click;
-        // 
-        // btnRemoveEventState
-        // 
-        btnRemoveEventState.Location = new Point(3, 75);
-        btnRemoveEventState.Name = "btnRemoveEventState";
-        btnRemoveEventState.Size = new Size(190, 36);
-        btnRemoveEventState.TabIndex = 2;
-        btnRemoveEventState.Text = "Remove Event State";
-        btnRemoveEventState.UseVisualStyleBackColor = true;
-        btnRemoveEventState.Click += btnRemoveEventState_Click;
-        // 
+        gbGlobalBuffs.AutoSize = false;
+        gbGlobalBuffs.Padding = new Padding(8, 18, 8, 8);
+        gbGlobalBuffs.Dock = DockStyle.Fill;
+        gbGlobalBuffs.Controls.Add(tlpGlobalButtons);
+
+        // tlpGlobalButtons
+        tlpGlobalButtons.Dock = DockStyle.Fill;
+        tlpGlobalButtons.ColumnCount = 1;
+        tlpGlobalButtons.RowCount = 4;
+        tlpGlobalButtons.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        tlpGlobalButtons.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
+        tlpGlobalButtons.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
+        tlpGlobalButtons.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
+        tlpGlobalButtons.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        tlpGlobalButtons.Controls.Add(btnAddTimedWorldState, 0, 0);
+        tlpGlobalButtons.Controls.Add(btnAddEventState, 0, 1);
+        tlpGlobalButtons.Controls.Add(btnRemoveEventState, 0, 2);
+
+        ConfigureGridButton(btnAddTimedWorldState, "Add Timed World State", btnAddTimedWorldState_Click);
+        ConfigureGridButton(btnAddEventState, "Add Event State", btnAddEventState_Click);
+        ConfigureGridButton(btnRemoveEventState, "Remove Event State", btnRemoveEventState_Click);
+
         // gbPlayerCreature
-        // 
-        gbPlayerCreature.Controls.Add(tlpPlayerCreature);
-        gbPlayerCreature.Dock = DockStyle.Fill;
-        gbPlayerCreature.Location = new Point(212, 3);
-        gbPlayerCreature.Name = "gbPlayerCreature";
-        gbPlayerCreature.Size = new Size(203, 170);
-        gbPlayerCreature.TabIndex = 1;
-        gbPlayerCreature.TabStop = false;
         gbPlayerCreature.Text = "Player/Creature Buffs";
-        // 
+        gbPlayerCreature.AutoSize = false;
+        gbPlayerCreature.Padding = new Padding(8, 18, 8, 8);
+        gbPlayerCreature.Dock = DockStyle.Fill;
+        gbPlayerCreature.Controls.Add(tlpPlayerCreature);
+
         // tlpPlayerCreature
-        // 
+        tlpPlayerCreature.Dock = DockStyle.Fill;
         tlpPlayerCreature.ColumnCount = 1;
+        tlpPlayerCreature.RowCount = 5;
         tlpPlayerCreature.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        tlpPlayerCreature.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
+        tlpPlayerCreature.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
+        tlpPlayerCreature.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
+        tlpPlayerCreature.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
+        tlpPlayerCreature.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
         tlpPlayerCreature.Controls.Add(rbPlayer, 0, 0);
         tlpPlayerCreature.Controls.Add(rbSummon, 0, 1);
         tlpPlayerCreature.Controls.Add(btnAddBuff, 0, 2);
         tlpPlayerCreature.Controls.Add(btnRemoveBuff, 0, 3);
-        tlpPlayerCreature.Dock = DockStyle.Fill;
-        tlpPlayerCreature.Location = new Point(3, 23);
-        tlpPlayerCreature.Name = "tlpPlayerCreature";
-        tlpPlayerCreature.RowCount = 5;
-        tlpPlayerCreature.RowStyles.Add(new RowStyle());
-        tlpPlayerCreature.RowStyles.Add(new RowStyle());
-        tlpPlayerCreature.RowStyles.Add(new RowStyle());
-        tlpPlayerCreature.RowStyles.Add(new RowStyle());
-        tlpPlayerCreature.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        tlpPlayerCreature.Size = new Size(197, 144);
-        tlpPlayerCreature.TabIndex = 0;
-        // 
+
         // rbPlayer
-        // 
         rbPlayer.AutoSize = true;
-        rbPlayer.Location = new Point(3, 3);
-        rbPlayer.Name = "rbPlayer";
-        rbPlayer.Size = new Size(67, 24);
-        rbPlayer.TabIndex = 0;
-        rbPlayer.TabStop = true;
+        rbPlayer.Anchor = AnchorStyles.Left;
         rbPlayer.Text = "Player";
         rbPlayer.UseVisualStyleBackColor = true;
-        // 
+
         // rbSummon
-        // 
         rbSummon.AutoSize = true;
-        rbSummon.Location = new Point(3, 33);
-        rbSummon.Name = "rbSummon";
-        rbSummon.Size = new Size(82, 24);
-        rbSummon.TabIndex = 1;
-        rbSummon.TabStop = true;
+        rbSummon.Anchor = AnchorStyles.Left;
         rbSummon.Text = "Summon";
         rbSummon.UseVisualStyleBackColor = true;
-        // 
-        // btnAddBuff
-        // 
-        btnAddBuff.Dock = DockStyle.Fill;
-        btnAddBuff.Location = new Point(3, 63);
-        btnAddBuff.Name = "btnAddBuff";
-        btnAddBuff.Size = new Size(191, 36);
-        btnAddBuff.TabIndex = 2;
-        btnAddBuff.Text = "Add Buff";
-        btnAddBuff.UseVisualStyleBackColor = true;
-        btnAddBuff.Click += btnAddBuff_Click;
-        // 
-        // btnRemoveBuff
-        // 
-        btnRemoveBuff.Dock = DockStyle.Fill;
-        btnRemoveBuff.Location = new Point(3, 99);
-        btnRemoveBuff.Name = "btnRemoveBuff";
-        btnRemoveBuff.Size = new Size(191, 36);
-        btnRemoveBuff.TabIndex = 3;
-        btnRemoveBuff.Text = "Remove Buff";
-        btnRemoveBuff.UseVisualStyleBackColor = true;
-        btnRemoveBuff.Click += btnRemoveBuff_Click;
-        // 
+
+        ConfigureGridButton(btnAddBuff, "Add Buff", btnAddBuff_Click);
+        ConfigureGridButton(btnRemoveBuff, "Remove Buff", btnRemoveBuff_Click);
+
         // BuffsActionsControl
-        // 
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        Controls.Add(gbBuffActions);
+        Controls.Add(_tlpRoot);
         Name = "BuffsActionsControl";
         Size = new Size(430, 330);
-        gbBuffActions.ResumeLayout(false);
-        tlpRoot.ResumeLayout(false);
-        gbSelected.ResumeLayout(false);
-        tlpSelected.ResumeLayout(false);
-        tlpSelected.PerformLayout();
-        ((System.ComponentModel.ISupportInitialize)nudStateId).EndInit();
-        ((System.ComponentModel.ISupportInitialize)nudBuffLevel).EndInit();
-        ((System.ComponentModel.ISupportInitialize)nudDurationMinutes).EndInit();
-        tlpBottom.ResumeLayout(false);
-        gbGlobalBuffs.ResumeLayout(false);
-        flpGlobalButtons.ResumeLayout(false);
-        gbPlayerCreature.ResumeLayout(false);
+
         tlpPlayerCreature.ResumeLayout(false);
         tlpPlayerCreature.PerformLayout();
+        gbPlayerCreature.ResumeLayout(false);
+        tlpGlobalButtons.ResumeLayout(false);
+        gbGlobalBuffs.ResumeLayout(false);
+        tlpBottom.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)nudDurationMinutes).EndInit();
+        ((System.ComponentModel.ISupportInitialize)nudBuffLevel).EndInit();
+        ((System.ComponentModel.ISupportInitialize)nudStateId).EndInit();
+        tlpSelected.ResumeLayout(false);
+        tlpSelected.PerformLayout();
+        gbSelected.ResumeLayout(false);
+        tlpRoot.ResumeLayout(false);
+        gbBuffActions.ResumeLayout(false);
+        _tlpRoot.ResumeLayout(false);
         ResumeLayout(false);
+    }
+
+    private static void ConfigureLabel(Label label, string text)
+    {
+        label.Text = text;
+        label.Dock = DockStyle.Fill;
+        label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+        label.AutoSize = false;
+        label.Margin = new Padding(3, 0, 3, 0);
+    }
+
+    private static void ConfigureGridButton(Button button, string text, EventHandler handler)
+    {
+        button.Text = text;
+        button.AutoSize = false;
+        button.Dock = DockStyle.Fill;
+        button.Margin = new Padding(3);
+        button.UseVisualStyleBackColor = true;
+        button.Click += handler;
     }
 }
