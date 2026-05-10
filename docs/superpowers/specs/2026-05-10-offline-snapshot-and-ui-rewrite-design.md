@@ -66,25 +66,25 @@ SQLite via `Microsoft.Data.Sqlite`. Single file. Read-only at runtime (`PRAGMA q
 Denormalized, one table per supported entity, columns 1:1 with the corresponding `*Record` C# model. String resource lookups (`StringResource` joins) are pre-resolved during export so runtime queries never join.
 
 ```sql
-CREATE TABLE Items     (id INTEGER PRIMARY KEY, name TEXT, icon_id INTEGER, level INTEGER, /* ...other ItemRecord fields... */);
-CREATE TABLE Monsters  (id INTEGER PRIMARY KEY, name TEXT, icon_id INTEGER, /* ...MonsterRecord fields... */);
-CREATE TABLE Npcs      (id INTEGER PRIMARY KEY, name TEXT, contact_script TEXT, /* ...NpcRecord fields... */);
-CREATE TABLE Skills    (id INTEGER PRIMARY KEY, name TEXT, icon_id INTEGER, /* ...SkillRecord fields... */);
-CREATE TABLE States    (id INTEGER PRIMARY KEY, name TEXT, icon_id INTEGER, /* ...StateRecord fields... */);
-CREATE TABLE Summons   (id INTEGER PRIMARY KEY, name TEXT, card_item_id INTEGER, /* ...SummonRecord fields... */);
+CREATE TABLE Items    (item_id INTEGER PRIMARY KEY, name_en TEXT NOT NULL, icon_file_name TEXT);
+CREATE TABLE Monsters (id INTEGER PRIMARY KEY, name TEXT NOT NULL, level INTEGER, location TEXT);
+CREATE TABLE Npcs     (npc_id INTEGER PRIMARY KEY, npc_title TEXT NOT NULL, x REAL, y REAL, contact_script TEXT);
+CREATE TABLE Skills   (skill_id INTEGER PRIMARY KEY, skillname TEXT NOT NULL, icon_file_name TEXT);
+CREATE TABLE States   (state_id INTEGER PRIMARY KEY, buff_name TEXT NOT NULL, icon_file_name TEXT);
+CREATE TABLE Summons  (summon_id INTEGER PRIMARY KEY, summon_name TEXT NOT NULL, card_name TEXT, icon_file_name TEXT);
 
-CREATE TABLE Meta      (key TEXT PRIMARY KEY, value TEXT);
+CREATE TABLE Meta     (key TEXT PRIMARY KEY, value TEXT);
 -- Meta keys: schema_version, exported_at (ISO-8601 UTC), source_provider (MSSQL|MySQL), tool_version
 
-CREATE INDEX idx_items_name    ON Items(name);
+CREATE INDEX idx_items_name    ON Items(name_en);
 CREATE INDEX idx_monsters_name ON Monsters(name);
-CREATE INDEX idx_npcs_name     ON Npcs(name);
-CREATE INDEX idx_skills_name   ON Skills(name);
-CREATE INDEX idx_states_name   ON States(name);
-CREATE INDEX idx_summons_name  ON Summons(name);
+CREATE INDEX idx_npcs_title    ON Npcs(npc_title);
+CREATE INDEX idx_skills_name   ON Skills(skillname);
+CREATE INDEX idx_states_name   ON States(buff_name);
+CREATE INDEX idx_summons_name  ON Summons(summon_name);
 ```
 
-Exact column lists are derived 1:1 from the existing `*Record` types in `App.Core/Models/Entities/`.
+Columns map 1:1 to fields on the corresponding `*Record` types in `App.Core/Models/Entities/` using snake_case (Dapper's `MatchNamesWithUnderscores` already handles binding).
 
 ### Schema Versioning
 
@@ -116,7 +116,7 @@ Exact column lists are derived 1:1 from the existing `*Record` types in `App.Cor
 ### Schema
 
 ```sql
-CREATE TABLE Icons (icon_id INTEGER PRIMARY KEY, png BLOB NOT NULL);
+CREATE TABLE Icons (file_name TEXT PRIMARY KEY, png BLOB NOT NULL);
 CREATE TABLE Meta  (key TEXT PRIMARY KEY, value TEXT);
 -- Meta keys: packed_at, source_dir, file_count, tool_version
 ```
@@ -124,14 +124,14 @@ CREATE TABLE Meta  (key TEXT PRIMARY KEY, value TEXT);
 ### Pack Flow
 
 1. After snapshot export completes, the app prompts: "Also pack icons from `<EntityIconsPath>` into `gmtool-icons.db`?"
-2. `IconPackService` scans the directory for `<icon_id>.png` files, parses the integer id from filename, inserts each as a BLOB row in a transaction.
-3. Files that fail to parse a numeric id are skipped with a warning logged.
+2. `IconPackService` scans the directory recursively for `*.png` files, stores each as a BLOB row keyed by file name (case-insensitive, matching how `IconFileName` is stored in resources).
+3. Existing rows are replaced (`INSERT OR REPLACE`).
 
 ### Runtime Integration
 
 - A small abstraction `IIconSource` with two implementations:
-  - `DirectoryIconSource` (live mode) — reads PNG from `EntityIconsPath\<icon_id>.png` (current behavior).
-  - `SqliteIconSource` (offline mode) — opens `gmtool-icons.db` once, reads BLOB by `icon_id` on demand.
+  - `DirectoryIconSource` (live mode) — reads PNG from `<EntityIconsPath>\<file_name>` (current behavior).
+  - `SqliteIconSource` (offline mode) — opens `gmtool-icons.db` once, reads BLOB by `file_name` on demand.
 - Both wrapped by the existing `LocalCacheService` (in-memory cache of decoded `Image`).
 - DI selects the implementation based on `AppMode`. If offline mode is active but `gmtool-icons.db` is missing, the app uses a null source (icons render as blank — no crash, logged once at startup).
 - In live mode the `EntityIconsPath` setting and behavior are completely unchanged.
