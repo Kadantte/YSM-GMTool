@@ -591,7 +591,7 @@ partial class MainForm
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(1725, 860);
         Controls.Add(tlpRoot);
-        MinimumSize = new Size(1500, 700);
+        MinimumSize = new System.Drawing.Size(1100, 720);
         Name = "MainForm";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "GM Tool";

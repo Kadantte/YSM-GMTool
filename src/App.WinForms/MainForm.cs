@@ -7,7 +7,6 @@ using App.Data.Infrastructure;
 using App.Data.Services;
 using App.WinForms.Controls;
 using App.WinForms.Forms;
-using App.WinForms.Layout;
 using App.WinForms.Models;
 using App.WinForms.Presenters;
 using Serilog;
@@ -64,9 +63,6 @@ public partial class MainForm : Form
     private IIconSource? _iconSource;
     private int _inventorySortColumnIndex = -1;
     private SortOrder _inventorySortOrder = SortOrder.None;
-    private readonly System.Windows.Forms.Timer _layoutDebounceTimer = new() { Interval = 140 };
-    private bool _layoutPassInProgress;
-
     public MainForm(
         IGameDataRepository repository,
         IAppSettingsService settingsService,
@@ -102,7 +98,6 @@ public partial class MainForm : Form
         ConfigureBrowserColumns();
         InitializePresenters();
         WireActionEvents();
-        WireLayoutPolicy();
         ApplyOfflineModeUi();
     }
 
@@ -118,146 +113,6 @@ public partial class MainForm : Form
         }
 
         _playerCheckerActions.Visible = false;
-    }
-
-    private void WireLayoutPolicy()
-    {
-        _layoutDebounceTimer.Tick += LayoutDebounceTimer_Tick;
-        Shown += MainForm_ShownForLayout;
-        SizeChanged += MainForm_SizeChangedForLayout;
-        tabMain.SelectedIndexChanged += tabMain_SelectedIndexChanged;
-    }
-
-    private void MainForm_ShownForLayout(object? sender, EventArgs e)
-    {
-        if (!IsHandleCreated || IsDisposed)
-        {
-            return;
-        }
-
-        BeginInvoke((Action)ApplyGlobalLayoutPolicySafe);
-    }
-
-    private void MainForm_SizeChangedForLayout(object? sender, EventArgs e)
-    {
-        ScheduleLayoutPass();
-    }
-
-    private void tabMain_SelectedIndexChanged(object? sender, EventArgs e)
-    {
-        ScheduleLayoutPass();
-    }
-
-    private void LayoutDebounceTimer_Tick(object? sender, EventArgs e)
-    {
-        _layoutDebounceTimer.Stop();
-        ApplyGlobalLayoutPolicySafe();
-    }
-
-    private void ScheduleLayoutPass()
-    {
-        if (IsDisposed || !IsHandleCreated)
-        {
-            return;
-        }
-
-        _layoutDebounceTimer.Stop();
-        _layoutDebounceTimer.Start();
-    }
-
-    private void ApplyGlobalLayoutPolicySafe()
-    {
-        if (_layoutPassInProgress || IsDisposed || !IsHandleCreated)
-        {
-            return;
-        }
-
-        try
-        {
-            _layoutPassInProgress = true;
-
-            UiLayoutPolicy.ApplyFixedButtonSizes(this);
-
-            var actionHosts = GetVisibleActionHosts();
-            foreach (var host in actionHosts)
-            {
-                UiLayoutPolicy.FitActionSections(host);
-                UiLayoutPolicy.ValidateNoSectionClipping(host);
-            }
-
-            var allActionControls = new Control[]
-            {
-                _playerCheckerActions,
-                _monsterActions,
-                _itemsActions,
-                _skillsActions,
-                _buffsActions,
-                _npcsActions,
-                _summonsActions,
-                _warpActions
-            };
-
-            foreach (var control in allActionControls)
-            {
-                ResizeActionControlHeight(control);
-            }
-
-            var requiredMinHeight = UiLayoutPolicy.GetRequiredMainFormMinHeight(
-                this,
-                actionHosts,
-                MinimumSize.Height);
-
-            if (requiredMinHeight > MinimumSize.Height)
-            {
-                MinimumSize = new Size(MinimumSize.Width, requiredMinHeight);
-            }
-
-            if (Height < MinimumSize.Height)
-            {
-                Height = MinimumSize.Height;
-            }
-        }
-        catch (Exception ex)
-        {
-            Log.Warning(ex, "Failed to apply global layout policy.");
-        }
-        finally
-        {
-            _layoutPassInProgress = false;
-        }
-    }
-
-    private List<Control> GetVisibleActionHosts()
-    {
-        var hosts = new Control[]
-        {
-            browserPlayerchecker.ActionsHostPanel,
-            browserMonster.ActionsHostPanel,
-            browserItems.ActionsHostPanel,
-            browserSkills.ActionsHostPanel,
-            browserBuffs.ActionsHostPanel,
-            browserNpcs.ActionsHostPanel,
-            browserSummons.ActionsHostPanel,
-            browserWarp.ActionsHostPanel
-        };
-
-        return hosts
-            .Where(x => x.IsHandleCreated && x.ClientSize.Height > 0 && IsActuallyVisible(x))
-            .Cast<Control>()
-            .ToList();
-    }
-
-    private static bool IsActuallyVisible(Control control)
-    {
-        for (Control? current = control; current is not null; current = current.Parent)
-        {
-            if (!current.Visible)
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     private void ApplyBrandingIcon()
@@ -404,22 +259,6 @@ public partial class MainForm : Form
     {
         control.Dock = DockStyle.Top;
         browser.ActionsHostPanel.Controls.Add(control);
-
-        ResizeActionControlHeight(control);
-        control.Layout += (_, _) => ResizeActionControlHeight(control);
-    }
-
-    private static void ResizeActionControlHeight(Control control)
-    {
-        if (control.IsDisposed)
-        {
-            return;
-        }
-
-        var preferred = control.GetPreferredSize(new Size(control.Width, 0)).Height;
-        var measured = UiLayoutPolicy.MeasureRequiredHeight(control);
-        var minH = control.MinimumSize.Height;
-        control.Height = Math.Max(minH, Math.Max(preferred, measured));
     }
 
     private void ConfigureBrowserColumns()
@@ -868,7 +707,6 @@ public partial class MainForm : Form
         RefreshWarpRows();
         _selectedWarp = null;
         _warpActions.ClearAddFields();
-        ScheduleLayoutPass();
     }
 
     private DatabaseProvider GetActiveProvider()
@@ -2115,9 +1953,6 @@ public partial class MainForm : Form
     {
         try
         {
-            _layoutDebounceTimer.Stop();
-            _layoutDebounceTimer.Dispose();
-
             _settings.SelectedPlayer = cmbPlayers.SelectedItem as string;
             _settings.AppendGeneratedCommands = chkAppendCommands.Checked;
 

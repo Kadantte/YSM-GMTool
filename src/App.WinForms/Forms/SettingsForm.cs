@@ -1,7 +1,6 @@
 using App.Core.Enums;
 using App.Core.Interfaces;
 using App.Core.Models;
-using App.WinForms.Layout;
 
 namespace App.WinForms.Forms;
 
@@ -54,7 +53,6 @@ public partial class SettingsForm : Form
         LoadSettingsIntoControls();
         RefreshCacheStatus();
         ApplyOfflineModeUi();
-        Shown += SettingsForm_Shown;
     }
 
     private void ApplyOfflineModeUi()
@@ -69,16 +67,6 @@ public partial class SettingsForm : Form
     }
 
     public AppSettings UpdatedSettings => _workingSettings.Clone();
-
-    private void SettingsForm_Shown(object? sender, EventArgs e)
-    {
-        if (!IsHandleCreated || IsDisposed)
-        {
-            return;
-        }
-
-        BeginInvoke((Action)(() => UiLayoutPolicy.ApplyFixedButtonSizes(this)));
-    }
 
     private void LoadSettingsIntoControls()
     {

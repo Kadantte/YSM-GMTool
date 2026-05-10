@@ -1,24 +1,11 @@
 namespace App.WinForms.Forms;
 
-using App.WinForms.Layout;
-
 public partial class AboutForm : Form
 {
     public AboutForm()
     {
         InitializeComponent();
         ApplyDialogIcon();
-        Shown += AboutForm_Shown;
-    }
-
-    private void AboutForm_Shown(object? sender, EventArgs e)
-    {
-        if (!IsHandleCreated || IsDisposed)
-        {
-            return;
-        }
-
-        BeginInvoke((Action)(() => UiLayoutPolicy.ApplyFixedButtonSizes(this)));
     }
 
     private void ApplyDialogIcon()
