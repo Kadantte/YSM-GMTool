@@ -20,6 +20,8 @@ public partial class SettingsForm : Form
     private readonly IGameDataRepository _repository;
     private readonly IConnectionStringBuilderService _connectionStringBuilder;
     private readonly ILocalCacheService _localCacheService;
+    private readonly ISnapshotExportService _exportService;
+    private readonly IIconPackService _iconPackService;
     private readonly AppSettings _workingSettings;
     private readonly AppMode _mode;
     private bool _isLoading;
@@ -33,16 +35,21 @@ public partial class SettingsForm : Form
         IConnectionStringBuilderService connectionStringBuilder,
         ILocalCacheService localCacheService,
         AppSettings currentSettings,
-        AppMode mode = AppMode.LiveDb)
+        AppMode mode,
+        ISnapshotExportService exportService,
+        IIconPackService iconPackService)
     {
         _repository = repository;
         _connectionStringBuilder = connectionStringBuilder;
         _localCacheService = localCacheService;
+        _exportService = exportService;
+        _iconPackService = iconPackService;
         _workingSettings = currentSettings.Clone();
         _mode = mode;
 
         InitializeComponent();
         InitializeIconSettingsSection();
+        InitializeExportSnapshotSection();
         ApplyDialogIcon();
         LoadSettingsIntoControls();
         RefreshCacheStatus();
@@ -488,6 +495,110 @@ public partial class SettingsForm : Form
         tlpGeneral.Controls.Add(iconPathRow, 0, 3);
         tlpGeneral.Controls.Add(tlpCacheRow, 0, 4);
         tlpGeneral.ResumeLayout();
+    }
+
+    private void InitializeExportSnapshotSection()
+    {
+        if (_mode == AppMode.OfflineSnapshot) return;
+
+        var btnExportSnapshot = new Button
+        {
+            Text = "Export Database to Snapshot…",
+            Name = "btnExportSnapshot",
+            AutoSize = false,
+            Size = new Size(220, 28),
+            Anchor = AnchorStyles.Top | AnchorStyles.Left,
+            Margin = new Padding(3)
+        };
+        btnExportSnapshot.Click += async (s, e) => await BtnExportSnapshot_ClickAsync();
+
+        tlpGeneral.SuspendLayout();
+        var newRowIndex = tlpGeneral.RowCount;
+        tlpGeneral.RowCount = newRowIndex + 1;
+        // Move the percent-fill row down: remove last style (which is the percent fill at index newRowIndex - 1)
+        // and re-add at the end so the button row sits above it.
+        if (tlpGeneral.RowStyles.Count > 0)
+        {
+            tlpGeneral.RowStyles.RemoveAt(tlpGeneral.RowStyles.Count - 1);
+        }
+        tlpGeneral.RowStyles.Add(new RowStyle());
+        tlpGeneral.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        tlpGeneral.Controls.Add(btnExportSnapshot, 0, newRowIndex - 1);
+        tlpGeneral.ResumeLayout();
+    }
+
+    private async Task BtnExportSnapshot_ClickAsync()
+    {
+        using var dlg = new SaveFileDialog
+        {
+            Title = "Save Snapshot",
+            Filter = "GM Tool Snapshot (*.db)|*.db",
+            FileName = "gmtool-snapshot.db",
+            InitialDirectory = AppContext.BaseDirectory
+        };
+        if (dlg.ShowDialog(this) != DialogResult.OK) return;
+
+        using var progressForm = new ExportProgressForm();
+        var progress = new Progress<SnapshotExportProgress>(p => progressForm.Report(p.EntityName, p.Current, p.Total));
+
+        var connectionString = _connectionStringBuilder.Build(_workingSettings.Provider, _workingSettings.Connection);
+        var tokens = _workingSettings.TableNames.ToTokenMap();
+
+        var task = _exportService.ExportAsync(
+            _workingSettings.Provider,
+            connectionString,
+            tokens,
+            dlg.FileName,
+            progress,
+            CancellationToken.None);
+
+        progressForm.Show(this);
+        try
+        {
+            await task;
+            MessageBox.Show(this, "Snapshot exported successfully.", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            Serilog.Log.Error(ex, "Snapshot export failed");
+            MessageBox.Show(this, $"Export failed: {ex.Message}", "Export", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+        }
+        finally
+        {
+            progressForm.Close();
+        }
+
+        if (MessageBox.Show(this, "Also pack icons from the configured Entity Icons Path?", "Pack Icons",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+
+        if (string.IsNullOrWhiteSpace(_workingSettings.EntityIconsPath) ||
+            !Directory.Exists(_workingSettings.EntityIconsPath))
+        {
+            MessageBox.Show(this, "Entity Icons Path is not configured or does not exist.", "Pack Icons",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+
+        var iconsDb = Path.Combine(Path.GetDirectoryName(dlg.FileName)!, "gmtool-icons.db");
+        using var iconProgressForm = new ExportProgressForm();
+        iconProgressForm.Text = "Pack Icons";
+        var iconProgress = new Progress<IconPackProgress>(p => iconProgressForm.Report("Packing icons", p.Current, p.Total));
+        iconProgressForm.Show(this);
+        try
+        {
+            var packed = await _iconPackService.PackAsync(_workingSettings.EntityIconsPath!, iconsDb, iconProgress, CancellationToken.None);
+            MessageBox.Show(this, $"Packed {packed} icons.", "Pack Icons", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        catch (Exception ex)
+        {
+            Serilog.Log.Error(ex, "Icon pack failed");
+            MessageBox.Show(this, $"Icon pack failed: {ex.Message}", "Pack Icons", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        finally
+        {
+            iconProgressForm.Close();
+        }
     }
 
     private void UpdateIconSettingsUi()

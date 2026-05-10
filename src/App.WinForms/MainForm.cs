@@ -2032,7 +2032,7 @@ public partial class MainForm : Form
 
     private async void btnSettings_Click(object sender, EventArgs e)
     {
-        using var settingsForm = new SettingsForm(_repository, _connectionStringBuilder, _localCacheService, _settings, _mode);
+        using var settingsForm = new SettingsForm(_repository, _connectionStringBuilder, _localCacheService, _settings, _mode, _exportService, _iconPackService);
         settingsForm.Icon = Icon;
         if (settingsForm.ShowDialog(this) != DialogResult.OK)
         {
