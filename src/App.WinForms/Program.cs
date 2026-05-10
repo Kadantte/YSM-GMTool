@@ -33,15 +33,6 @@ internal static class Program
             ApplyNativeDarkMode();
             RegisterUnhandledExceptionHandlers();
 
-            var snapshotPath = Path.Combine(AppContext.BaseDirectory, "gmtool-snapshot.db");
-            var iconsDbPath  = Path.Combine(AppContext.BaseDirectory, "gmtool-icons.db");
-            var mode = File.Exists(snapshotPath) ? AppMode.OfflineSnapshot : AppMode.LiveDb;
-            Log.Information("App started in {Mode} mode", mode);
-
-            IIconSource? offlineIconSource = mode == AppMode.OfflineSnapshot && File.Exists(iconsDbPath)
-                ? new SqliteIconSource(iconsDbPath)
-                : null;
-
             var queryFile = Path.Combine(AppContext.BaseDirectory, "Config", "queries.json");
             var luaFile = Path.Combine(AppContext.BaseDirectory, "Config", "lua_commands.json");
             var settingsFile = Path.Combine(appDirectory, "settings.json");
@@ -49,6 +40,16 @@ internal static class Program
             IQueryStore queryStore = new FileQueryStore(queryFile);
             ILuaCommandTemplateStore templateStore = new FileLuaCommandTemplateStore(luaFile);
             IAppSettingsService settingsService = new JsonAppSettingsService(settingsFile);
+
+            var forceLive = settingsService.LoadAsync().GetAwaiter().GetResult().ForceLiveMode;
+            var snapshotPath = Path.Combine(AppContext.BaseDirectory, "gmtool-snapshot.db");
+            var iconsDbPath  = Path.Combine(AppContext.BaseDirectory, "gmtool-icons.db");
+            var mode = (!forceLive && File.Exists(snapshotPath)) ? AppMode.OfflineSnapshot : AppMode.LiveDb;
+            Log.Information("App started in {Mode} mode (ForceLiveMode={ForceLive})", mode, forceLive);
+
+            IIconSource? offlineIconSource = mode == AppMode.OfflineSnapshot && File.Exists(iconsDbPath)
+                ? new SqliteIconSource(iconsDbPath)
+                : null;
             INameNormalizer normalizer = new SearchNameNormalizer();
             IConnectionStringBuilderService connectionStringBuilder = new DefaultConnectionStringBuilderService();
             ILuaCommandBuilder commandBuilder = new LuaCommandBuilder(templateStore);

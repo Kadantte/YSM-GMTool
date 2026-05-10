@@ -27,6 +27,8 @@ public sealed class AppSettings
 
     public string EntityIconsPath { get; set; } = string.Empty;
 
+    public bool ForceLiveMode { get; set; } = false;
+
     public List<WarpLocationSettings> WarpLocations { get; set; } = [];
 
     public AppSettings Clone() => new()
@@ -42,6 +44,7 @@ public sealed class AppSettings
         UseLocalCache = UseLocalCache,
         EnableEntityIcons = EnableEntityIcons,
         EntityIconsPath = EntityIconsPath,
+        ForceLiveMode = ForceLiveMode,
         WarpLocations = WarpLocations is null ? [] : [.. WarpLocations.Select(static x => x.Clone())]
     };
 }

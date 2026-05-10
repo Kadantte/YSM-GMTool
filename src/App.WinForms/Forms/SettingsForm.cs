@@ -28,6 +28,8 @@ public partial class SettingsForm : Form
     private TextBox? _txtEntityIconsPath;
     private Button? _btnBrowseEntityIconsPath;
     private Label? _lblIconsPath;
+    private CheckBox? _chkForceLiveMode;
+    private Label? _lblForceLiveModeHint;
 
     public SettingsForm(
         IGameDataRepository repository,
@@ -48,6 +50,7 @@ public partial class SettingsForm : Form
 
         InitializeComponent();
         InitializeIconSettingsSection();
+        InitializeForceLiveModeSection();
         InitializeExportSnapshotSection();
         ApplyDialogIcon();
         LoadSettingsIntoControls();
@@ -59,8 +62,8 @@ public partial class SettingsForm : Form
     {
         if (_mode != AppMode.OfflineSnapshot) return;
 
-        if (tabConnection is not null) tabSettings.TabPages.Remove(tabConnection);
-        if (tabTables is not null) tabSettings.TabPages.Remove(tabTables);
+        // Connection and Table Names tabs remain visible so the user can configure
+        // a live DB and re-enable live mode via the "Force Live mode" checkbox.
         if (_lblIconsPath is not null) _lblIconsPath.Visible = false;
         if (_txtEntityIconsPath is not null) _txtEntityIconsPath.Visible = false;
         if (_btnBrowseEntityIconsPath is not null) _btnBrowseEntityIconsPath.Visible = false;
@@ -117,6 +120,11 @@ public partial class SettingsForm : Form
         if (_txtEntityIconsPath is not null)
         {
             _txtEntityIconsPath.Text = _workingSettings.EntityIconsPath ?? string.Empty;
+        }
+
+        if (_chkForceLiveMode is not null)
+        {
+            _chkForceLiveMode.Checked = _workingSettings.ForceLiveMode;
         }
 
         _isLoading = false;
@@ -176,6 +184,7 @@ public partial class SettingsForm : Form
         _workingSettings.UseLocalCache = chkUseLocalCache.Checked;
         _workingSettings.EnableEntityIcons = _chkEnableEntityIcons?.Checked == true;
         _workingSettings.EntityIconsPath = _txtEntityIconsPath?.Text.Trim() ?? string.Empty;
+        _workingSettings.ForceLiveMode = _chkForceLiveMode?.Checked == true;
 
         _workingSettings.ConnectionString = _connectionStringBuilder.Build(_workingSettings.Provider, _workingSettings.Connection);
     }
@@ -482,6 +491,49 @@ public partial class SettingsForm : Form
         tlpGeneral.Controls.Add(_chkEnableEntityIcons, 0, 2);
         tlpGeneral.Controls.Add(iconPathRow, 0, 3);
         tlpGeneral.Controls.Add(tlpCacheRow, 0, 4);
+        tlpGeneral.ResumeLayout();
+    }
+
+    private void InitializeForceLiveModeSection()
+    {
+        _chkForceLiveMode = new CheckBox
+        {
+            AutoSize = true,
+            Name = "chkForceLiveMode",
+            Text = "Force Live mode (ignore snapshot file)",
+            Margin = new Padding(3, 8, 3, 0)
+        };
+        _chkForceLiveMode.CheckedChanged += (_, _) =>
+        {
+            if (_isLoading) return;
+            _workingSettings.ForceLiveMode = _chkForceLiveMode!.Checked;
+        };
+
+        var snapshotPath = Path.Combine(AppContext.BaseDirectory, "gmtool-snapshot.db");
+        var snapshotDescriptor = File.Exists(snapshotPath) ? snapshotPath : "none";
+
+        _lblForceLiveModeHint = new Label
+        {
+            AutoSize = true,
+            Name = "lblForceLiveModeHint",
+            Text = $"Takes effect after restart. Snapshot file: {snapshotDescriptor}",
+            Margin = new Padding(20, 0, 3, 8),
+            ForeColor = SystemColors.GrayText
+        };
+
+        tlpGeneral.SuspendLayout();
+        var checkboxRowIndex = tlpGeneral.RowCount;
+        var hintRowIndex = checkboxRowIndex + 1;
+        tlpGeneral.RowCount = hintRowIndex + 1;
+        if (tlpGeneral.RowStyles.Count > 0)
+        {
+            tlpGeneral.RowStyles.RemoveAt(tlpGeneral.RowStyles.Count - 1);
+        }
+        tlpGeneral.RowStyles.Add(new RowStyle());
+        tlpGeneral.RowStyles.Add(new RowStyle());
+        tlpGeneral.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        tlpGeneral.Controls.Add(_chkForceLiveMode, 0, checkboxRowIndex - 1);
+        tlpGeneral.Controls.Add(_lblForceLiveModeHint, 0, hintRowIndex - 1);
         tlpGeneral.ResumeLayout();
     }
 
