@@ -1,8 +1,12 @@
 namespace App.WinForms.Controls;
 
+using System.Drawing;
+using System.Windows.Forms;
+
 partial class MonsterActionsControl
 {
     private System.ComponentModel.IContainer components = null;
+    private TableLayoutPanel _tlpRoot;
     private GroupBox gbMonsterActions;
     private TableLayoutPanel tlp;
     private Label lblSpawnMode;
@@ -34,6 +38,7 @@ partial class MonsterActionsControl
 
     private void InitializeComponent()
     {
+        _tlpRoot = new TableLayoutPanel();
         gbMonsterActions = new GroupBox();
         tlp = new TableLayoutPanel();
         lblSpawnMode = new Label();
@@ -52,6 +57,8 @@ partial class MonsterActionsControl
         lblMinutes = new Label();
         nudMinutesLifetime = new NumericUpDown();
         btnCreateSpawnCommand = new Button();
+
+        _tlpRoot.SuspendLayout();
         gbMonsterActions.SuspendLayout();
         tlp.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)nudMonsterId).BeginInit();
@@ -61,23 +68,34 @@ partial class MonsterActionsControl
         ((System.ComponentModel.ISupportInitialize)nudLayer).BeginInit();
         ((System.ComponentModel.ISupportInitialize)nudMinutesLifetime).BeginInit();
         SuspendLayout();
-        // 
+
+        // _tlpRoot
+        _tlpRoot.Dock = DockStyle.Fill;
+        _tlpRoot.ColumnCount = 1;
+        _tlpRoot.RowCount = 1;
+        _tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        _tlpRoot.Controls.Add(gbMonsterActions, 0, 0);
+
         // gbMonsterActions
-        // 
-        gbMonsterActions.Controls.Add(tlp);
-        gbMonsterActions.Dock = DockStyle.Fill;
-        gbMonsterActions.Location = new Point(0, 0);
-        gbMonsterActions.Name = "gbMonsterActions";
-        gbMonsterActions.Size = new Size(430, 370);
-        gbMonsterActions.TabIndex = 0;
-        gbMonsterActions.TabStop = false;
         gbMonsterActions.Text = "Monster";
-        // 
+        gbMonsterActions.AutoSize = false;
+        gbMonsterActions.Padding = new Padding(8, 18, 8, 8);
+        gbMonsterActions.Dock = DockStyle.Fill;
+        gbMonsterActions.Controls.Add(tlp);
+
         // tlp
-        // 
+        tlp.Dock = DockStyle.Fill;
         tlp.ColumnCount = 2;
-        tlp.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        tlp.RowCount = 9;
+        tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130F));
         tlp.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        for (int i = 0; i < 8; i++)
+        {
+            tlp.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
+        }
+        tlp.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+
         tlp.Controls.Add(lblSpawnMode, 0, 0);
         tlp.Controls.Add(cmbSpawnMode, 1, 0);
         tlp.Controls.Add(lblMonsterId, 0, 1);
@@ -94,208 +112,106 @@ partial class MonsterActionsControl
         tlp.Controls.Add(lblMinutes, 0, 7);
         tlp.Controls.Add(nudMinutesLifetime, 1, 7);
         tlp.Controls.Add(btnCreateSpawnCommand, 0, 8);
-        tlp.Dock = DockStyle.Fill;
-        tlp.Location = new Point(3, 23);
-        tlp.Name = "tlp";
-        tlp.RowCount = 9;
-        tlp.RowStyles.Add(new RowStyle());
-        tlp.RowStyles.Add(new RowStyle());
-        tlp.RowStyles.Add(new RowStyle());
-        tlp.RowStyles.Add(new RowStyle());
-        tlp.RowStyles.Add(new RowStyle());
-        tlp.RowStyles.Add(new RowStyle());
-        tlp.RowStyles.Add(new RowStyle());
-        tlp.RowStyles.Add(new RowStyle());
-        tlp.RowStyles.Add(new RowStyle());
-        tlp.Size = new Size(424, 344);
-        tlp.TabIndex = 0;
-        // 
-        // lblSpawnMode
-        // 
-        lblSpawnMode.Anchor = AnchorStyles.Left;
-        lblSpawnMode.AutoSize = true;
-        lblSpawnMode.Location = new Point(3, 8);
-        lblSpawnMode.Name = "lblSpawnMode";
-        lblSpawnMode.Size = new Size(88, 20);
-        lblSpawnMode.TabIndex = 0;
-        lblSpawnMode.Text = "Spawntype:";
-        // 
+        tlp.SetColumnSpan(btnCreateSpawnCommand, 2);
+
+        ConfigureLabel(lblSpawnMode, "Spawntype:");
+        ConfigureLabel(lblMonsterId, "ID:");
+        ConfigureLabel(lblAmount, "Amount:");
+        ConfigureLabel(lblX, "X:");
+        ConfigureLabel(lblY, "Y:");
+        ConfigureLabel(lblLayer, "Layer:");
+        ConfigureLabel(lblMinutes, "Minutes:");
+
         // cmbSpawnMode
-        // 
         cmbSpawnMode.Dock = DockStyle.Fill;
         cmbSpawnMode.DropDownStyle = ComboBoxStyle.DropDownList;
         cmbSpawnMode.FormattingEnabled = true;
         cmbSpawnMode.Items.AddRange(new object[] { "At your place", "At selected player place", "At specific coordinates" });
-        cmbSpawnMode.Location = new Point(97, 3);
-        cmbSpawnMode.Name = "cmbSpawnMode";
-        cmbSpawnMode.Size = new Size(324, 28);
-        cmbSpawnMode.TabIndex = 1;
+        cmbSpawnMode.Margin = new Padding(3, 4, 3, 4);
         cmbSpawnMode.SelectedIndexChanged += cmbSpawnMode_SelectedIndexChanged;
-        // 
-        // lblMonsterId
-        // 
-        lblMonsterId.Anchor = AnchorStyles.Left;
-        lblMonsterId.AutoSize = true;
-        lblMonsterId.Location = new Point(3, 43);
-        lblMonsterId.Name = "lblMonsterId";
-        lblMonsterId.Size = new Size(26, 20);
-        lblMonsterId.TabIndex = 2;
-        lblMonsterId.Text = "ID:";
-        // 
+
         // nudMonsterId
-        // 
         nudMonsterId.Dock = DockStyle.Fill;
-        nudMonsterId.Location = new Point(97, 37);
+        nudMonsterId.Margin = new Padding(3, 4, 3, 4);
         nudMonsterId.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
         nudMonsterId.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-        nudMonsterId.Name = "nudMonsterId";
-        nudMonsterId.Size = new Size(324, 27);
-        nudMonsterId.TabIndex = 3;
         nudMonsterId.Value = new decimal(new int[] { 1, 0, 0, 0 });
-        // 
-        // lblAmount
-        // 
-        lblAmount.Anchor = AnchorStyles.Left;
-        lblAmount.AutoSize = true;
-        lblAmount.Location = new Point(3, 77);
-        lblAmount.Name = "lblAmount";
-        lblAmount.Size = new Size(67, 20);
-        lblAmount.TabIndex = 4;
-        lblAmount.Text = "Amount:";
-        // 
+
         // nudAmount
-        // 
         nudAmount.Dock = DockStyle.Fill;
-        nudAmount.Location = new Point(97, 71);
+        nudAmount.Margin = new Padding(3, 4, 3, 4);
         nudAmount.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
         nudAmount.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-        nudAmount.Name = "nudAmount";
-        nudAmount.Size = new Size(324, 27);
-        nudAmount.TabIndex = 5;
         nudAmount.Value = new decimal(new int[] { 1, 0, 0, 0 });
-        // 
-        // lblX
-        // 
-        lblX.Anchor = AnchorStyles.Left;
-        lblX.AutoSize = true;
-        lblX.Location = new Point(3, 111);
-        lblX.Name = "lblX";
-        lblX.Size = new Size(20, 20);
-        lblX.TabIndex = 6;
-        lblX.Text = "X:";
-        // 
+
         // nudX
-        // 
         nudX.Dock = DockStyle.Fill;
-        nudX.Location = new Point(97, 105);
+        nudX.Margin = new Padding(3, 4, 3, 4);
         nudX.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
         nudX.Minimum = new decimal(new int[] { 100000, 0, 0, int.MinValue });
-        nudX.Name = "nudX";
-        nudX.Size = new Size(324, 27);
-        nudX.TabIndex = 7;
-        // 
-        // lblY
-        // 
-        lblY.Anchor = AnchorStyles.Left;
-        lblY.AutoSize = true;
-        lblY.Location = new Point(3, 145);
-        lblY.Name = "lblY";
-        lblY.Size = new Size(19, 20);
-        lblY.TabIndex = 8;
-        lblY.Text = "Y:";
-        // 
+
         // nudY
-        // 
         nudY.Dock = DockStyle.Fill;
-        nudY.Location = new Point(97, 139);
+        nudY.Margin = new Padding(3, 4, 3, 4);
         nudY.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
         nudY.Minimum = new decimal(new int[] { 100000, 0, 0, int.MinValue });
-        nudY.Name = "nudY";
-        nudY.Size = new Size(324, 27);
-        nudY.TabIndex = 9;
-        // 
-        // lblLayer
-        // 
-        lblLayer.Anchor = AnchorStyles.Left;
-        lblLayer.AutoSize = true;
-        lblLayer.Location = new Point(3, 179);
-        lblLayer.Name = "lblLayer";
-        lblLayer.Size = new Size(47, 20);
-        lblLayer.TabIndex = 10;
-        lblLayer.Text = "Layer:";
-        // 
+
         // nudLayer
-        // 
         nudLayer.Dock = DockStyle.Fill;
-        nudLayer.Location = new Point(97, 173);
+        nudLayer.Margin = new Padding(3, 4, 3, 4);
         nudLayer.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
         nudLayer.Minimum = new decimal(new int[] { 1000, 0, 0, int.MinValue });
-        nudLayer.Name = "nudLayer";
-        nudLayer.Size = new Size(324, 27);
-        nudLayer.TabIndex = 11;
         nudLayer.Value = new decimal(new int[] { 1, 0, 0, 0 });
-        // 
+
         // chkUseLifetime
-        // 
         chkUseLifetime.Anchor = AnchorStyles.Left;
         chkUseLifetime.AutoSize = true;
-        chkUseLifetime.Location = new Point(3, 206);
-        chkUseLifetime.Name = "chkUseLifetime";
-        chkUseLifetime.Size = new Size(85, 24);
-        chkUseLifetime.TabIndex = 12;
         chkUseLifetime.Text = "Lifetime:";
         chkUseLifetime.UseVisualStyleBackColor = true;
         chkUseLifetime.CheckedChanged += chkUseLifetime_CheckedChanged;
-        // 
-        // lblMinutes
-        // 
-        lblMinutes.Anchor = AnchorStyles.Left;
-        lblMinutes.AutoSize = true;
-        lblMinutes.Location = new Point(3, 241);
-        lblMinutes.Name = "lblMinutes";
-        lblMinutes.Size = new Size(65, 20);
-        lblMinutes.TabIndex = 13;
-        lblMinutes.Text = "Minutes:";
-        // 
+
         // nudMinutesLifetime
-        // 
         nudMinutesLifetime.Dock = DockStyle.Fill;
-        nudMinutesLifetime.Location = new Point(97, 236);
+        nudMinutesLifetime.Margin = new Padding(3, 4, 3, 4);
         nudMinutesLifetime.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
         nudMinutesLifetime.Minimum = new decimal(new int[] { 1, 0, 0, int.MinValue });
-        nudMinutesLifetime.Name = "nudMinutesLifetime";
-        nudMinutesLifetime.Size = new Size(324, 27);
-        nudMinutesLifetime.TabIndex = 14;
         nudMinutesLifetime.Value = new decimal(new int[] { 1, 0, 0, int.MinValue });
-        // 
+
         // btnCreateSpawnCommand
-        // 
-        tlp.SetColumnSpan(btnCreateSpawnCommand, 2);
-        btnCreateSpawnCommand.Dock = DockStyle.Top;
-        btnCreateSpawnCommand.Location = new Point(3, 269);
-        btnCreateSpawnCommand.Name = "btnCreateSpawnCommand";
-        btnCreateSpawnCommand.Size = new Size(418, 36);
-        btnCreateSpawnCommand.TabIndex = 15;
         btnCreateSpawnCommand.Text = "Create Command";
+        btnCreateSpawnCommand.AutoSize = false;
+        btnCreateSpawnCommand.Size = new Size(100, 28);
+        btnCreateSpawnCommand.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+        btnCreateSpawnCommand.Margin = new Padding(3);
         btnCreateSpawnCommand.UseVisualStyleBackColor = true;
         btnCreateSpawnCommand.Click += btnCreateSpawnCommand_Click;
-        // 
+
         // MonsterActionsControl
-        // 
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        Controls.Add(gbMonsterActions);
+        Controls.Add(_tlpRoot);
         Name = "MonsterActionsControl";
         Size = new Size(430, 370);
-        gbMonsterActions.ResumeLayout(false);
-        tlp.ResumeLayout(false);
-        tlp.PerformLayout();
+
         ((System.ComponentModel.ISupportInitialize)nudMonsterId).EndInit();
         ((System.ComponentModel.ISupportInitialize)nudAmount).EndInit();
         ((System.ComponentModel.ISupportInitialize)nudX).EndInit();
         ((System.ComponentModel.ISupportInitialize)nudY).EndInit();
         ((System.ComponentModel.ISupportInitialize)nudLayer).EndInit();
         ((System.ComponentModel.ISupportInitialize)nudMinutesLifetime).EndInit();
+        tlp.ResumeLayout(false);
+        tlp.PerformLayout();
+        gbMonsterActions.ResumeLayout(false);
+        _tlpRoot.ResumeLayout(false);
         ResumeLayout(false);
+    }
+
+    private static void ConfigureLabel(Label label, string text)
+    {
+        label.Text = text;
+        label.Dock = DockStyle.Fill;
+        label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+        label.AutoSize = false;
+        label.Margin = new Padding(3, 0, 3, 0);
     }
 }
