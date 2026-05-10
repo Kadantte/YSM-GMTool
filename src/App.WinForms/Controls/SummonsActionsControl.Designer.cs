@@ -88,20 +88,23 @@ partial class SummonsActionsControl
         tlpRoot.ColumnCount = 1;
         tlpRoot.RowCount = 2;
         tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 110F));
-        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 140F));
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         tlpRoot.Controls.Add(gbAddSummon, 0, 0);
         tlpRoot.Controls.Add(gbStageSummon, 0, 1);
 
         // gbAddSummon
         gbAddSummon.Text = "Add Summon";
-        gbAddSummon.AutoSize = false;
+        gbAddSummon.AutoSize = true;
+        gbAddSummon.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         gbAddSummon.Padding = new Padding(8, 18, 8, 8);
-        gbAddSummon.Dock = DockStyle.Fill;
+        gbAddSummon.Dock = DockStyle.Top;
         gbAddSummon.Controls.Add(tlpAdd);
 
         // tlpAdd
-        tlpAdd.Dock = DockStyle.Fill;
+        tlpAdd.AutoSize = true;
+        tlpAdd.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        tlpAdd.Dock = DockStyle.Top;
         tlpAdd.ColumnCount = 3;
         tlpAdd.RowCount = 2;
         tlpAdd.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130F));
@@ -147,13 +150,16 @@ partial class SummonsActionsControl
 
         // gbStageSummon
         gbStageSummon.Text = "Stage Summon";
-        gbStageSummon.AutoSize = false;
+        gbStageSummon.AutoSize = true;
+        gbStageSummon.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         gbStageSummon.Padding = new Padding(8, 18, 8, 8);
-        gbStageSummon.Dock = DockStyle.Fill;
+        gbStageSummon.Dock = DockStyle.Top;
         gbStageSummon.Controls.Add(tlpStage);
 
         // tlpStage
-        tlpStage.Dock = DockStyle.Fill;
+        tlpStage.AutoSize = true;
+        tlpStage.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        tlpStage.Dock = DockStyle.Top;
         tlpStage.ColumnCount = 2;
         tlpStage.RowCount = 3;
         tlpStage.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130F));

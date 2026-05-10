@@ -107,20 +107,23 @@ partial class BuffsActionsControl
         tlpRoot.ColumnCount = 1;
         tlpRoot.RowCount = 2;
         tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 140F));
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
         tlpRoot.Controls.Add(gbSelected, 0, 0);
         tlpRoot.Controls.Add(tlpBottom, 0, 1);
 
         // gbSelected
         gbSelected.Text = "Selected";
-        gbSelected.AutoSize = false;
+        gbSelected.AutoSize = true;
+        gbSelected.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         gbSelected.Padding = new Padding(8, 18, 8, 8);
-        gbSelected.Dock = DockStyle.Fill;
+        gbSelected.Dock = DockStyle.Top;
         gbSelected.Controls.Add(tlpSelected);
 
         // tlpSelected
-        tlpSelected.Dock = DockStyle.Fill;
+        tlpSelected.AutoSize = true;
+        tlpSelected.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        tlpSelected.Dock = DockStyle.Top;
         tlpSelected.ColumnCount = 4;
         tlpSelected.RowCount = 3;
         tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));

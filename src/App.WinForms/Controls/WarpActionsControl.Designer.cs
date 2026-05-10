@@ -99,20 +99,23 @@ partial class WarpActionsControl
         tlpRoot.ColumnCount = 1;
         tlpRoot.RowCount = 2;
         tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 170F));
-        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         tlpRoot.Controls.Add(gbWarpCommands, 0, 0);
         tlpRoot.Controls.Add(gbManageWarp, 0, 1);
 
         // gbWarpCommands
         gbWarpCommands.Text = "Selected Warp";
-        gbWarpCommands.AutoSize = false;
+        gbWarpCommands.AutoSize = true;
+        gbWarpCommands.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         gbWarpCommands.Padding = new Padding(8, 18, 8, 8);
-        gbWarpCommands.Dock = DockStyle.Fill;
+        gbWarpCommands.Dock = DockStyle.Top;
         gbWarpCommands.Controls.Add(tlpCommands);
 
         // tlpCommands
-        tlpCommands.Dock = DockStyle.Fill;
+        tlpCommands.AutoSize = true;
+        tlpCommands.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        tlpCommands.Dock = DockStyle.Top;
         tlpCommands.ColumnCount = 4;
         tlpCommands.RowCount = 4;
         tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
@@ -165,13 +168,16 @@ partial class WarpActionsControl
 
         // gbManageWarp
         gbManageWarp.Text = "Manage Warps";
-        gbManageWarp.AutoSize = false;
+        gbManageWarp.AutoSize = true;
+        gbManageWarp.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         gbManageWarp.Padding = new Padding(8, 18, 8, 8);
-        gbManageWarp.Dock = DockStyle.Fill;
+        gbManageWarp.Dock = DockStyle.Top;
         gbManageWarp.Controls.Add(tlpManage);
 
         // tlpManage
-        tlpManage.Dock = DockStyle.Fill;
+        tlpManage.AutoSize = true;
+        tlpManage.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        tlpManage.Dock = DockStyle.Top;
         tlpManage.ColumnCount = 4;
         tlpManage.RowCount = 3;
         tlpManage.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));

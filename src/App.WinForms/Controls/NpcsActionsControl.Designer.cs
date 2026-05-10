@@ -100,7 +100,7 @@ partial class NpcsActionsControl
         tlpRoot.RowCount = 2;
         tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
         tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 70F));
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         tlpRoot.Controls.Add(gbSelectedNpc, 0, 0);
         tlpRoot.Controls.Add(gbCommands, 0, 1);
 
@@ -183,13 +183,16 @@ partial class NpcsActionsControl
 
         // gbCommands
         gbCommands.Text = "Actions";
-        gbCommands.AutoSize = false;
+        gbCommands.AutoSize = true;
+        gbCommands.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         gbCommands.Padding = new Padding(8, 18, 8, 8);
-        gbCommands.Dock = DockStyle.Fill;
+        gbCommands.Dock = DockStyle.Top;
         gbCommands.Controls.Add(tlpCommands);
 
         // tlpCommands
-        tlpCommands.Dock = DockStyle.Fill;
+        tlpCommands.AutoSize = true;
+        tlpCommands.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        tlpCommands.Dock = DockStyle.Top;
         tlpCommands.ColumnCount = 3;
         tlpCommands.RowCount = 1;
         tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33F));

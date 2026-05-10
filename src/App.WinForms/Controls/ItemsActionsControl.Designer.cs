@@ -159,21 +159,24 @@ partial class ItemsActionsControl
         tlpItemRoot.ColumnCount = 1;
         tlpItemRoot.RowCount = 3;
         tlpItemRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        tlpItemRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 180F));
-        tlpItemRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 240F));
+        tlpItemRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        tlpItemRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         tlpItemRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
         tlpItemRoot.Controls.Add(gbInsertItem, 0, 0);
         tlpItemRoot.Controls.Add(gbModifyItem, 0, 1);
 
         // gbInsertItem
         gbInsertItem.Text = "Give / Insert Commands";
-        gbInsertItem.AutoSize = false;
+        gbInsertItem.AutoSize = true;
+        gbInsertItem.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         gbInsertItem.Padding = new Padding(8, 18, 8, 8);
-        gbInsertItem.Dock = DockStyle.Fill;
+        gbInsertItem.Dock = DockStyle.Top;
         gbInsertItem.Controls.Add(tlpInsert);
 
         // tlpInsert
-        tlpInsert.Dock = DockStyle.Fill;
+        tlpInsert.AutoSize = true;
+        tlpInsert.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        tlpInsert.Dock = DockStyle.Top;
         tlpInsert.ColumnCount = 4;
         tlpInsert.RowCount = 4;
         tlpInsert.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
@@ -255,13 +258,16 @@ partial class ItemsActionsControl
 
         // gbModifyItem
         gbModifyItem.Text = "Modify Equipped Item";
-        gbModifyItem.AutoSize = false;
+        gbModifyItem.AutoSize = true;
+        gbModifyItem.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         gbModifyItem.Padding = new Padding(8, 18, 8, 8);
-        gbModifyItem.Dock = DockStyle.Fill;
+        gbModifyItem.Dock = DockStyle.Top;
         gbModifyItem.Controls.Add(tlpModify);
 
         // tlpModify
-        tlpModify.Dock = DockStyle.Fill;
+        tlpModify.AutoSize = true;
+        tlpModify.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        tlpModify.Dock = DockStyle.Top;
         tlpModify.ColumnCount = 4;
         tlpModify.RowCount = 4;
         tlpModify.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130F));

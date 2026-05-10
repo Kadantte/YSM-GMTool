@@ -96,9 +96,9 @@ partial class SkillsActionsControl
         tlpRoot.ColumnCount = 1;
         tlpRoot.RowCount = 4;
         tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
-        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 110F));
-        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 130F));
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
         tlpRoot.Controls.Add(gbSelected, 0, 0);
         tlpRoot.Controls.Add(gbPlayerSkills, 0, 1);
@@ -106,13 +106,16 @@ partial class SkillsActionsControl
 
         // gbSelected
         gbSelected.Text = "Selected";
-        gbSelected.AutoSize = false;
+        gbSelected.AutoSize = true;
+        gbSelected.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         gbSelected.Padding = new Padding(8, 18, 8, 8);
-        gbSelected.Dock = DockStyle.Fill;
+        gbSelected.Dock = DockStyle.Top;
         gbSelected.Controls.Add(tlpSelected);
 
         // tlpSelected
-        tlpSelected.Dock = DockStyle.Fill;
+        tlpSelected.AutoSize = true;
+        tlpSelected.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        tlpSelected.Dock = DockStyle.Top;
         tlpSelected.ColumnCount = 4;
         tlpSelected.RowCount = 1;
         tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 50F));
@@ -144,13 +147,16 @@ partial class SkillsActionsControl
 
         // gbPlayerSkills
         gbPlayerSkills.Text = "Player Skills";
-        gbPlayerSkills.AutoSize = false;
+        gbPlayerSkills.AutoSize = true;
+        gbPlayerSkills.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         gbPlayerSkills.Padding = new Padding(8, 18, 8, 8);
-        gbPlayerSkills.Dock = DockStyle.Fill;
+        gbPlayerSkills.Dock = DockStyle.Top;
         gbPlayerSkills.Controls.Add(tlpPlayerSkills);
 
         // tlpPlayerSkills (2x2 grid of buttons)
-        tlpPlayerSkills.Dock = DockStyle.Fill;
+        tlpPlayerSkills.AutoSize = true;
+        tlpPlayerSkills.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        tlpPlayerSkills.Dock = DockStyle.Top;
         tlpPlayerSkills.ColumnCount = 2;
         tlpPlayerSkills.RowCount = 2;
         tlpPlayerSkills.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
@@ -169,13 +175,16 @@ partial class SkillsActionsControl
 
         // gbCreatureSkills
         gbCreatureSkills.Text = "Creature Skills";
-        gbCreatureSkills.AutoSize = false;
+        gbCreatureSkills.AutoSize = true;
+        gbCreatureSkills.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         gbCreatureSkills.Padding = new Padding(8, 18, 8, 8);
-        gbCreatureSkills.Dock = DockStyle.Fill;
+        gbCreatureSkills.Dock = DockStyle.Top;
         gbCreatureSkills.Controls.Add(tlpCreature);
 
         // tlpCreature
-        tlpCreature.Dock = DockStyle.Fill;
+        tlpCreature.AutoSize = true;
+        tlpCreature.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        tlpCreature.Dock = DockStyle.Top;
         tlpCreature.ColumnCount = 2;
         tlpCreature.RowCount = 3;
         tlpCreature.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160F));

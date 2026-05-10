@@ -52,20 +52,23 @@ partial class PlayerCheckerActionsControl
         _tlpRoot.ColumnCount = 1;
         _tlpRoot.RowCount = 2;
         _tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        _tlpRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 130F));
+        _tlpRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         _tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
         _tlpRoot.Controls.Add(gbPlayerChecker, 0, 0);
 
         // gbPlayerChecker
         gbPlayerChecker.Text = "Playerchecker Actions";
-        gbPlayerChecker.AutoSize = false;
+        gbPlayerChecker.AutoSize = true;
+        gbPlayerChecker.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         gbPlayerChecker.Padding = new Padding(8, 18, 8, 8);
-        gbPlayerChecker.Dock = DockStyle.Fill;
+        gbPlayerChecker.Dock = DockStyle.Top;
         gbPlayerChecker.Margin = new Padding(3);
         gbPlayerChecker.Controls.Add(_tlpInner);
 
         // _tlpInner
-        _tlpInner.Dock = DockStyle.Fill;
+        _tlpInner.AutoSize = true;
+        _tlpInner.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        _tlpInner.Dock = DockStyle.Top;
         _tlpInner.ColumnCount = 1;
         _tlpInner.RowCount = 2;
         _tlpInner.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
