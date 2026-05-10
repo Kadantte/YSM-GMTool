@@ -1,8 +1,12 @@
 namespace App.WinForms.Controls;
 
+using System.Drawing;
+using System.Windows.Forms;
+
 partial class WarpActionsControl
 {
     private System.ComponentModel.IContainer components = null;
+    private TableLayoutPanel _tlpRoot;
     private GroupBox gbWarpActions;
     private TableLayoutPanel tlpRoot;
     private GroupBox gbWarpCommands;
@@ -38,6 +42,7 @@ partial class WarpActionsControl
 
     private void InitializeComponent()
     {
+        _tlpRoot = new TableLayoutPanel();
         gbWarpActions = new GroupBox();
         tlpRoot = new TableLayoutPanel();
         gbWarpCommands = new GroupBox();
@@ -60,6 +65,8 @@ partial class WarpActionsControl
         txtLocationName = new TextBox();
         btnAdd = new Button();
         btnRemoveSelected = new Button();
+
+        _tlpRoot.SuspendLayout();
         gbWarpActions.SuspendLayout();
         tlpRoot.SuspendLayout();
         gbWarpCommands.SuspendLayout();
@@ -71,51 +78,51 @@ partial class WarpActionsControl
         ((System.ComponentModel.ISupportInitialize)nudAddX).BeginInit();
         ((System.ComponentModel.ISupportInitialize)nudAddY).BeginInit();
         SuspendLayout();
-        // 
+
+        // _tlpRoot
+        _tlpRoot.Dock = DockStyle.Fill;
+        _tlpRoot.ColumnCount = 1;
+        _tlpRoot.RowCount = 1;
+        _tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        _tlpRoot.Controls.Add(gbWarpActions, 0, 0);
+
         // gbWarpActions
-        // 
-        gbWarpActions.Controls.Add(tlpRoot);
-        gbWarpActions.Dock = DockStyle.Fill;
-        gbWarpActions.Location = new Point(0, 0);
-        gbWarpActions.Name = "gbWarpActions";
-        gbWarpActions.Size = new Size(430, 290);
-        gbWarpActions.TabIndex = 0;
-        gbWarpActions.TabStop = false;
         gbWarpActions.Text = "Warp Commands";
-        // 
+        gbWarpActions.AutoSize = false;
+        gbWarpActions.Padding = new Padding(8, 18, 8, 8);
+        gbWarpActions.Dock = DockStyle.Fill;
+        gbWarpActions.Controls.Add(tlpRoot);
+
         // tlpRoot
-        // 
+        tlpRoot.Dock = DockStyle.Fill;
         tlpRoot.ColumnCount = 1;
+        tlpRoot.RowCount = 2;
         tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 170F));
+        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
         tlpRoot.Controls.Add(gbWarpCommands, 0, 0);
         tlpRoot.Controls.Add(gbManageWarp, 0, 1);
-        tlpRoot.Dock = DockStyle.Fill;
-        tlpRoot.Location = new Point(3, 23);
-        tlpRoot.Name = "tlpRoot";
-        tlpRoot.RowCount = 2;
-        tlpRoot.RowStyles.Add(new RowStyle());
-        tlpRoot.RowStyles.Add(new RowStyle());
-        tlpRoot.Size = new Size(424, 264);
-        tlpRoot.TabIndex = 0;
-        // 
+
         // gbWarpCommands
-        // 
-        gbWarpCommands.Controls.Add(tlpCommands);
-        gbWarpCommands.Dock = DockStyle.Fill;
-        gbWarpCommands.Location = new Point(3, 3);
-        gbWarpCommands.Name = "gbWarpCommands";
-        gbWarpCommands.Size = new Size(418, 146);
-        gbWarpCommands.TabIndex = 0;
-        gbWarpCommands.TabStop = false;
         gbWarpCommands.Text = "Selected Warp";
-        // 
+        gbWarpCommands.AutoSize = false;
+        gbWarpCommands.Padding = new Padding(8, 18, 8, 8);
+        gbWarpCommands.Dock = DockStyle.Fill;
+        gbWarpCommands.Controls.Add(tlpCommands);
+
         // tlpCommands
-        // 
+        tlpCommands.Dock = DockStyle.Fill;
         tlpCommands.ColumnCount = 4;
-        tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 50F));
+        tlpCommands.RowCount = 4;
+        tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
         tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-        tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 50F));
+        tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
         tlpCommands.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tlpCommands.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
+        tlpCommands.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
+        tlpCommands.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
+        tlpCommands.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
         tlpCommands.Controls.Add(lblSelectedX, 0, 0);
         tlpCommands.Controls.Add(nudSelectedX, 1, 0);
         tlpCommands.Controls.Add(lblSelectedY, 2, 0);
@@ -124,123 +131,56 @@ partial class WarpActionsControl
         tlpCommands.Controls.Add(btnWarpToYou, 0, 2);
         tlpCommands.Controls.Add(btnWarpToSomeone, 2, 2);
         tlpCommands.Controls.Add(btnOpenWorldmap, 0, 3);
-        tlpCommands.Dock = DockStyle.Fill;
-        tlpCommands.Location = new Point(3, 23);
-        tlpCommands.Name = "tlpCommands";
-        tlpCommands.RowCount = 4;
-        tlpCommands.RowStyles.Add(new RowStyle());
-        tlpCommands.RowStyles.Add(new RowStyle());
-        tlpCommands.RowStyles.Add(new RowStyle());
-        tlpCommands.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
-        tlpCommands.Size = new Size(412, 120);
-        tlpCommands.TabIndex = 0;
-        // 
-        // lblSelectedX
-        // 
-        lblSelectedX.Anchor = AnchorStyles.Left;
-        lblSelectedX.AutoSize = true;
-        lblSelectedX.Location = new Point(3, 7);
-        lblSelectedX.Name = "lblSelectedX";
-        lblSelectedX.Size = new Size(17, 20);
-        lblSelectedX.TabIndex = 0;
-        lblSelectedX.Text = "X";
-        // 
+        tlpCommands.SetColumnSpan(btnWarp, 4);
+        tlpCommands.SetColumnSpan(btnWarpToYou, 2);
+        tlpCommands.SetColumnSpan(btnWarpToSomeone, 2);
+        tlpCommands.SetColumnSpan(btnOpenWorldmap, 4);
+
+        ConfigureLabel(lblSelectedX, "X");
+        ConfigureLabel(lblSelectedY, "Y");
+
         // nudSelectedX
-        // 
         nudSelectedX.Dock = DockStyle.Fill;
-        nudSelectedX.Location = new Point(53, 3);
+        nudSelectedX.Margin = new Padding(3, 4, 3, 4);
         nudSelectedX.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
         nudSelectedX.Minimum = new decimal(new int[] { 1000000, 0, 0, int.MinValue });
-        nudSelectedX.Name = "nudSelectedX";
-        nudSelectedX.Size = new Size(150, 27);
-        nudSelectedX.TabIndex = 1;
-        // 
-        // lblSelectedY
-        // 
-        lblSelectedY.Anchor = AnchorStyles.Left;
-        lblSelectedY.AutoSize = true;
-        lblSelectedY.Location = new Point(209, 7);
-        lblSelectedY.Name = "lblSelectedY";
-        lblSelectedY.Size = new Size(16, 20);
-        lblSelectedY.TabIndex = 2;
-        lblSelectedY.Text = "Y";
-        // 
+
         // nudSelectedY
-        // 
         nudSelectedY.Dock = DockStyle.Fill;
-        nudSelectedY.Location = new Point(259, 3);
+        nudSelectedY.Margin = new Padding(3, 4, 3, 4);
         nudSelectedY.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
         nudSelectedY.Minimum = new decimal(new int[] { 1000000, 0, 0, int.MinValue });
-        nudSelectedY.Name = "nudSelectedY";
-        nudSelectedY.Size = new Size(150, 27);
-        nudSelectedY.TabIndex = 3;
-        // 
-        // btnWarp
-        // 
-        tlpCommands.SetColumnSpan(btnWarp, 2);
-        btnWarp.Dock = DockStyle.Fill;
-        btnWarp.Location = new Point(3, 36);
-        btnWarp.Name = "btnWarp";
-        btnWarp.Size = new Size(200, 30);
-        btnWarp.TabIndex = 4;
-        btnWarp.Text = "Warp";
-        btnWarp.UseVisualStyleBackColor = true;
-        btnWarp.Click += btnWarp_Click;
-        // 
-        // btnWarpToYou
-        // 
-        tlpCommands.SetColumnSpan(btnWarpToYou, 2);
-        btnWarpToYou.Dock = DockStyle.Fill;
-        btnWarpToYou.Location = new Point(3, 72);
-        btnWarpToYou.Name = "btnWarpToYou";
-        btnWarpToYou.Size = new Size(200, 30);
-        btnWarpToYou.TabIndex = 5;
-        btnWarpToYou.Text = "Warp to you";
-        btnWarpToYou.UseVisualStyleBackColor = true;
-        btnWarpToYou.Click += btnWarpToYou_Click;
-        // 
-        // btnWarpToSomeone
-        // 
-        tlpCommands.SetColumnSpan(btnWarpToSomeone, 2);
-        btnWarpToSomeone.Dock = DockStyle.Fill;
-        btnWarpToSomeone.Location = new Point(209, 72);
-        btnWarpToSomeone.Name = "btnWarpToSomeone";
-        btnWarpToSomeone.Size = new Size(200, 30);
-        btnWarpToSomeone.TabIndex = 6;
-        btnWarpToSomeone.Text = "Warp to someone";
-        btnWarpToSomeone.UseVisualStyleBackColor = true;
-        btnWarpToSomeone.Click += btnWarpToSomeone_Click;
-        // 
-        // btnOpenWorldmap
-        // 
-        tlpCommands.SetColumnSpan(btnOpenWorldmap, 2);
-        btnOpenWorldmap.Dock = DockStyle.Fill;
-        btnOpenWorldmap.Enabled = false;
-        btnOpenWorldmap.Location = new Point(3, 108);
-        btnOpenWorldmap.Name = "btnOpenWorldmap";
-        btnOpenWorldmap.Size = new Size(200, 30);
-        btnOpenWorldmap.TabIndex = 7;
+
+        ConfigureGridButton(btnWarp, "Warp", btnWarp_Click);
+        ConfigureGridButton(btnWarpToYou, "Warp to you", btnWarpToYou_Click);
+        ConfigureGridButton(btnWarpToSomeone, "Warp to someone", btnWarpToSomeone_Click);
+
+        // btnOpenWorldmap (no handler)
         btnOpenWorldmap.Text = "OpenWorldmap";
+        btnOpenWorldmap.AutoSize = false;
+        btnOpenWorldmap.Dock = DockStyle.Fill;
+        btnOpenWorldmap.Margin = new Padding(3);
         btnOpenWorldmap.UseVisualStyleBackColor = true;
-        // 
+        btnOpenWorldmap.Enabled = false;
+
         // gbManageWarp
-        // 
-        gbManageWarp.Controls.Add(tlpManage);
-        gbManageWarp.Dock = DockStyle.Fill;
-        gbManageWarp.Location = new Point(3, 126);
-        gbManageWarp.Name = "gbManageWarp";
-        gbManageWarp.Size = new Size(418, 135);
-        gbManageWarp.TabIndex = 1;
-        gbManageWarp.TabStop = false;
         gbManageWarp.Text = "Manage Warps";
-        // 
+        gbManageWarp.AutoSize = false;
+        gbManageWarp.Padding = new Padding(8, 18, 8, 8);
+        gbManageWarp.Dock = DockStyle.Fill;
+        gbManageWarp.Controls.Add(tlpManage);
+
         // tlpManage
-        // 
+        tlpManage.Dock = DockStyle.Fill;
         tlpManage.ColumnCount = 4;
-        tlpManage.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 50F));
+        tlpManage.RowCount = 3;
+        tlpManage.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
         tlpManage.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-        tlpManage.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 50F));
+        tlpManage.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 40F));
         tlpManage.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tlpManage.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
+        tlpManage.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
+        tlpManage.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
         tlpManage.Controls.Add(lblAddX, 0, 0);
         tlpManage.Controls.Add(nudAddX, 1, 0);
         tlpManage.Controls.Add(lblAddY, 2, 0);
@@ -249,120 +189,74 @@ partial class WarpActionsControl
         tlpManage.Controls.Add(txtLocationName, 1, 1);
         tlpManage.Controls.Add(btnAdd, 0, 2);
         tlpManage.Controls.Add(btnRemoveSelected, 2, 2);
-        tlpManage.Dock = DockStyle.Fill;
-        tlpManage.Location = new Point(3, 23);
-        tlpManage.Name = "tlpManage";
-        tlpManage.RowCount = 3;
-        tlpManage.RowStyles.Add(new RowStyle());
-        tlpManage.RowStyles.Add(new RowStyle());
-        tlpManage.RowStyles.Add(new RowStyle());
-        tlpManage.Size = new Size(412, 109);
-        tlpManage.TabIndex = 0;
-        // 
-        // lblAddX
-        // 
-        lblAddX.Anchor = AnchorStyles.Left;
-        lblAddX.AutoSize = true;
-        lblAddX.Location = new Point(3, 7);
-        lblAddX.Name = "lblAddX";
-        lblAddX.Size = new Size(17, 20);
-        lblAddX.TabIndex = 0;
-        lblAddX.Text = "X";
-        // 
+        tlpManage.SetColumnSpan(txtLocationName, 3);
+        tlpManage.SetColumnSpan(btnAdd, 2);
+        tlpManage.SetColumnSpan(btnRemoveSelected, 2);
+
+        ConfigureLabel(lblAddX, "X");
+        ConfigureLabel(lblAddY, "Y");
+        ConfigureLabel(lblLocationName, "Loc");
+
         // nudAddX
-        // 
         nudAddX.Dock = DockStyle.Fill;
-        nudAddX.Location = new Point(53, 3);
+        nudAddX.Margin = new Padding(3, 4, 3, 4);
         nudAddX.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
         nudAddX.Minimum = new decimal(new int[] { 1000000, 0, 0, int.MinValue });
-        nudAddX.Name = "nudAddX";
-        nudAddX.Size = new Size(150, 27);
-        nudAddX.TabIndex = 1;
-        // 
-        // lblAddY
-        // 
-        lblAddY.Anchor = AnchorStyles.Left;
-        lblAddY.AutoSize = true;
-        lblAddY.Location = new Point(209, 7);
-        lblAddY.Name = "lblAddY";
-        lblAddY.Size = new Size(16, 20);
-        lblAddY.TabIndex = 2;
-        lblAddY.Text = "Y";
-        // 
+
         // nudAddY
-        // 
         nudAddY.Dock = DockStyle.Fill;
-        nudAddY.Location = new Point(259, 3);
+        nudAddY.Margin = new Padding(3, 4, 3, 4);
         nudAddY.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
         nudAddY.Minimum = new decimal(new int[] { 1000000, 0, 0, int.MinValue });
-        nudAddY.Name = "nudAddY";
-        nudAddY.Size = new Size(150, 27);
-        nudAddY.TabIndex = 3;
-        // 
-        // lblLocationName
-        // 
-        lblLocationName.Anchor = AnchorStyles.Left;
-        lblLocationName.AutoSize = true;
-        lblLocationName.Location = new Point(3, 40);
-        lblLocationName.Name = "lblLocationName";
-        lblLocationName.Size = new Size(29, 20);
-        lblLocationName.TabIndex = 4;
-        lblLocationName.Text = "Loc";
-        // 
+
         // txtLocationName
-        // 
-        tlpManage.SetColumnSpan(txtLocationName, 3);
         txtLocationName.Dock = DockStyle.Fill;
-        txtLocationName.Location = new Point(53, 36);
-        txtLocationName.Name = "txtLocationName";
+        txtLocationName.Margin = new Padding(3, 4, 3, 4);
         txtLocationName.PlaceholderText = "Location name";
-        txtLocationName.Size = new Size(356, 27);
-        txtLocationName.TabIndex = 5;
-        // 
-        // btnAdd
-        // 
-        tlpManage.SetColumnSpan(btnAdd, 2);
-        btnAdd.Dock = DockStyle.Fill;
-        btnAdd.Location = new Point(3, 69);
-        btnAdd.Name = "btnAdd";
-        btnAdd.Size = new Size(200, 37);
-        btnAdd.TabIndex = 6;
-        btnAdd.Text = "Add";
-        btnAdd.UseVisualStyleBackColor = true;
-        btnAdd.Click += btnAdd_Click;
-        // 
-        // btnRemoveSelected
-        // 
-        tlpManage.SetColumnSpan(btnRemoveSelected, 2);
-        btnRemoveSelected.Dock = DockStyle.Fill;
-        btnRemoveSelected.Location = new Point(209, 69);
-        btnRemoveSelected.Name = "btnRemoveSelected";
-        btnRemoveSelected.Size = new Size(200, 37);
-        btnRemoveSelected.TabIndex = 7;
-        btnRemoveSelected.Text = "X";
-        btnRemoveSelected.UseVisualStyleBackColor = true;
-        btnRemoveSelected.Click += btnRemoveSelected_Click;
-        // 
+
+        ConfigureGridButton(btnAdd, "Add", btnAdd_Click);
+        ConfigureGridButton(btnRemoveSelected, "X", btnRemoveSelected_Click);
+
         // WarpActionsControl
-        // 
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        Controls.Add(gbWarpActions);
+        Controls.Add(_tlpRoot);
         MinimumSize = new Size(430, 0);
         Name = "WarpActionsControl";
-        Size = new Size(430, 320);
-        gbWarpActions.ResumeLayout(false);
-        tlpRoot.ResumeLayout(false);
-        gbWarpCommands.ResumeLayout(false);
-        tlpCommands.ResumeLayout(false);
-        tlpCommands.PerformLayout();
-        ((System.ComponentModel.ISupportInitialize)nudSelectedX).EndInit();
-        ((System.ComponentModel.ISupportInitialize)nudSelectedY).EndInit();
-        gbManageWarp.ResumeLayout(false);
+        Size = new Size(430, 330);
+
+        ((System.ComponentModel.ISupportInitialize)nudAddY).EndInit();
+        ((System.ComponentModel.ISupportInitialize)nudAddX).EndInit();
         tlpManage.ResumeLayout(false);
         tlpManage.PerformLayout();
-        ((System.ComponentModel.ISupportInitialize)nudAddX).EndInit();
-        ((System.ComponentModel.ISupportInitialize)nudAddY).EndInit();
+        gbManageWarp.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)nudSelectedY).EndInit();
+        ((System.ComponentModel.ISupportInitialize)nudSelectedX).EndInit();
+        tlpCommands.ResumeLayout(false);
+        tlpCommands.PerformLayout();
+        gbWarpCommands.ResumeLayout(false);
+        tlpRoot.ResumeLayout(false);
+        gbWarpActions.ResumeLayout(false);
+        _tlpRoot.ResumeLayout(false);
         ResumeLayout(false);
+    }
+
+    private static void ConfigureLabel(Label label, string text)
+    {
+        label.Text = text;
+        label.Dock = DockStyle.Fill;
+        label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+        label.AutoSize = false;
+        label.Margin = new Padding(3, 0, 3, 0);
+    }
+
+    private static void ConfigureGridButton(Button button, string text, EventHandler handler)
+    {
+        button.Text = text;
+        button.AutoSize = false;
+        button.Dock = DockStyle.Fill;
+        button.Margin = new Padding(3);
+        button.UseVisualStyleBackColor = true;
+        button.Click += handler;
     }
 }
