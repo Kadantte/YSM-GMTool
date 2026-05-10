@@ -6,7 +6,7 @@ using System.Windows.Forms;
 partial class SkillsActionsControl
 {
     private System.ComponentModel.IContainer components = null;
-    private TableLayoutPanel _tlpRoot;
+
     private GroupBox gbSkillsActions;
     private TableLayoutPanel tlpRoot;
     private GroupBox gbSelected;
@@ -30,17 +30,12 @@ partial class SkillsActionsControl
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing && (components != null))
-        {
-            components.Dispose();
-        }
-
+        if (disposing && components != null) components.Dispose();
         base.Dispose(disposing);
     }
 
     private void InitializeComponent()
     {
-        _tlpRoot = new TableLayoutPanel();
         gbSkillsActions = new GroupBox();
         tlpRoot = new TableLayoutPanel();
         gbSelected = new GroupBox();
@@ -62,7 +57,6 @@ partial class SkillsActionsControl
         btnLearnCreatureSkill = new Button();
         btnLearnCreatureAllSkill = new Button();
 
-        _tlpRoot.SuspendLayout();
         gbSkillsActions.SuspendLayout();
         tlpRoot.SuspendLayout();
         gbSelected.SuspendLayout();
@@ -76,30 +70,25 @@ partial class SkillsActionsControl
         ((System.ComponentModel.ISupportInitialize)nudCreatureSlotIndex).BeginInit();
         SuspendLayout();
 
-        // _tlpRoot
-        _tlpRoot.Dock = DockStyle.Fill;
-        _tlpRoot.ColumnCount = 1;
-        _tlpRoot.RowCount = 1;
-        _tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-        _tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-        _tlpRoot.Controls.Add(gbSkillsActions, 0, 0);
-
-        // gbSkillsActions
+        // gbSkillsActions (outer wrapper)
         gbSkillsActions.Text = "Skills";
-        gbSkillsActions.AutoSize = false;
+        gbSkillsActions.AutoSize = true;
+        gbSkillsActions.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        gbSkillsActions.Dock = DockStyle.Top;
         gbSkillsActions.Padding = new Padding(8, 18, 8, 8);
-        gbSkillsActions.Dock = DockStyle.Fill;
+        gbSkillsActions.Margin = new Padding(0);
         gbSkillsActions.Controls.Add(tlpRoot);
 
-        // tlpRoot
-        tlpRoot.Dock = DockStyle.Fill;
+        // tlpRoot (3 sections stacked)
+        tlpRoot.AutoSize = true;
+        tlpRoot.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        tlpRoot.Dock = DockStyle.Top;
         tlpRoot.ColumnCount = 1;
-        tlpRoot.RowCount = 4;
         tlpRoot.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        tlpRoot.RowCount = 3;
         tlpRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         tlpRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         tlpRoot.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        tlpRoot.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
         tlpRoot.Controls.Add(gbSelected, 0, 0);
         tlpRoot.Controls.Add(gbPlayerSkills, 0, 1);
         tlpRoot.Controls.Add(gbCreatureSkills, 0, 2);
@@ -108,8 +97,9 @@ partial class SkillsActionsControl
         gbSelected.Text = "Selected";
         gbSelected.AutoSize = true;
         gbSelected.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        gbSelected.Padding = new Padding(8, 18, 8, 8);
         gbSelected.Dock = DockStyle.Top;
+        gbSelected.Padding = new Padding(8, 18, 8, 8);
+        gbSelected.Margin = new Padding(3, 3, 3, 6);
         gbSelected.Controls.Add(tlpSelected);
 
         // tlpSelected
@@ -117,11 +107,11 @@ partial class SkillsActionsControl
         tlpSelected.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         tlpSelected.Dock = DockStyle.Top;
         tlpSelected.ColumnCount = 4;
-        tlpSelected.RowCount = 1;
-        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 50F));
-        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
         tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
         tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80F));
+        tlpSelected.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tlpSelected.RowCount = 1;
         tlpSelected.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
         tlpSelected.Controls.Add(lblSkillId, 0, 0);
         tlpSelected.Controls.Add(nudSkillId, 1, 0);
@@ -130,37 +120,26 @@ partial class SkillsActionsControl
 
         ConfigureLabel(lblSkillId, "ID:");
         ConfigureLabel(lblSkillLevel, "Level:");
-
-        // nudSkillId
-        nudSkillId.Dock = DockStyle.Fill;
-        nudSkillId.Margin = new Padding(3, 4, 3, 4);
-        nudSkillId.Maximum = new decimal(new int[] { 1000000000, 0, 0, 0 });
-        nudSkillId.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-        nudSkillId.Value = new decimal(new int[] { 1, 0, 0, 0 });
-
-        // nudSkillLevel
-        nudSkillLevel.Dock = DockStyle.Fill;
-        nudSkillLevel.Margin = new Padding(3, 4, 3, 4);
-        nudSkillLevel.Maximum = new decimal(new int[] { 999, 0, 0, 0 });
-        nudSkillLevel.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-        nudSkillLevel.Value = new decimal(new int[] { 1, 0, 0, 0 });
+        ConfigureNumeric(nudSkillId, 1, 1_000_000_000, 1);
+        ConfigureNumeric(nudSkillLevel, 1, 999, 1);
 
         // gbPlayerSkills
         gbPlayerSkills.Text = "Player Skills";
         gbPlayerSkills.AutoSize = true;
         gbPlayerSkills.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        gbPlayerSkills.Padding = new Padding(8, 18, 8, 8);
         gbPlayerSkills.Dock = DockStyle.Top;
+        gbPlayerSkills.Padding = new Padding(8, 18, 8, 8);
+        gbPlayerSkills.Margin = new Padding(3, 3, 3, 6);
         gbPlayerSkills.Controls.Add(tlpPlayerSkills);
 
-        // tlpPlayerSkills (2x2 grid of buttons)
+        // tlpPlayerSkills (2x2 buttons)
         tlpPlayerSkills.AutoSize = true;
         tlpPlayerSkills.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         tlpPlayerSkills.Dock = DockStyle.Top;
         tlpPlayerSkills.ColumnCount = 2;
+        tlpPlayerSkills.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tlpPlayerSkills.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
         tlpPlayerSkills.RowCount = 2;
-        tlpPlayerSkills.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-        tlpPlayerSkills.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
         tlpPlayerSkills.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
         tlpPlayerSkills.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
         tlpPlayerSkills.Controls.Add(btnLearnSkill, 0, 0);
@@ -168,17 +147,18 @@ partial class SkillsActionsControl
         tlpPlayerSkills.Controls.Add(btnRemoveSkill, 0, 1);
         tlpPlayerSkills.Controls.Add(btnLearnAllJobSkills, 1, 1);
 
-        ConfigureGridButton(btnLearnSkill, "Learn skill", btnLearnSkill_Click);
-        ConfigureGridButton(btnSetSkill, "Set skill level", btnSetSkill_Click);
-        ConfigureGridButton(btnRemoveSkill, "Remove skill", btnRemoveSkill_Click);
-        ConfigureGridButton(btnLearnAllJobSkills, "Learn all skill", btnLearnAllJobSkills_Click);
+        ConfigureFillButton(btnLearnSkill, "Learn skill", btnLearnSkill_Click);
+        ConfigureFillButton(btnSetSkill, "Set skill level", btnSetSkill_Click);
+        ConfigureFillButton(btnRemoveSkill, "Remove skill", btnRemoveSkill_Click);
+        ConfigureFillButton(btnLearnAllJobSkills, "Learn all skills", btnLearnAllJobSkills_Click);
 
         // gbCreatureSkills
         gbCreatureSkills.Text = "Creature Skills";
         gbCreatureSkills.AutoSize = true;
         gbCreatureSkills.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        gbCreatureSkills.Padding = new Padding(8, 18, 8, 8);
         gbCreatureSkills.Dock = DockStyle.Top;
+        gbCreatureSkills.Padding = new Padding(8, 18, 8, 8);
+        gbCreatureSkills.Margin = new Padding(3, 3, 3, 6);
         gbCreatureSkills.Controls.Add(tlpCreature);
 
         // tlpCreature
@@ -186,9 +166,9 @@ partial class SkillsActionsControl
         tlpCreature.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         tlpCreature.Dock = DockStyle.Top;
         tlpCreature.ColumnCount = 2;
-        tlpCreature.RowCount = 3;
         tlpCreature.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160F));
         tlpCreature.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        tlpCreature.RowCount = 3;
         tlpCreature.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
         tlpCreature.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
         tlpCreature.RowStyles.Add(new RowStyle(SizeType.Absolute, 36F));
@@ -200,49 +180,53 @@ partial class SkillsActionsControl
         tlpCreature.SetColumnSpan(btnLearnCreatureAllSkill, 2);
 
         ConfigureLabel(lblCreatureSlotIndex, "Creature slot (0=all):");
+        ConfigureNumeric(nudCreatureSlotIndex, 0, 10, 0);
+        ConfigureFillButton(btnLearnCreatureSkill, "Learn creature skill", btnLearnCreatureSkill_Click);
+        ConfigureFillButton(btnLearnCreatureAllSkill, "Learn all creature skills", btnLearnCreatureAllSkill_Click);
 
-        // nudCreatureSlotIndex
-        nudCreatureSlotIndex.Dock = DockStyle.Fill;
-        nudCreatureSlotIndex.Margin = new Padding(3, 4, 3, 4);
-        nudCreatureSlotIndex.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
-
-        ConfigureGridButton(btnLearnCreatureSkill, "Learn creature skill", btnLearnCreatureSkill_Click);
-        ConfigureGridButton(btnLearnCreatureAllSkill, "Learn creature all skill", btnLearnCreatureAllSkill_Click);
-
-        // SkillsActionsControl
+        // SkillsActionsControl itself
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        Controls.Add(_tlpRoot);
+        AutoSize = true;
+        AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        Padding = Padding.Empty;
+        Margin = Padding.Empty;
+        Controls.Add(gbSkillsActions);
         Name = "SkillsActionsControl";
-        Size = new Size(430, 390);
 
         ((System.ComponentModel.ISupportInitialize)nudCreatureSlotIndex).EndInit();
         tlpCreature.ResumeLayout(false);
-        tlpCreature.PerformLayout();
         gbCreatureSkills.ResumeLayout(false);
         tlpPlayerSkills.ResumeLayout(false);
         gbPlayerSkills.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)nudSkillLevel).EndInit();
         ((System.ComponentModel.ISupportInitialize)nudSkillId).EndInit();
         tlpSelected.ResumeLayout(false);
-        tlpSelected.PerformLayout();
         gbSelected.ResumeLayout(false);
         tlpRoot.ResumeLayout(false);
         gbSkillsActions.ResumeLayout(false);
-        _tlpRoot.ResumeLayout(false);
         ResumeLayout(false);
     }
 
     private static void ConfigureLabel(Label label, string text)
     {
         label.Text = text;
+        label.AutoSize = false;
         label.Dock = DockStyle.Fill;
         label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-        label.AutoSize = false;
         label.Margin = new Padding(3, 0, 3, 0);
     }
 
-    private static void ConfigureGridButton(Button button, string text, EventHandler handler)
+    private static void ConfigureNumeric(NumericUpDown nud, int min, int max, int value)
+    {
+        nud.Dock = DockStyle.Fill;
+        nud.Margin = new Padding(3, 4, 3, 4);
+        nud.Minimum = min;
+        nud.Maximum = max;
+        nud.Value = value;
+    }
+
+    private static void ConfigureFillButton(Button button, string text, EventHandler handler)
     {
         button.Text = text;
         button.AutoSize = false;
