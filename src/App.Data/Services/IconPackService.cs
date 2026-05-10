@@ -25,7 +25,11 @@ public sealed class IconPackService : IIconPackService
             await schema.ExecuteNonQueryAsync(cancellationToken);
         }
 
-        var files = Directory.EnumerateFiles(sourceDirectory, "*.png", SearchOption.AllDirectories).ToArray();
+        string[] extensions = [".png", ".jpg", ".jpeg", ".bmp", ".gif", ".webp"];
+        var files = Directory
+            .EnumerateFiles(sourceDirectory, "*.*", SearchOption.AllDirectories)
+            .Where(p => extensions.Contains(Path.GetExtension(p), StringComparer.OrdinalIgnoreCase))
+            .ToArray();
         await using var tx = (SqliteTransaction)await conn.BeginTransactionAsync(cancellationToken);
 
         var inserted = 0;
