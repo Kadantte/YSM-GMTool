@@ -64,19 +64,22 @@ public sealed class SkillsTabViewModel : TabModuleViewModel
             && !string.IsNullOrWhiteSpace(settings.Current.EntityIconsPath)
             && Directory.Exists(settings.Current.EntityIconsPath);
 
+        // Single icons-on snapshot: columns and row-values must share the same shape (#3).
+        var iconsOn = Icons();
+
         Browser = new EntityBrowserViewModel<SkillRecord>(
             loadAllAsync: ct => settings.Current.UseLocalCache
                 ? cache.LoadAsync<SkillRecord>("skills", ct)
                 : repo.GetSkillsAsync(connection.Provider, connection.Resolve(), connection.Tokens(), ct),
             idSelector: x => x.SkillId,
             nameSelector: x => x.Skillname,
-            rowValuesSelector: x => Icons()
+            rowValuesSelector: x => iconsOn
                 ? new object?[] { x.IconFileName ?? string.Empty, x.SkillId, x.Skillname }
                 : new object?[] { x.SkillId, x.Skillname },
             normalizer: norm,
             maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null)
         {
-            Columns = Icons()
+            Columns = iconsOn
                 ?
                 [
                     new BrowserColumn("Icon", 44, IsImage: true, ImageSize: 36),

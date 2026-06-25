@@ -52,20 +52,23 @@ public sealed class SummonsTabViewModel : TabModuleViewModel
             && !string.IsNullOrWhiteSpace(settings.Current.EntityIconsPath)
             && Directory.Exists(settings.Current.EntityIconsPath);
 
+        // Single icons-on snapshot: columns and row-values must share the same shape (#3).
+        var iconsOn = Icons();
+
         Browser = new EntityBrowserViewModel<SummonRecord>(
             loadAllAsync: ct => settings.Current.UseLocalCache
                 ? cache.LoadAsync<SummonRecord>("summons", ct)
                 : repo.GetSummonsAsync(connection.Provider, connection.Resolve(), connection.Tokens(), ct),
             idSelector: x => x.SummonId,
             nameSelector: x => x.SummonName,
-            rowValuesSelector: x => Icons()
+            rowValuesSelector: x => iconsOn
                 ? new object?[] { x.IconFileName ?? string.Empty, x.SummonId, x.SummonName, x.CardName ?? string.Empty }
                 : new object?[] { x.SummonId, x.SummonName, x.CardName ?? string.Empty },
             normalizer: norm,
             searchableTextSelector: x => new[] { x.SummonName, x.CardName },
             maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null)
         {
-            Columns = Icons()
+            Columns = iconsOn
                 ?
                 [
                     new BrowserColumn("Icon", 44, IsImage: true, ImageSize: 36),

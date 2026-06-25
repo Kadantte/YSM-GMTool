@@ -60,19 +60,22 @@ public sealed class BuffsTabViewModel : TabModuleViewModel
             && !string.IsNullOrWhiteSpace(settings.Current.EntityIconsPath)
             && Directory.Exists(settings.Current.EntityIconsPath);
 
+        // Single icons-on snapshot: columns and row-values must share the same shape (#3).
+        var iconsOn = Icons();
+
         Browser = new EntityBrowserViewModel<StateRecord>(
             loadAllAsync: ct => settings.Current.UseLocalCache
                 ? cache.LoadAsync<StateRecord>("states", ct)
                 : repo.GetStatesAsync(connection.Provider, connection.Resolve(), connection.Tokens(), ct),
             idSelector: x => x.StateId,
             nameSelector: x => x.BuffName,
-            rowValuesSelector: x => Icons()
+            rowValuesSelector: x => iconsOn
                 ? new object?[] { x.IconFileName ?? string.Empty, x.StateId, x.BuffName }
                 : new object?[] { x.StateId, x.BuffName },
             normalizer: norm,
             maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null)
         {
-            Columns = Icons()
+            Columns = iconsOn
                 ?
                 [
                     new BrowserColumn("Icon", 28, IsImage: true, ImageSize: 20),

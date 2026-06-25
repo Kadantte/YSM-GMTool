@@ -62,19 +62,22 @@ public sealed class ItemsTabViewModel : TabModuleViewModel
             && !string.IsNullOrWhiteSpace(settings.Current.EntityIconsPath)
             && Directory.Exists(settings.Current.EntityIconsPath);
 
+        // Single icons-on snapshot: columns and row-values must share the same shape (#3).
+        var iconsOn = Icons();
+
         Browser = new EntityBrowserViewModel<ItemRecord>(
             loadAllAsync: ct => settings.Current.UseLocalCache
                 ? cache.LoadAsync<ItemRecord>("items", ct)
                 : repo.GetItemsAsync(connection.Provider, connection.Resolve(), connection.Tokens(), ct),
             idSelector: x => x.ItemId,
             nameSelector: x => x.NameEn,
-            rowValuesSelector: x => Icons()
+            rowValuesSelector: x => iconsOn
                 ? new object?[] { x.IconFileName ?? string.Empty, x.ItemId, x.NameEn }
                 : new object?[] { x.ItemId, x.NameEn },
             normalizer: norm,
             maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null)
         {
-            Columns = Icons()
+            Columns = iconsOn
                 ?
                 [
                     new BrowserColumn("Icon", 44, IsImage: true, ImageSize: 36),
