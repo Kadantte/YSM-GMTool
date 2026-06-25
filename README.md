@@ -2,7 +2,7 @@
 
 A Windows desktop GM utility for Rappelz private servers — browse game data, inspect player inventories/warehouses, and generate Lua commands directly to clipboard.
 
-Built with WinForms on .NET 10, with a native dark theme and fully async database access (MSSQL + MySQL).
+Built with Avalonia + ReactiveUI on .NET 10, with a native dark theme and fully async database access (MSSQL + MySQL).
 
 ---
 
@@ -24,18 +24,17 @@ Built with WinForms on .NET 10, with a native dark theme and fully async databas
 git clone https://github.com/your-org/YSM-GMTool.git
 cd YSM-GMTool
 dotnet restore YSM-GMTool.slnx
-dotnet run --project src/App.WinForms/App.WinForms.csproj
+dotnet run --project src/App.Desktop/App.Desktop.csproj
 ```
 
-**Option B — Release build (auto-publish to YSMReleasedTools)**
+**Option B — Release build**
 ```bash
-dotnet build src/App.WinForms/App.WinForms.csproj -c Release
+dotnet build YSM-GMTool.slnx -c Release
 ```
-*The Release build automatically publishes a clean executable output to `%USERPROFILE%\Documents\YSMReleasedTools\GM-Tool\`. If the build fails with a file-lock error, close `GM Tool.exe` from that folder and retry.*
 
-**Option C — Explicit clean publish**
+**Option C — Clean publish (framework-dependent, win-x64)**
 ```bash
-powershell -ExecutionPolicy Bypass -File .\scripts\publish-release.ps1
+dotnet publish src/App.Desktop/App.Desktop.csproj -c Release -r win-x64 --self-contained false -o publish
 ```
 
 ---
@@ -96,15 +95,16 @@ Browse NPCs with contact script search. Generate add/show/warp commands. Browse 
 - **Real-time Filtering Toggle:** Choose between search-as-you-type debounced filtering, or exact Search button submissions.
 
 ### Command Generation & Sidebar
-- Every action builds a Lua command from a configurable `lua_commands.json` template and copies it to clipboard.
+- Every action builds a Lua command from the hardcoded `LuaCommands` catalog (in `App.Core`) and copies it to clipboard.
 - Optional `/run` prefix: when **Append /run to commands** is checked, the `/run ` prefix is added to all non-comment commands.
+- **Command history** — every dispatched command is recorded in the right-sidebar history panel (copy selected / copy all / clear).
 - Manage a list of target players (add/remove from the right sidebar) to use as targets for multi-player commands.
 
 ---
 
 ## ⚙️ Configuration
 
-### SQL Queries — `src/App.WinForms/Config/queries.json`
+### SQL Queries — `src/App.Desktop/Config/queries.json`
 
 Queries are grouped by provider (`MSSQL`, `MySQL`) and entity key. Tokens in `{{DougleBraces}}` are replaced at runtime from Settings → Table Names.
 
@@ -123,9 +123,9 @@ Queries are grouped by provider (`MSSQL`, `MySQL`) and entity key. Tokens in `{{
 
 Parameterized queries use Dapper named parameters (`@SearchTerm`, `@OwnerId`, `@AccountName`).
 
-### Lua Templates — `src/App.WinForms/Config/lua_commands.json`
+### Lua Commands — `src/App.Core/Commands/LuaCommands.cs`
 
-Command templates use `{{placeholder}}` substitution. Edit freely to match your server's Lua API without recompiling.
+Lua commands are hardcoded as a typed catalog formatted with InvariantCulture. Edit the `LuaCommands` methods to match your server's Lua API.
 
 ### Environment Variables (`.env`)
 
@@ -136,7 +136,7 @@ YSM_DB_PROVIDER=MSSQL
 YSM_DB_CONNECTION_STRING=Server=localhost;Database=ArcadiaDB;User Id=sa;Password=...;TrustServerCertificate=True
 ```
 
-`.env` is gitignored. On Release auto-publish, the root `.env` (if present) is copied to the publish folder.
+`.env` is gitignored.
 
 ---
 
@@ -153,12 +153,11 @@ YSM_DB_CONNECTION_STRING=Server=localhost;Database=ArcadiaDB;User Id=sa;Password
 
 ```
 src/
-  App.Core/         # Models, interfaces, enums, query/lua stores, normalizer
+  App.Core/         # Models, abstractions, enums, services, hardcoded Lua command catalog
   App.Data/         # Dapper repository, DB connection factory
-  App.WinForms/     # WinForms UI: forms, controls, presenters, config
+  App.Desktop/      # Avalonia + ReactiveUI UI: shell, modules, view models, views
     Config/
       queries.json        # SQL queries per provider and entity
-      lua_commands.json   # Lua command templates
 ```
 
 ---
@@ -167,12 +166,13 @@ src/
 
 | Component | Library |
 |-----------|---------|
-| UI framework | WinForms (.NET 10) |
+| UI framework | Avalonia 11 + ReactiveUI (.NET 10) |
+| DI | Microsoft.Extensions.DependencyInjection (bridged via Splat) |
 | ORM | Dapper |
 | SQL Server | Microsoft.Data.SqlClient |
 | MySQL | MySqlConnector |
 | Logging | Serilog (file sink) |
-| Icons | FontAwesome.Sharp |
+| Icons | Projektanker.Icons.Avalonia (FontAwesome) |
 
 ---
 
