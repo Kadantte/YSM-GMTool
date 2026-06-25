@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Serilog;
 
 namespace App.Desktop.Infrastructure;
 
@@ -29,9 +30,10 @@ public static class IconCache
     {
         var normalized = string.IsNullOrWhiteSpace(rootPath) ? null : rootPath.Trim();
 
+        bool changed;
         lock (Gate)
         {
-            var changed = _enabled != enabled
+            changed = _enabled != enabled
                 || !string.Equals(_rootPath, normalized, StringComparison.OrdinalIgnoreCase);
 
             _enabled = enabled;
@@ -42,6 +44,13 @@ public static class IconCache
                 Cache.Clear();
             }
         }
+
+        Log.Debug(
+            "IconCache.Configure: enabled={Enabled} root={Root} rootExists={RootExists} changed={Changed}",
+            enabled,
+            normalized ?? "<null>",
+            normalized is not null && Directory.Exists(normalized),
+            changed);
     }
 
     /// <summary>Resolve a key to a square bitmap of <paramref name="iconSize"/>, or null if unavailable.</summary>
@@ -57,6 +66,11 @@ public static class IconCache
 
         if (!enabled || string.IsNullOrWhiteSpace(root) || string.IsNullOrWhiteSpace(iconKey))
         {
+            Log.Debug(
+                "IconCache.Resolve: skipped (enabled={Enabled} hasRoot={HasRoot} key={Key}).",
+                enabled,
+                !string.IsNullOrWhiteSpace(root),
+                iconKey ?? "<null>");
             return null;
         }
 
@@ -68,6 +82,11 @@ public static class IconCache
         {
             if (Cache.TryGetValue(cacheKey, out var cached))
             {
+                Log.Debug(
+                    "IconCache.Resolve: cache hit key={Key} size={Size} bitmap={HasBitmap}.",
+                    normalizedKey,
+                    size,
+                    cached is not null);
                 return cached;
             }
         }
@@ -87,16 +106,34 @@ public static class IconCache
         var path = ResolveIconFilePath(root, iconKey);
         if (string.IsNullOrWhiteSpace(path))
         {
+            Log.Debug(
+                "IconCache.Resolve: file NOT FOUND for key={Key} under root={Root} (size={Size}).",
+                iconKey,
+                root,
+                size);
             return null;
         }
 
         try
         {
             using var source = new Bitmap(path);
-            return ResizeWithLetterboxing(source, size);
+            var bitmap = ResizeWithLetterboxing(source, size);
+            Log.Debug(
+                "IconCache.Resolve: loaded key={Key} path={Path} src={SrcW}x{SrcH} -> size={Size}.",
+                iconKey,
+                path,
+                source.PixelSize.Width,
+                source.PixelSize.Height,
+                size);
+            return bitmap;
         }
-        catch
+        catch (Exception ex)
         {
+            Log.Debug(
+                ex,
+                "IconCache.Resolve: bitmap load FAILED for key={Key} path={Path}.",
+                iconKey,
+                path);
             return null;
         }
     }
@@ -105,6 +142,7 @@ public static class IconCache
     {
         if (!Directory.Exists(root))
         {
+            Log.Debug("IconCache.Resolve: root folder does not exist root={Root}.", root);
             return null;
         }
 

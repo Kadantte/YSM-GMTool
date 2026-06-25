@@ -119,6 +119,14 @@ public partial class EntityBrowserView : UserControl
         // Scale icons to the row height (minus padding) so they fill the configured row.
         var iconSize = Math.Max(8, (_browser?.RowHeight ?? column.ImageSize) - 4);
 
+        Serilog.Log.Debug(
+            "EntityBrowserView.BuildImageColumn: header={Header} index={Index} iconSize={IconSize} rowHeight={RowHeight} iconCacheEnabled={Enabled}.",
+            column.Header,
+            index,
+            iconSize,
+            _browser?.RowHeight,
+            IconCache.Enabled);
+
         var imageColumn = new DataGridTemplateColumn
         {
             Header = column.Header,

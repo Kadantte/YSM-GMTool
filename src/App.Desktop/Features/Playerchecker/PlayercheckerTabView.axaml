@@ -67,12 +67,12 @@
                       ScrollViewer.HorizontalScrollBarVisibility="Auto"
                       ItemsSource="{Binding Inventory}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Item ID" Binding="{Binding ItemId}" Width="90" />
-                    <DataGridTextColumn Header="Name" Binding="{Binding ItemName}" Width="*" />
-                    <DataGridTextColumn Header="Count" Binding="{Binding Count}" Width="70" />
-                    <DataGridTextColumn Header="Level" Binding="{Binding Level}" Width="70" />
-                    <DataGridTextColumn Header="Enhance" Binding="{Binding Enhance}" Width="75" />
-                    <DataGridTextColumn Header="Wear" Binding="{Binding WearInfo}" Width="60" />
+                    <DataGridTextColumn Header="Item ID" Binding="{Binding ItemId}" Width="Auto" MinWidth="90" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding ItemName}" Width="*" MinWidth="160" />
+                    <DataGridTextColumn Header="Count" Binding="{Binding Count}" Width="Auto" MinWidth="80" />
+                    <DataGridTextColumn Header="Level" Binding="{Binding Level}" Width="Auto" MinWidth="75" />
+                    <DataGridTextColumn Header="Enhance" Binding="{Binding Enhance}" Width="Auto" MinWidth="95" />
+                    <DataGridTextColumn Header="Wear" Binding="{Binding WearInfo}" Width="Auto" MinWidth="80" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

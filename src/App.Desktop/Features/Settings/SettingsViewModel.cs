@@ -438,6 +438,10 @@ public sealed class SettingsViewModel : ReactiveObject
 
         var updated = _working.Clone();
         _holder.Set(updated);
+        Log.Debug(
+            "Settings.Save: re-applying IconCache (enabled={Enabled} path={Path}).",
+            updated.EnableEntityIcons,
+            updated.EntityIconsPath ?? "<null>");
         IconCache.Configure(updated.EnableEntityIcons, updated.EntityIconsPath);
 
         try

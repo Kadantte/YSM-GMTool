@@ -22,10 +22,6 @@
                                            Increment="1" FormatString="0" Value="{Binding ItemId}" />
                         </StackPanel>
                         <StackPanel Classes="field">
-                            <TextBlock Classes="fieldLabel" Text="Name" />
-                            <TextBox IsReadOnly="True" Text="{Binding ItemName}" />
-                        </StackPanel>
-                        <StackPanel Classes="field">
                             <TextBlock Classes="fieldLabel" Text="Amount" />
                             <NumericUpDown Minimum="1" Maximum="99999"
                                            Increment="1" FormatString="0" Value="{Binding Amount}" />
