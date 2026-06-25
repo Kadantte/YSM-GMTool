@@ -1,0 +1,27 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:pc="clr-namespace:App.Desktop.Features.Playerchecker"
+        x:Class="App.Desktop.Features.Playerchecker.InventoryWindow"
+        x:DataType="pc:InventoryViewModel"
+        x:CompileBindings="False"
+        Title="{Binding Title}"
+        Width="760" Height="540"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource WindowBackground}">
+    <Grid RowDefinitions="Auto,*" Margin="8">
+        <TextBlock Grid.Row="0" Classes="sectionHeader" Text="{Binding Title}" Margin="0,0,0,6" />
+        <DataGrid x:Name="ItemsGrid"
+                  Grid.Row="1"
+                  IsReadOnly="True"
+                  SelectionMode="Extended"
+                  CanUserSortColumns="True"
+                  CanUserReorderColumns="False"
+                  CanUserResizeColumns="True"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="Column"
+                  FontSize="12"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  ItemsSource="{Binding Items}" />
+    </Grid>
+</Window>

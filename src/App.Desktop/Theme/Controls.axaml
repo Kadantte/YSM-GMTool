@@ -1,0 +1,141 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Baseline control styling matching the dark palette in Dark.axaml. -->
+
+    <Style Selector="Window">
+        <Setter Property="Background" Value="{DynamicResource WindowBackground}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+    </Style>
+
+    <!-- Compact density: smaller base font for chrome text. -->
+    <Style Selector="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+        <Setter Property="FontSize" Value="13" />
+    </Style>
+
+    <Style Selector="Label">
+        <Setter Property="Foreground" Value="{DynamicResource MutedForeground}" />
+        <Setter Property="FontSize" Value="13" />
+    </Style>
+
+    <Style Selector="TextBox">
+        <Setter Property="Background" Value="{DynamicResource PanelAltBackground}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="Padding" Value="6,3" />
+    </Style>
+
+    <Style Selector="ComboBox">
+        <Setter Property="Background" Value="{DynamicResource PanelAltBackground}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="Padding" Value="6,3" />
+    </Style>
+
+    <Style Selector="NumericUpDown">
+        <Setter Property="Background" Value="{DynamicResource PanelAltBackground}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="MinHeight" Value="28" />
+    </Style>
+
+    <Style Selector="Button">
+        <Setter Property="Background" Value="{DynamicResource PanelBackground}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="Padding" Value="11,5" />
+    </Style>
+
+    <Style Selector="Button:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource Accent}" />
+        <Setter Property="Foreground" Value="{DynamicResource SelectionForeground}" />
+    </Style>
+
+    <!-- Emphasized primary action: 2px accent border. -->
+    <Style Selector="Button.primary">
+        <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
+        <Setter Property="BorderThickness" Value="2" />
+    </Style>
+
+    <Style Selector="CheckBox">
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+    </Style>
+
+    <Style Selector="RadioButton">
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+    </Style>
+
+    <Style Selector="TabControl">
+        <Setter Property="Background" Value="{DynamicResource WindowBackground}" />
+    </Style>
+
+    <!-- Text-only tabs (no icons); active tab = accent underline + accent text.
+         FluentTheme 11.3 has no named selected-pipe part, so the underline is
+         drawn via the TabItem's own bottom border on the selected state. -->
+    <Style Selector="TabItem">
+        <Setter Property="Foreground" Value="{DynamicResource MutedForeground}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Padding" Value="11,7" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0,0,0,2" />
+    </Style>
+
+    <Style Selector="TabItem:selected">
+        <Setter Property="Foreground" Value="{DynamicResource Accent}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Accent}" />
+    </Style>
+
+    <Style Selector="DataGrid">
+        <Setter Property="Background" Value="{DynamicResource GridBackground}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Border}" />
+        <Setter Property="GridLinesVisibility" Value="All" />
+        <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource GridLine}" />
+        <Setter Property="VerticalGridLinesBrush" Value="{DynamicResource GridLine}" />
+        <Setter Property="RowBackground" Value="{DynamicResource RowBackground}" />
+    </Style>
+
+    <Style Selector="DataGridColumnHeader">
+        <Setter Property="Background" Value="{DynamicResource HeaderBackground}" />
+        <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
+        <Setter Property="FontSize" Value="12" />
+    </Style>
+
+    <Style Selector="DataGridRow:selected /template/ Rectangle#BackgroundRectangle">
+        <Setter Property="Fill" Value="{DynamicResource SelectionBackground}" />
+    </Style>
+
+    <!-- Reusable action-panel section header + divider. -->
+    <Style Selector="TextBlock.sectionHeader">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource MutedForeground}" />
+        <Setter Property="Margin" Value="0,4,0,4" />
+    </Style>
+
+    <Style Selector="Border.sectionDivider">
+        <Setter Property="BorderBrush" Value="{DynamicResource Border}" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+    </Style>
+
+    <!-- Responsive action-panel field block: ~130px labeled column that reflows
+         inside a WrapPanel. Each block stacks a small label above its input. -->
+    <Style Selector="StackPanel.field">
+        <Setter Property="Width" Value="130" />
+        <Setter Property="Margin" Value="0,0,8,6" />
+        <Setter Property="Spacing" Value="2" />
+    </Style>
+
+    <Style Selector="TextBlock.fieldLabel">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="{DynamicResource MutedForeground}" />
+    </Style>
+</Styles>

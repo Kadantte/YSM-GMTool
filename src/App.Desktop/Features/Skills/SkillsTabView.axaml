@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:App.Desktop.Controls"
+             xmlns:skills="clr-namespace:App.Desktop.Features.Skills"
+             x:Class="App.Desktop.Features.Skills.SkillsTabView"
+             x:Name="Root"
+             x:DataType="skills:SkillsTabViewModel"
+             Background="{DynamicResource WindowBackground}">
+    <controls:EntityBrowserView DataContext="{Binding Browser}">
+        <controls:EntityBrowserView.Actions>
+            <ScrollViewer DataContext="{Binding #Root.DataContext}">
+                <StackPanel Spacing="8" Margin="0,8,0,0">
+
+                    <!-- Skill -->
+                    <TextBlock Classes="sectionHeader" Text="Skill" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Skill ID" />
+                            <NumericUpDown Minimum="1" Maximum="1000000000"
+                                           Increment="1" FormatString="0" Value="{Binding SkillId}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Level" />
+                            <NumericUpDown Minimum="1" Maximum="999"
+                                           Increment="1" FormatString="0" Value="{Binding SkillLevel}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Creature slot" />
+                            <NumericUpDown Minimum="0" Maximum="10"
+                                           Increment="1" FormatString="0" Value="{Binding CreatureSlotIndex}" />
+                        </StackPanel>
+                    </WrapPanel>
+
+                    <!-- Player skills -->
+                    <TextBlock Classes="sectionHeader" Text="Player skills" Margin="0,8,0,4" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <Button Classes="primary" Content="Learn skill" Margin="0,0,6,6" Command="{Binding LearnSkill}" />
+                        <Button Content="Set skill level" Margin="0,0,6,6" Command="{Binding SetSkillLevel}" />
+                        <Button Content="Remove skill" Margin="0,0,6,6" Command="{Binding RemoveSkill}" />
+                        <Button Content="Learn all skill" Margin="0,0,6,6" Command="{Binding LearnAllSkill}" />
+                    </WrapPanel>
+
+                    <!-- Creature skills -->
+                    <TextBlock Classes="sectionHeader" Text="Creature skills" Margin="0,8,0,4" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <Button Content="Learn creature skill" Margin="0,0,6,6" Command="{Binding LearnCreatureSkill}" />
+                        <Button Content="Learn creature all skill" Margin="0,0,6,6" Command="{Binding LearnCreatureAllSkill}" />
+                    </WrapPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+        </controls:EntityBrowserView.Actions>
+    </controls:EntityBrowserView>
+</UserControl>

@@ -4,7 +4,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $RepoRoot = Split-Path -Parent $PSScriptRoot
-$ProjectPath = Join-Path $RepoRoot "src\App.WinForms\App.WinForms.csproj"
+$ProjectPath = Join-Path $RepoRoot "src\App.Desktop\App.Desktop.csproj"
 $PublishedExePath = Join-Path $PublishDir "GM Tool.exe"
 
 Get-Process |
@@ -24,8 +24,8 @@ if (Test-Path $PublishDir) {
 
 New-Item -ItemType Directory -Path $PublishDir -Force | Out-Null
 
-dotnet build $ProjectPath `
+dotnet publish $ProjectPath `
     -c Release `
-    -p:RuntimeIdentifier=win-x64 `
-    -p:AutoPublishDir="$PublishDir" `
-    -p:AutoPublishOnRelease=true
+    -r win-x64 `
+    --self-contained false `
+    -o "$PublishDir"

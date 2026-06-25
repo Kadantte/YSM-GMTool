@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
+             xmlns:shell="clr-namespace:App.Desktop.Shell"
+             x:Class="App.Desktop.Shell.TopBarView"
+             x:DataType="shell:TopBarViewModel"
+             x:CompileBindings="False"
+             Background="{DynamicResource SidebarBackground}">
+    <Border BorderBrush="{DynamicResource Border}" BorderThickness="0,0,0,1" Padding="10,6">
+        <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto,Auto,Auto,Auto">
+            <!-- Logo -->
+            <Image Grid.Column="0" Width="40" Height="40" Stretch="Uniform"
+                   Source="/Assets/Heaven_logo1.png" Margin="0,0,10,0"
+                   VerticalAlignment="Center" />
+
+            <!-- Title -->
+            <TextBlock Grid.Column="1" Text="GM Tool" FontSize="15" FontWeight="SemiBold"
+                       VerticalAlignment="Center" />
+
+            <!-- Target player -->
+            <TextBlock Grid.Column="3" Text="Target" VerticalAlignment="Center" Margin="0,0,6,0"
+                       Foreground="{DynamicResource MutedForeground}" />
+            <ComboBox Grid.Column="4" Width="150" VerticalAlignment="Center"
+                      ItemsSource="{Binding Players}"
+                      SelectedItem="{Binding SelectedPlayer, Mode=TwoWay}"
+                      PlaceholderText="self" />
+
+            <!-- Manage players -->
+            <Button Grid.Column="5" Width="30" Margin="6,0" VerticalAlignment="Center"
+                    ToolTip.Tip="Manage players">
+                <i:Icon Value="fa-solid fa-user-plus" FontSize="16" Foreground="{DynamicResource IconColor}" />
+                <Button.Flyout>
+                    <Flyout>
+                        <StackPanel Width="220" Spacing="6">
+                            <TextBox Watermark="New player name" Text="{Binding NewPlayerName, Mode=TwoWay}" />
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Button Content="Add" Command="{Binding AddPlayer}" />
+                                <Button Content="Remove selected" Command="{Binding RemovePlayer}" />
+                            </StackPanel>
+                            <ListBox ItemsSource="{Binding Players}"
+                                     SelectedItem="{Binding SelectedPlayer, Mode=TwoWay}"
+                                     MaxHeight="160" />
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+
+            <!-- Append /run toggle -->
+            <CheckBox Grid.Column="6" Content="/run" VerticalAlignment="Center" Margin="8,0"
+                      IsChecked="{Binding AppendRun, Mode=TwoWay}" />
+
+            <!-- Settings / About -->
+            <StackPanel Grid.Column="7" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                <Button Width="30" ToolTip.Tip="Settings" Command="{Binding OpenSettings}">
+                    <i:Icon Value="fa-solid fa-gear" FontSize="16" Foreground="{DynamicResource IconColor}" />
+                </Button>
+                <Button Width="30" ToolTip.Tip="About" Command="{Binding OpenAbout}">
+                    <i:Icon Value="fa-solid fa-circle-info" FontSize="16" Foreground="{DynamicResource IconColor}" />
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

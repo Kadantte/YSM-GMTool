@@ -1,0 +1,70 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:App.Desktop.Controls"
+             xmlns:buffs="clr-namespace:App.Desktop.Features.Buffs"
+             x:Class="App.Desktop.Features.Buffs.BuffsTabView"
+             x:Name="Root"
+             x:DataType="buffs:BuffsTabViewModel"
+             Background="{DynamicResource WindowBackground}">
+    <controls:EntityBrowserView DataContext="{Binding Browser}">
+        <controls:EntityBrowserView.Actions>
+            <ScrollViewer DataContext="{Binding #Root.DataContext}">
+                <StackPanel Spacing="8" Margin="0,8,0,0">
+
+                    <!-- Buff / State -->
+                    <TextBlock Classes="sectionHeader" Text="Buff / State" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="State ID" />
+                            <NumericUpDown Minimum="1" Maximum="1000000000"
+                                           Increment="1" FormatString="0" Value="{Binding StateId}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Name" />
+                            <TextBox IsReadOnly="True" Text="{Binding BuffName}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Level" />
+                            <NumericUpDown Minimum="1" Maximum="999"
+                                           Increment="1" FormatString="0" Value="{Binding BuffLevel}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Duration (min)" />
+                            <NumericUpDown Minimum="1" Maximum="100000"
+                                           Increment="1" FormatString="0" Value="{Binding DurationMinutes}" />
+                        </StackPanel>
+                    </WrapPanel>
+
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <RadioButton GroupName="BuffTarget" Content="Player"
+                                     IsChecked="{Binding !IsSummonTarget}" />
+                        <RadioButton GroupName="BuffTarget" Content="Summon"
+                                     IsChecked="{Binding IsSummonTarget}" />
+                    </StackPanel>
+
+                    <!-- Global states -->
+                    <TextBlock Classes="sectionHeader" Text="Global states" Margin="0,8,0,4" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <Button Content="Add Timed World State" Margin="0,0,6,6" Command="{Binding AddTimedWorldState}" />
+                        <Button Content="Add Event State" Margin="0,0,6,6" Command="{Binding AddEventState}" />
+                        <Button Content="Remove Event State" Margin="0,0,6,6" Command="{Binding RemoveEventState}" />
+                    </WrapPanel>
+
+                    <!-- Player / Creature buffs -->
+                    <TextBlock Classes="sectionHeader" Text="Player / Creature buffs" Margin="0,8,0,4" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <Button Classes="primary" Content="Add Buff" Margin="0,0,6,6" Command="{Binding AddBuff}" />
+                        <Button Content="Remove Buff" Margin="0,0,6,6" Command="{Binding RemoveBuff}" />
+                    </WrapPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+        </controls:EntityBrowserView.Actions>
+    </controls:EntityBrowserView>
+</UserControl>

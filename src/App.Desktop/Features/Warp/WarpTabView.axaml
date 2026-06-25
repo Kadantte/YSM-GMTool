@@ -1,0 +1,69 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:App.Desktop.Controls"
+             xmlns:warp="clr-namespace:App.Desktop.Features.Warp"
+             x:Class="App.Desktop.Features.Warp.WarpTabView"
+             x:Name="Root"
+             x:DataType="warp:WarpTabViewModel"
+             Background="{DynamicResource WindowBackground}">
+    <controls:EntityBrowserView DataContext="{Binding Browser}">
+        <controls:EntityBrowserView.Actions>
+            <ScrollViewer DataContext="{Binding #Root.DataContext}">
+                <StackPanel Spacing="8" Margin="0,8,0,0">
+
+                    <!-- Selected Warp -->
+                    <TextBlock Classes="sectionHeader" Text="Selected Warp" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="X" />
+                            <NumericUpDown Minimum="-1000000" Maximum="1000000"
+                                           Increment="1" FormatString="0"
+                                           IsReadOnly="True" Value="{Binding SelectedX}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Y" />
+                            <NumericUpDown Minimum="-1000000" Maximum="1000000"
+                                           Increment="1" FormatString="0"
+                                           IsReadOnly="True" Value="{Binding SelectedY}" />
+                        </StackPanel>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <Button Classes="primary" Content="Warp" Margin="0,0,6,6" Command="{Binding Warp}" />
+                        <Button Content="Warp to you" Margin="0,0,6,6" Command="{Binding WarpToYou}" />
+                        <Button Content="Warp to someone" Margin="0,0,6,6" Command="{Binding WarpToSomeone}" />
+                    </WrapPanel>
+
+                    <!-- Manage Warps -->
+                    <TextBlock Classes="sectionHeader" Text="Manage Warps" Margin="0,8,0,4" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="X" />
+                            <NumericUpDown Minimum="-1000000" Maximum="1000000"
+                                           Increment="1" FormatString="0" Value="{Binding AddX}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Y" />
+                            <NumericUpDown Minimum="-1000000" Maximum="1000000"
+                                           Increment="1" FormatString="0" Value="{Binding AddY}" />
+                        </StackPanel>
+                        <StackPanel Classes="field" Width="270">
+                            <TextBlock Classes="fieldLabel" Text="Location name" />
+                            <TextBox Watermark="Location name" Text="{Binding LocationName}" />
+                        </StackPanel>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <Button Content="Add" Margin="0,0,6,6" Command="{Binding Add}" />
+                        <Button Content="Remove selected" Margin="0,0,6,6" Command="{Binding RemoveSelected}" />
+                    </WrapPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+        </controls:EntityBrowserView.Actions>
+    </controls:EntityBrowserView>
+</UserControl>

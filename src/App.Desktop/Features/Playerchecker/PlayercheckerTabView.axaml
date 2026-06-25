@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:App.Desktop.Controls"
+             xmlns:pc="clr-namespace:App.Desktop.Features.Playerchecker"
+             x:Class="App.Desktop.Features.Playerchecker.PlayercheckerTabView"
+             x:Name="Root"
+             x:DataType="pc:PlayercheckerTabViewModel"
+             Background="{DynamicResource WindowBackground}">
+    <controls:EntityBrowserView DataContext="{Binding Browser}">
+        <controls:EntityBrowserView.Actions>
+            <ScrollViewer DataContext="{Binding #Root.DataContext}">
+                <StackPanel Spacing="8" Margin="0,8,0,0">
+
+                    <!-- Characters -->
+                    <TextBlock Classes="sectionHeader" Text="Characters" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <Button Classes="primary" Content="Load All Characters" Margin="0,0,6,6"
+                                Command="{Binding LoadAllCharacters}" />
+                        <Button Content="Load Online Characters" Margin="0,0,6,6"
+                                Command="{Binding LoadOnlineCharacters}" />
+                    </WrapPanel>
+
+                    <!-- Selected Character -->
+                    <TextBlock Classes="sectionHeader" Text="Selected Character" Margin="0,8,0,4" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <Button Content="Load inventory" Margin="0,0,6,6"
+                                Command="{Binding LoadInventory}" />
+                        <Button Content="Load WH" Margin="0,0,6,6"
+                                Command="{Binding LoadWarehouse}" />
+                        <Button Content="Open infos" Margin="0,0,6,6"
+                                Command="{Binding OpenInfos}" />
+                    </WrapPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+        </controls:EntityBrowserView.Actions>
+    </controls:EntityBrowserView>
+</UserControl>

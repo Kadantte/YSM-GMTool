@@ -1,6 +1,6 @@
 using System.Data.Common;
 using App.Core.Enums;
-using App.Core.Interfaces;
+using App.Core.Abstractions;
 using App.Core.Models;
 
 namespace App.Core.Services;

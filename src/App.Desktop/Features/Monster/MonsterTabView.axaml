@@ -1,0 +1,74 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:App.Desktop.Controls"
+             xmlns:monster="clr-namespace:App.Desktop.Features.Monster"
+             x:Class="App.Desktop.Features.Monster.MonsterTabView"
+             x:Name="Root"
+             x:DataType="monster:MonsterTabViewModel"
+             Background="{DynamicResource WindowBackground}">
+    <controls:EntityBrowserView DataContext="{Binding Browser}">
+        <controls:EntityBrowserView.Actions>
+            <ScrollViewer DataContext="{Binding #Root.DataContext}">
+                <StackPanel Spacing="8" Margin="0,8,0,0">
+
+                    <!-- Spawn Monster -->
+                    <TextBlock Classes="sectionHeader" Text="Spawn Monster" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <StackPanel Classes="field" Width="270">
+                            <TextBlock Classes="fieldLabel" Text="Spawn mode" />
+                            <ComboBox HorizontalAlignment="Stretch"
+                                      ItemsSource="{Binding SpawnModes}"
+                                      SelectedItem="{Binding SpawnMode}" />
+                        </StackPanel>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Monster ID" />
+                            <NumericUpDown Minimum="1" Maximum="1000000000"
+                                           Increment="1" FormatString="0" Value="{Binding MonsterId}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Amount" />
+                            <NumericUpDown Minimum="1" Maximum="10000"
+                                           Increment="1" FormatString="0" Value="{Binding Amount}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="X" />
+                            <NumericUpDown Minimum="-100000" Maximum="100000"
+                                           Increment="1" FormatString="0" Value="{Binding X}"
+                                           IsEnabled="{Binding IsCoordinatesEnabled}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Y" />
+                            <NumericUpDown Minimum="-100000" Maximum="100000"
+                                           Increment="1" FormatString="0" Value="{Binding Y}"
+                                           IsEnabled="{Binding IsCoordinatesEnabled}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Layer" />
+                            <NumericUpDown Minimum="-1000" Maximum="1000"
+                                           Increment="1" FormatString="0" Value="{Binding Layer}"
+                                           IsEnabled="{Binding IsCoordinatesEnabled}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <CheckBox Content="Lifetime" Margin="0,0,0,2"
+                                      IsChecked="{Binding UseLifetime}"
+                                      IsEnabled="{Binding IsUseLifetimeEnabled}" />
+                            <NumericUpDown Minimum="-1" Maximum="100000" Increment="1"
+                                           FormatString="0" Value="{Binding MinutesLifetime}"
+                                           IsEnabled="{Binding IsMinutesLifetimeEnabled}" />
+                        </StackPanel>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <Button Classes="primary" Content="Create Command" Command="{Binding CreateCommand}" />
+                    </WrapPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+        </controls:EntityBrowserView.Actions>
+    </controls:EntityBrowserView>
+</UserControl>

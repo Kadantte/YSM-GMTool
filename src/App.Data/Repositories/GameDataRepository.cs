@@ -1,5 +1,5 @@
 using App.Core.Enums;
-using App.Core.Interfaces;
+using App.Core.Abstractions;
 using App.Core.Models.Entities;
 using App.Data.Infrastructure;
 using Dapper;
@@ -10,11 +10,6 @@ public sealed class GameDataRepository(IQueryStore queryStore, DbConnectionFacto
 {
     private readonly IQueryStore _queryStore = queryStore;
     private readonly DbConnectionFactory _connectionFactory = connectionFactory;
-
-    static GameDataRepository()
-    {
-        DefaultTypeMap.MatchNamesWithUnderscores = true;
-    }
 
     public Task<IReadOnlyList<PlayerRecord>> GetPlayersAsync(
         DatabaseProvider provider,

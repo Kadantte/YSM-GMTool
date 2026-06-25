@@ -1,6 +1,6 @@
 using System.Text.Json;
 using App.Core.Enums;
-using App.Core.Interfaces;
+using App.Core.Abstractions;
 
 namespace App.Core.Services;
 

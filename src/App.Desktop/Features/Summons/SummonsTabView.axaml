@@ -1,0 +1,62 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:App.Desktop.Controls"
+             xmlns:summons="clr-namespace:App.Desktop.Features.Summons"
+             x:Class="App.Desktop.Features.Summons.SummonsTabView"
+             x:Name="Root"
+             x:DataType="summons:SummonsTabViewModel"
+             Background="{DynamicResource WindowBackground}">
+    <controls:EntityBrowserView DataContext="{Binding Browser}">
+        <controls:EntityBrowserView.Actions>
+            <ScrollViewer DataContext="{Binding #Root.DataContext}">
+                <StackPanel Spacing="8" Margin="0,8,0,0">
+
+                    <!-- Add Summon -->
+                    <TextBlock Classes="sectionHeader" Text="Add Summon" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Summon ID" />
+                            <NumericUpDown Minimum="0" Maximum="2000000000"
+                                           Increment="1" FormatString="0" Value="{Binding SummonId}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <CheckBox Content="Stage" Margin="0,0,0,2"
+                                      IsChecked="{Binding UseAddStage}" />
+                            <NumericUpDown Minimum="0" Maximum="10" Increment="1"
+                                           FormatString="0" Value="{Binding AddStage}"
+                                           IsEnabled="{Binding UseAddStage}" />
+                        </StackPanel>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <Button Classes="primary" Content="Add Summon" Command="{Binding AddSummon}" />
+                    </WrapPanel>
+
+                    <!-- Stage Summon -->
+                    <TextBlock Classes="sectionHeader" Text="Stage Summon" Margin="0,8,0,4" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Slot" />
+                            <ComboBox HorizontalAlignment="Stretch"
+                                      ItemsSource="{Binding Slots}" SelectedItem="{Binding Slot}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Stage" />
+                            <NumericUpDown Minimum="0" Maximum="10"
+                                           Increment="1" FormatString="0" Value="{Binding Stage}" />
+                        </StackPanel>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <Button Content="Stage Summon" Command="{Binding StageSummon}" />
+                    </WrapPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+        </controls:EntityBrowserView.Actions>
+    </controls:EntityBrowserView>
+</UserControl>

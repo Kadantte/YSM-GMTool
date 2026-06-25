@@ -1,6 +1,7 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using App.Core.Models;
-using App.Core.Interfaces;
+using App.Core.Abstractions;
 
 namespace App.Core.Services;
 
@@ -9,7 +10,8 @@ public sealed class JsonAppSettingsService(string filePath) : IAppSettingsServic
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
-        WriteIndented = true
+        WriteIndented = true,
+        Converters = { new JsonStringEnumConverter() },
     };
 
     private readonly string _filePath = filePath;

@@ -13,6 +13,7 @@ x86/
 [Aa][Rr][Mm]64/
 artifacts/
 publish/
+*.jpg
 
 # Logs
 *.log
@@ -97,3 +98,6 @@ Desktop.ini
 *.local.json
 appsettings.Development.json
 secrets.json
+
+# Git worktrees (local isolated workspaces)
+.worktrees/

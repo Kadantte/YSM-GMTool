@@ -1,0 +1,102 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:App.Desktop.Controls"
+             xmlns:items="clr-namespace:App.Desktop.Features.Items"
+             x:Class="App.Desktop.Features.Items.ItemsTabView"
+             x:Name="Root"
+             x:DataType="items:ItemsTabViewModel"
+             Background="{DynamicResource WindowBackground}">
+    <controls:EntityBrowserView DataContext="{Binding Browser}">
+        <controls:EntityBrowserView.Actions>
+            <ScrollViewer DataContext="{Binding #Root.DataContext}">
+                <StackPanel Spacing="8" Margin="0,8,0,0">
+
+                    <!-- Give / Insert -->
+                    <TextBlock Classes="sectionHeader" Text="Give / Insert" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Item ID" />
+                            <NumericUpDown Minimum="1" Maximum="1000000000"
+                                           Increment="1" FormatString="0" Value="{Binding ItemId}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Amount" />
+                            <NumericUpDown Minimum="1" Maximum="99999"
+                                           Increment="1" FormatString="0" Value="{Binding Amount}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Enhance" />
+                            <NumericUpDown Minimum="0" Maximum="999"
+                                           Increment="1" FormatString="0" Value="{Binding Enhance}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Level" />
+                            <NumericUpDown Minimum="1" Maximum="999"
+                                           Increment="1" FormatString="0" Value="{Binding Level}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <CheckBox Content="Statusflag" Margin="0,0,0,2"
+                                      IsChecked="{Binding UseStatusFlag}" />
+                            <NumericUpDown Minimum="0" Maximum="999999" Increment="1"
+                                           FormatString="0" Value="{Binding StatusFlagValue}"
+                                           IsEnabled="{Binding UseStatusFlag}" />
+                        </StackPanel>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <Button Classes="primary" Content="Add yourself" Margin="0,0,6,6" Command="{Binding AddYourself}" />
+                        <Button Content="Give other player" Margin="0,0,6,6" Command="{Binding GiveOtherPlayer}" />
+                    </WrapPanel>
+
+                    <!-- Modify Equipped Item -->
+                    <TextBlock Classes="sectionHeader" Text="Modify Equipped Item" Margin="0,8,0,4" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <StackPanel Classes="field" Width="270">
+                            <TextBlock Classes="fieldLabel" Text="Targeted Wear-Slot" />
+                            <ComboBox HorizontalAlignment="Stretch"
+                                      ItemsSource="{Binding WearSlots}"
+                                      SelectedItem="{Binding WearSlot}" />
+                        </StackPanel>
+                    </WrapPanel>
+
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <RadioButton GroupName="ItemsTarget" Content="Own"
+                                     IsChecked="{Binding !ApplyToOther}" />
+                        <RadioButton GroupName="ItemsTarget" Content="Other"
+                                     IsChecked="{Binding ApplyToOther}" />
+                    </StackPanel>
+
+                    <WrapPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Level" />
+                            <NumericUpDown Minimum="1" Maximum="999"
+                                           Increment="1" FormatString="0" Value="{Binding ModifyLevel}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Enhance" />
+                            <NumericUpDown Minimum="0" Maximum="999"
+                                           Increment="1" FormatString="0" Value="{Binding ModifyEnhance}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Itemcode" />
+                            <NumericUpDown Minimum="1" Maximum="1000000000"
+                                           Increment="1" FormatString="0" Value="{Binding ModifyItemCode}" />
+                        </StackPanel>
+                    </WrapPanel>
+
+                    <WrapPanel>
+                        <Button Content="Edit level" Margin="0,0,6,6" Command="{Binding EditLevel}" />
+                        <Button Content="Edit Enhance" Margin="0,0,6,6" Command="{Binding EditEnhance}" />
+                        <Button Content="Change appearance" Margin="0,0,6,6" Command="{Binding ChangeAppearance}" />
+                        <Button Content="Change itemcode" Margin="0,0,6,6" Command="{Binding ChangeItemCode}" />
+                    </WrapPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+        </controls:EntityBrowserView.Actions>
+    </controls:EntityBrowserView>
+</UserControl>
