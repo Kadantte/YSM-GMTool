@@ -125,4 +125,17 @@
         <Setter Property="BorderBrush" Value="{DynamicResource Border}" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
     </Style>
+
+    <!-- Responsive action-panel field block: ~130px labeled column that reflows
+         inside a WrapPanel. Each block stacks a small label above its input. -->
+    <Style Selector="StackPanel.field">
+        <Setter Property="Width" Value="130" />
+        <Setter Property="Margin" Value="0,0,8,6" />
+        <Setter Property="Spacing" Value="2" />
+    </Style>
+
+    <Style Selector="TextBlock.fieldLabel">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="{DynamicResource MutedForeground}" />
+    </Style>
 </Styles>

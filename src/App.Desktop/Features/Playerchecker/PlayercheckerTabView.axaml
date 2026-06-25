@@ -11,30 +11,32 @@
         <controls:EntityBrowserView Grid.Row="0" DataContext="{Binding Browser}">
             <controls:EntityBrowserView.Actions>
                 <ScrollViewer DataContext="{Binding #Root.DataContext}">
-                    <StackPanel Spacing="10" Margin="0,8,0,0">
-                        <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
-                                Background="{DynamicResource PanelBackground}" Padding="8" CornerRadius="3">
-                            <StackPanel Spacing="6">
-                                <TextBlock Text="Characters" FontWeight="SemiBold" />
-                                <Button Content="Load All Characters" HorizontalAlignment="Stretch"
-                                        Command="{Binding LoadAllCharacters}" />
-                                <Button Content="Load Online Characters" HorizontalAlignment="Stretch"
-                                        Command="{Binding LoadOnlineCharacters}" />
-                            </StackPanel>
-                        </Border>
+                    <StackPanel Spacing="8" Margin="0,8,0,0">
 
-                        <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
-                                Background="{DynamicResource PanelAltBackground}" Padding="8" CornerRadius="3">
-                            <StackPanel Spacing="6">
-                                <TextBlock Text="Selected Character" FontWeight="SemiBold" />
-                                <Button Content="Load inventory" HorizontalAlignment="Stretch"
-                                        Command="{Binding LoadInventory}" />
-                                <Button Content="Load WH" HorizontalAlignment="Stretch"
-                                        Command="{Binding LoadWarehouse}" />
-                                <Button Content="Open infos" HorizontalAlignment="Stretch"
-                                        Command="{Binding OpenInfos}" />
-                            </StackPanel>
-                        </Border>
+                        <!-- Characters -->
+                        <TextBlock Classes="sectionHeader" Text="Characters" />
+                        <Border Classes="sectionDivider" />
+
+                        <WrapPanel>
+                            <Button Classes="primary" Content="Load All Characters" Margin="0,0,6,6"
+                                    Command="{Binding LoadAllCharacters}" />
+                            <Button Content="Load Online Characters" Margin="0,0,6,6"
+                                    Command="{Binding LoadOnlineCharacters}" />
+                        </WrapPanel>
+
+                        <!-- Selected Character -->
+                        <TextBlock Classes="sectionHeader" Text="Selected Character" Margin="0,8,0,4" />
+                        <Border Classes="sectionDivider" />
+
+                        <WrapPanel>
+                            <Button Content="Load inventory" Margin="0,0,6,6"
+                                    Command="{Binding LoadInventory}" />
+                            <Button Content="Load WH" Margin="0,0,6,6"
+                                    Command="{Binding LoadWarehouse}" />
+                            <Button Content="Open infos" Margin="0,0,6,6"
+                                    Command="{Binding OpenInfos}" />
+                        </WrapPanel>
+
                     </StackPanel>
                 </ScrollViewer>
             </controls:EntityBrowserView.Actions>
@@ -47,9 +49,8 @@
         <!-- Bottom: inventory / warehouse grid -->
         <Grid Grid.Row="2" RowDefinitions="Auto,*" Margin="6,4,6,6">
             <TextBlock Grid.Row="0"
+                       Classes="sectionHeader"
                        Text="{Binding InventoryTitle}"
-                       Foreground="{DynamicResource MutedForeground}"
-                       FontWeight="SemiBold"
                        Margin="0,0,0,4" />
             <DataGrid x:Name="InventoryGrid"
                       Grid.Row="1"
@@ -60,6 +61,10 @@
                       CanUserResizeColumns="True"
                       AutoGenerateColumns="False"
                       HeadersVisibility="Column"
+                      FontSize="12"
+                      RowHeight="{Binding Browser.RowHeight}"
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                       ItemsSource="{Binding Inventory}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Item ID" Binding="{Binding ItemId}" Width="90" />

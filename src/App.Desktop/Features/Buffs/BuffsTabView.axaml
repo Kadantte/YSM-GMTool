@@ -9,51 +9,60 @@
     <controls:EntityBrowserView DataContext="{Binding Browser}">
         <controls:EntityBrowserView.Actions>
             <ScrollViewer DataContext="{Binding #Root.DataContext}">
-                <StackPanel Spacing="10" Margin="0,8,0,0">
-                    <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
-                            Background="{DynamicResource PanelBackground}" Padding="8" CornerRadius="3">
-                        <StackPanel Spacing="6">
-                            <TextBlock Text="Buff / State" FontWeight="SemiBold" />
+                <StackPanel Spacing="8" Margin="0,8,0,0">
 
-                            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto"
-                                  ColumnSpacing="8" RowSpacing="6">
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="State ID" VerticalAlignment="Center" />
-                                <NumericUpDown Grid.Row="0" Grid.Column="1" Minimum="1" Maximum="1000000000"
-                                               Increment="1" FormatString="0" Value="{Binding StateId}" />
+                    <!-- Buff / State -->
+                    <TextBlock Classes="sectionHeader" Text="Buff / State" />
+                    <Border Classes="sectionDivider" />
 
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" VerticalAlignment="Center" />
-                                <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="True" Text="{Binding BuffName}" />
-
-                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Level" VerticalAlignment="Center" />
-                                <NumericUpDown Grid.Row="2" Grid.Column="1" Minimum="1" Maximum="999"
-                                               Increment="1" FormatString="0" Value="{Binding BuffLevel}" />
-
-                                <TextBlock Grid.Row="3" Grid.Column="0" Text="Duration (min)" VerticalAlignment="Center" />
-                                <NumericUpDown Grid.Row="3" Grid.Column="1" Minimum="1" Maximum="100000"
-                                               Increment="1" FormatString="0" Value="{Binding DurationMinutes}" />
-                            </Grid>
-
-                            <StackPanel Orientation="Horizontal" Spacing="12">
-                                <RadioButton GroupName="BuffTarget" Content="Player"
-                                             IsChecked="{Binding !IsSummonTarget}" />
-                                <RadioButton GroupName="BuffTarget" Content="Summon"
-                                             IsChecked="{Binding IsSummonTarget}" />
-                            </StackPanel>
-
-                            <TextBlock Text="Global states" FontWeight="SemiBold" Margin="0,4,0,0" />
-                            <WrapPanel>
-                                <Button Content="Add Timed World State" Margin="0,0,6,6" Command="{Binding AddTimedWorldState}" />
-                                <Button Content="Add Event State" Margin="0,0,6,6" Command="{Binding AddEventState}" />
-                                <Button Content="Remove Event State" Command="{Binding RemoveEventState}" />
-                            </WrapPanel>
-
-                            <TextBlock Text="Player / Creature buffs" FontWeight="SemiBold" Margin="0,4,0,0" />
-                            <WrapPanel>
-                                <Button Content="Add Buff" Margin="0,0,6,0" Command="{Binding AddBuff}" />
-                                <Button Content="Remove Buff" Command="{Binding RemoveBuff}" />
-                            </WrapPanel>
+                    <WrapPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="State ID" />
+                            <NumericUpDown Minimum="1" Maximum="1000000000"
+                                           Increment="1" FormatString="0" Value="{Binding StateId}" />
                         </StackPanel>
-                    </Border>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Name" />
+                            <TextBox IsReadOnly="True" Text="{Binding BuffName}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Level" />
+                            <NumericUpDown Minimum="1" Maximum="999"
+                                           Increment="1" FormatString="0" Value="{Binding BuffLevel}" />
+                        </StackPanel>
+                        <StackPanel Classes="field">
+                            <TextBlock Classes="fieldLabel" Text="Duration (min)" />
+                            <NumericUpDown Minimum="1" Maximum="100000"
+                                           Increment="1" FormatString="0" Value="{Binding DurationMinutes}" />
+                        </StackPanel>
+                    </WrapPanel>
+
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <RadioButton GroupName="BuffTarget" Content="Player"
+                                     IsChecked="{Binding !IsSummonTarget}" />
+                        <RadioButton GroupName="BuffTarget" Content="Summon"
+                                     IsChecked="{Binding IsSummonTarget}" />
+                    </StackPanel>
+
+                    <!-- Global states -->
+                    <TextBlock Classes="sectionHeader" Text="Global states" Margin="0,8,0,4" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <Button Content="Add Timed World State" Margin="0,0,6,6" Command="{Binding AddTimedWorldState}" />
+                        <Button Content="Add Event State" Margin="0,0,6,6" Command="{Binding AddEventState}" />
+                        <Button Content="Remove Event State" Margin="0,0,6,6" Command="{Binding RemoveEventState}" />
+                    </WrapPanel>
+
+                    <!-- Player / Creature buffs -->
+                    <TextBlock Classes="sectionHeader" Text="Player / Creature buffs" Margin="0,8,0,4" />
+                    <Border Classes="sectionDivider" />
+
+                    <WrapPanel>
+                        <Button Classes="primary" Content="Add Buff" Margin="0,0,6,6" Command="{Binding AddBuff}" />
+                        <Button Content="Remove Buff" Margin="0,0,6,6" Command="{Binding RemoveBuff}" />
+                    </WrapPanel>
+
                 </StackPanel>
             </ScrollViewer>
         </controls:EntityBrowserView.Actions>
