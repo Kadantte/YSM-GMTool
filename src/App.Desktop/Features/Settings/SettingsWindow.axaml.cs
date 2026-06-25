@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,8 +19,6 @@ public partial class SettingsWindow : Window
         _viewModel.CloseRequested += (_, _) => Close();
         DataContext = _viewModel;
     }
-
-    private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
     private async Task<string?> PickFolderAsync(string? startPath)
     {

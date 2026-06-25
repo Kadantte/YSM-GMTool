@@ -1,7 +1,6 @@
 using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 
 namespace App.Desktop.Features.About;
 
@@ -18,8 +17,6 @@ public partial class AboutWindow : Window
 
         VersionText.Text = $"Version {version}";
     }
-
-    private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
     private void OnOk(object? sender, RoutedEventArgs e) => Close();
 }

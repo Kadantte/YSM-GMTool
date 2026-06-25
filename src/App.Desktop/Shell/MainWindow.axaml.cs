@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using App.Core.Abstractions;
 using App.Desktop.Services;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -21,8 +20,6 @@ public partial class MainWindow : Window
         DataContext = Program.Services.GetRequiredService<ShellViewModel>();
         Closing += OnClosing;
     }
-
-    private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
     private async void OnClosing(object? sender, WindowClosingEventArgs e)
     {

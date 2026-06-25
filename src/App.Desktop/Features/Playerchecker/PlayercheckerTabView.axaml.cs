@@ -5,7 +5,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml;
 
 namespace App.Desktop.Features.Playerchecker;
 
@@ -16,8 +15,6 @@ public partial class PlayercheckerTabView : UserControl
         InitializeComponent();
         InventoryGrid.DoubleTapped += OnInventoryDoubleTapped;
     }
-
-    private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
     private void OnInventoryDoubleTapped(object? sender, TappedEventArgs e)
     {
