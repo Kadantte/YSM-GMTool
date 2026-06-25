@@ -77,8 +77,7 @@ public sealed class WarpTabViewModel : TabModuleViewModel
             idSelector: x => x.X,
             nameSelector: x => x.Name,
             rowValuesSelector: x => new object?[] { x.X, x.Y, x.Name },
-            normalizer: norm,
-            settingsHolder: settings)
+            normalizer: norm)
         {
             Columns =
             [

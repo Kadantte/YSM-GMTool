@@ -18,7 +18,6 @@
                   HeadersVisibility="Column"
                   MinWidth="320"
                   FontSize="12"
-                  RowHeight="{Binding RowHeight}"
                   ScrollViewer.VerticalScrollBarVisibility="Visible"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   ItemsSource="{Binding Rows}"

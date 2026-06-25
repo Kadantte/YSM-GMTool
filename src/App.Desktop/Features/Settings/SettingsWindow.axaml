@@ -135,12 +135,6 @@
                                     Command="{Binding Browse}"
                                     IsEnabled="{Binding EnableEntityIcons}" />
                         </Grid>
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="Row height" VerticalAlignment="Center" Width="120" />
-                            <Slider Minimum="18" Maximum="48"
-                                    Value="{Binding RowHeight, Mode=TwoWay}" Width="220" />
-                            <TextBlock Text="{Binding RowHeight}" VerticalAlignment="Center" />
-                        </StackPanel>
                         <Button Content="Export to local cache"
                                 HorizontalAlignment="Left"
                                 Command="{Binding ExportCache}" />

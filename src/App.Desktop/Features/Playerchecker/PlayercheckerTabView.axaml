@@ -62,7 +62,6 @@
                       AutoGenerateColumns="False"
                       HeadersVisibility="Column"
                       FontSize="12"
-                      RowHeight="{Binding Browser.RowHeight}"
                       ScrollViewer.VerticalScrollBarVisibility="Visible"
                       ScrollViewer.HorizontalScrollBarVisibility="Auto"
                       ItemsSource="{Binding Inventory}">

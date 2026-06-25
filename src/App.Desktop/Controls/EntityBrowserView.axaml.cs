@@ -1,3 +1,4 @@
+using System.Linq;
 using App.Desktop.Infrastructure;
 using App.Desktop.ViewModels;
 using Avalonia;
@@ -53,28 +54,14 @@ public partial class EntityBrowserView : UserControl
 
     private void OnDataContextChanged(object? sender, EventArgs e)
     {
-        if (_browser is not null)
-        {
-            _browser.ColumnsChanged -= OnColumnsChanged;
-        }
-
         _browser = DataContext as IEntityBrowser;
         if (_browser is null)
         {
             return;
         }
 
-        _browser.ColumnsChanged += OnColumnsChanged;
         BuildColumns(_browser.Columns);
         SyncSearchModeRadios(_browser.SearchMode);
-    }
-
-    private void OnColumnsChanged(object? sender, EventArgs e)
-    {
-        if (_browser is not null)
-        {
-            BuildColumns(_browser.Columns);
-        }
     }
 
     private void BuildColumns(IReadOnlyList<BrowserColumn> columns)
@@ -95,6 +82,11 @@ public partial class EntityBrowserView : UserControl
                 RecordsGrid.Columns.Add(BuildTextColumn(column, index));
             }
         }
+
+        // Row height follows the icon: when an image column is present, size rows to the icon
+        // (plus a little padding); otherwise leave the grid's default content-based height.
+        var imageSizes = columns.Where(c => c.IsImage).Select(c => c.ImageSize).ToList();
+        RecordsGrid.RowHeight = imageSizes.Count > 0 ? imageSizes.Max() + 6 : double.NaN;
     }
 
     private DataGridColumn BuildTextColumn(BrowserColumn column, int index)
@@ -116,18 +108,10 @@ public partial class EntityBrowserView : UserControl
 
     private DataGridColumn BuildImageColumn(BrowserColumn column, int index)
     {
-        // Scale icons to the row height (minus padding) so they fill the configured row.
-        var iconSize = Math.Max(8, (_browser?.RowHeight ?? column.ImageSize) - 4);
+        // Icons render at the column's configured size; rows size to match (see BuildColumns).
+        var iconSize = column.ImageSize;
 
-        Serilog.Log.Debug(
-            "EntityBrowserView.BuildImageColumn: header={Header} index={Index} iconSize={IconSize} rowHeight={RowHeight} iconCacheEnabled={Enabled}.",
-            column.Header,
-            index,
-            iconSize,
-            _browser?.RowHeight,
-            IconCache.Enabled);
-
-        var imageColumn = new DataGridTemplateColumn
+        return new DataGridTemplateColumn
         {
             Header = column.Header,
             Width = new DataGridLength(column.Width),
@@ -146,8 +130,6 @@ public partial class EntityBrowserView : UserControl
                 return image;
             }),
         };
-
-        return imageColumn;
     }
 
     private void OnGridDoubleTapped(object? sender, TappedEventArgs e)

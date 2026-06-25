@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using App.Core.Abstractions;
-using App.Desktop.Services;
 using ReactiveUI;
 
 namespace App.Desktop.ViewModels;
@@ -23,12 +22,6 @@ public interface IEntityBrowser
 
     SearchMode SearchMode { get; set; }
 
-    /// <summary>Data-grid row height (pixels), sourced from settings and clamped 18–48.</summary>
-    int RowHeight { get; }
-
-    /// <summary>Raised when icon settings or row height change, so the view rebuilds its columns.</summary>
-    event EventHandler? ColumnsChanged;
-
     void SortByColumn(int columnIndex);
 }
 
@@ -39,10 +32,6 @@ public interface IEntityBrowser
 /// </summary>
 public sealed class EntityBrowserViewModel<TRecord> : ReactiveObject, IEntityBrowser
 {
-    private const int DefaultRowHeight = 26;
-    private const int MinRowHeight = 18;
-    private const int MaxRowHeight = 48;
-
     private static readonly Regex IdRangeRegex = new(
         @"^\s*(?<from>\d+)\s*-\s*(?<to>\d+)\s*$",
         RegexOptions.Compiled | RegexOptions.CultureInvariant);
@@ -56,10 +45,6 @@ public sealed class EntityBrowserViewModel<TRecord> : ReactiveObject, IEntityBro
     private readonly Func<TRecord, string?>? _secondarySearchTextSelector;
     private readonly Func<string, SearchMode, CancellationToken, Task<IReadOnlyList<TRecord>>>? _sqlSearchAsync;
     private readonly Func<int?>? _maxRowsSelector;
-    private readonly IAppSettingsHolder? _settingsHolder;
-
-    private int _rowHeight = DefaultRowHeight;
-    private (bool Enabled, string? Path) _iconState;
 
     private List<SearchIndexedRecord> _index = [];
     private List<BrowserRow> _allRows = [];
@@ -86,8 +71,7 @@ public sealed class EntityBrowserViewModel<TRecord> : ReactiveObject, IEntityBro
         Func<TRecord, IEnumerable<string?>>? searchableTextSelector = null,
         Func<TRecord, string?>? secondarySearchTextSelector = null,
         Func<string, SearchMode, CancellationToken, Task<IReadOnlyList<TRecord>>>? sqlSearchAsync = null,
-        Func<int?>? maxRowsSelector = null,
-        IAppSettingsHolder? settingsHolder = null)
+        Func<int?>? maxRowsSelector = null)
     {
         _loadAllAsync = loadAllAsync;
         _idSelector = idSelector;
@@ -98,14 +82,6 @@ public sealed class EntityBrowserViewModel<TRecord> : ReactiveObject, IEntityBro
         _secondarySearchTextSelector = secondarySearchTextSelector;
         _sqlSearchAsync = sqlSearchAsync;
         _maxRowsSelector = maxRowsSelector;
-        _settingsHolder = settingsHolder;
-
-        if (_settingsHolder is not null)
-        {
-            _rowHeight = ClampRowHeight(_settingsHolder.Current.RowHeight);
-            _iconState = (_settingsHolder.Current.EnableEntityIcons, _settingsHolder.Current.EntityIconsPath);
-            _settingsHolder.Changed += OnSettingsChanged;
-        }
 
         LoadAll = ReactiveCommand.CreateFromTask(LoadAllAsync);
         Filter = ReactiveCommand.CreateFromTask(() => ApplyFilterAsync(SearchText, SearchMode));
@@ -128,19 +104,9 @@ public sealed class EntityBrowserViewModel<TRecord> : ReactiveObject, IEntityBro
     /// <summary>Raised with the underlying exception when a load/filter operation fails.</summary>
     public event EventHandler<Exception>? ErrorOccurred;
 
-    /// <summary>Raised when icon settings or row height change, so the view rebuilds its columns.</summary>
-    public event EventHandler? ColumnsChanged;
-
     // --- Configuration (set by the owning tab VM after construction). ---
 
     public IReadOnlyList<BrowserColumn> Columns { get; set; } = [];
-
-    /// <summary>Data-grid row height (pixels), sourced from settings and clamped 18–48.</summary>
-    public int RowHeight
-    {
-        get => _rowHeight;
-        private set => this.RaiseAndSetIfChanged(ref _rowHeight, value);
-    }
 
     public string ByIdLabel { get; set; } = "Search by ID";
 
@@ -489,29 +455,6 @@ public sealed class EntityBrowserViewModel<TRecord> : ReactiveObject, IEntityBro
     private static bool IsInRange(int value, int from, int to) => value >= from && value <= to;
 
     private static string Format(int count) => count.ToString("N0", CultureInfo.InvariantCulture);
-
-    private static int ClampRowHeight(int value) => Math.Clamp(value, MinRowHeight, MaxRowHeight);
-
-    private void OnSettingsChanged(object? sender, EventArgs e)
-    {
-        if (_settingsHolder is null)
-        {
-            return;
-        }
-
-        var newRowHeight = ClampRowHeight(_settingsHolder.Current.RowHeight);
-        var newIconState = (_settingsHolder.Current.EnableEntityIcons, _settingsHolder.Current.EntityIconsPath);
-
-        var changed = newRowHeight != RowHeight || newIconState != _iconState;
-
-        RowHeight = newRowHeight;
-        _iconState = newIconState;
-
-        if (changed)
-        {
-            ColumnsChanged?.Invoke(this, EventArgs.Empty);
-        }
-    }
 
     private readonly record struct SearchIndexedRecord(
         TRecord Item,
