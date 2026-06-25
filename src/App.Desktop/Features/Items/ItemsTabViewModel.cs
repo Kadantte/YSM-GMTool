@@ -152,6 +152,9 @@ public sealed class ItemsTabViewModel : TabModuleViewModel
             self: () => LuaCommands.ChangeWearItemCodeOwn(WearSlotIndex, ModifyItemCode),
             other: p => LuaCommands.ChangeWearItemCodePlayer(WearSlotIndex, p, ModifyItemCode),
             requireItemCode: true));
+
+        // Auto-load game data at startup (failures are silent — see AutoLoadAsync).
+        _ = Browser.AutoLoadAsync();
     }
 
     // --- Insert inputs (defaults per parity inventory). ---

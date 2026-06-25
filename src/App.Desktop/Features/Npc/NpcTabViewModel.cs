@@ -132,6 +132,9 @@ public sealed class NpcTabViewModel : TabModuleViewModel
 
             await _cmd.DispatchAsync(LuaCommands.WarpToNpcCoordinates(NpcX, NpcY, p));
         });
+
+        // Auto-load game data at startup (failures are silent — see AutoLoadAsync).
+        _ = Browser.AutoLoadAsync();
     }
 
     // --- Inputs. ---

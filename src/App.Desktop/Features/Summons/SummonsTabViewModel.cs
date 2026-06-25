@@ -107,6 +107,9 @@ public sealed class SummonsTabViewModel : TabModuleViewModel
 
         StageSummon = ReactiveCommand.CreateFromTask(() =>
             _cmd.DispatchAsync(LuaCommands.StageSummon(Slot, Stage)));
+
+        // Auto-load game data at startup (failures are silent — see AutoLoadAsync).
+        _ = Browser.AutoLoadAsync();
     }
 
     // --- Inputs. ---

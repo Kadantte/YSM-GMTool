@@ -83,7 +83,7 @@ public sealed class EntityBrowserViewModel<TRecord> : ReactiveObject, IEntityBro
         _sqlSearchAsync = sqlSearchAsync;
         _maxRowsSelector = maxRowsSelector;
 
-        LoadAll = ReactiveCommand.CreateFromTask(LoadAllAsync);
+        LoadAll = ReactiveCommand.CreateFromTask(() => LoadAllAsync());
         Filter = ReactiveCommand.CreateFromTask(() => ApplyFilterAsync(SearchText, SearchMode));
 
         LoadAll.ThrownExceptions.Subscribe(ex => ErrorOccurred?.Invoke(this, ex));
@@ -199,6 +199,13 @@ public sealed class EntityBrowserViewModel<TRecord> : ReactiveObject, IEntityBro
         }
     }
 
+    /// <summary>
+    /// Startup auto-load: same as the <see cref="LoadAll"/> command, but a failure only updates
+    /// <see cref="Status"/> instead of raising <see cref="ErrorOccurred"/>. This keeps an unconfigured
+    /// or unreachable database from popping an error dialog for every tab when the app starts.
+    /// </summary>
+    public Task AutoLoadAsync() => LoadAllAsync(silent: true);
+
     /// <summary>Re-sorts the current rows by the given column (toggles asc/desc on repeat clicks).</summary>
     public void SortByColumn(int columnIndex)
     {
@@ -248,7 +255,7 @@ public sealed class EntityBrowserViewModel<TRecord> : ReactiveObject, IEntityBro
         SelectedRow = null;
     }
 
-    private async Task LoadAllAsync()
+    private async Task LoadAllAsync(bool silent = false)
     {
         _loadCts?.Cancel();
         _loadCts?.Dispose();
@@ -266,6 +273,12 @@ public sealed class EntityBrowserViewModel<TRecord> : ReactiveObject, IEntityBro
         catch (OperationCanceledException)
         {
             // Ignore stale load operations.
+        }
+        catch (Exception ex) when (silent)
+        {
+            // Auto-load: surface the failure in the status line only (no dialog), so an
+            // unconfigured/unreachable DB doesn't pop a modal per tab at startup.
+            Status = $"Auto-load failed: {ex.Message} Click Load All to retry.";
         }
         catch (Exception ex)
         {

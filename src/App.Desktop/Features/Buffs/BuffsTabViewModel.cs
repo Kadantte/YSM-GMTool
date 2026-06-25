@@ -119,6 +119,9 @@ public sealed class BuffsTabViewModel : TabModuleViewModel
             player: p => IsSummonTarget
                 ? LuaCommands.RemoveCreatureState(StateId, p)
                 : LuaCommands.RemovePlayerState(StateId, p)));
+
+        // Auto-load game data at startup (failures are silent — see AutoLoadAsync).
+        _ = Browser.AutoLoadAsync();
     }
 
     // --- Inputs. ---

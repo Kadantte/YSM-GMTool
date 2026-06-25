@@ -136,6 +136,9 @@ public sealed class SkillsTabViewModel : TabModuleViewModel
                 ? LuaCommands.LearnCreatureAllSkill(CreatureSlotIndex)
                 : LuaCommands.LearnCreatureAllSkillForPlayer(CreatureSlotIndex, target));
         });
+
+        // Auto-load game data at startup (failures are silent — see AutoLoadAsync).
+        _ = Browser.AutoLoadAsync();
     }
 
     // --- Inputs. ---

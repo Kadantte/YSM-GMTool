@@ -103,6 +103,9 @@ public sealed class MonsterTabViewModel : TabModuleViewModel
             });
 
         CreateCommand = ReactiveCommand.CreateFromTask(CreateCommandAsync);
+
+        // Auto-load game data at startup (failures are silent — see AutoLoadAsync).
+        _ = Browser.AutoLoadAsync();
     }
 
     // --- Inputs (defaults per parity inventory). ---
