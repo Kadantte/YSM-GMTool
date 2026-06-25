@@ -1,0 +1,61 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:App.Desktop.Controls"
+             xmlns:summons="clr-namespace:App.Desktop.Features.Summons"
+             x:Class="App.Desktop.Features.Summons.SummonsTabView"
+             x:Name="Root"
+             x:DataType="summons:SummonsTabViewModel"
+             Background="{DynamicResource WindowBackground}">
+    <controls:EntityBrowserView DataContext="{Binding Browser}">
+        <controls:EntityBrowserView.Actions>
+            <ScrollViewer DataContext="{Binding #Root.DataContext}">
+                <StackPanel Spacing="10" Margin="0,8,0,0">
+                    <!-- Add summon -->
+                    <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
+                            Background="{DynamicResource PanelBackground}" Padding="8" CornerRadius="3">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Add Summon" FontWeight="SemiBold" />
+
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" RowSpacing="6">
+                                <TextBlock Grid.Column="0" Text="Summon ID" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Column="1" Minimum="0" Maximum="2000000000"
+                                               Increment="1" FormatString="0" Value="{Binding SummonId}" />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                <CheckBox Grid.Column="0" Content="Stage" VerticalAlignment="Center"
+                                          IsChecked="{Binding UseAddStage}" />
+                                <NumericUpDown Grid.Column="1" Minimum="0" Maximum="10" Increment="1"
+                                               FormatString="0" Value="{Binding AddStage}"
+                                               IsEnabled="{Binding UseAddStage}" />
+                            </Grid>
+
+                            <Button Content="Add Summon" HorizontalAlignment="Left" Command="{Binding AddSummon}" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Stage summon -->
+                    <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
+                            Background="{DynamicResource PanelBackground}" Padding="8" CornerRadius="3">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Stage Summon" FontWeight="SemiBold" />
+
+                            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto"
+                                  ColumnSpacing="8" RowSpacing="6">
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Slot" VerticalAlignment="Center" />
+                                <ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"
+                                          ItemsSource="{Binding Slots}" SelectedItem="{Binding Slot}" />
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Stage" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="10"
+                                               Increment="1" FormatString="0" Value="{Binding Stage}" />
+                            </Grid>
+
+                            <Button Content="Stage Summon" HorizontalAlignment="Left" Command="{Binding StageSummon}" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </controls:EntityBrowserView.Actions>
+    </controls:EntityBrowserView>
+</UserControl>

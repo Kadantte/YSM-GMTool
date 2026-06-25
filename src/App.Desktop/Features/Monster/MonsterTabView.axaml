@@ -1,0 +1,69 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:App.Desktop.Controls"
+             xmlns:monster="clr-namespace:App.Desktop.Features.Monster"
+             x:Class="App.Desktop.Features.Monster.MonsterTabView"
+             x:Name="Root"
+             x:DataType="monster:MonsterTabViewModel"
+             Background="{DynamicResource WindowBackground}">
+    <controls:EntityBrowserView DataContext="{Binding Browser}">
+        <controls:EntityBrowserView.Actions>
+            <ScrollViewer DataContext="{Binding #Root.DataContext}">
+                <StackPanel Spacing="10" Margin="0,8,0,0">
+                    <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
+                            Background="{DynamicResource PanelBackground}" Padding="8" CornerRadius="3">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Spawn Monster" FontWeight="SemiBold" />
+
+                            <TextBlock Text="Spawn mode" />
+                            <ComboBox HorizontalAlignment="Stretch"
+                                      ItemsSource="{Binding SpawnModes}"
+                                      SelectedItem="{Binding SpawnMode}" />
+
+                            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto"
+                                  ColumnSpacing="8" RowSpacing="6">
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Monster ID" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Row="0" Grid.Column="1" Minimum="1" Maximum="1000000000"
+                                               Increment="1" FormatString="0" Value="{Binding MonsterId}" />
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Amount" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Row="1" Grid.Column="1" Minimum="1" Maximum="10000"
+                                               Increment="1" FormatString="0" Value="{Binding Amount}" />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto"
+                                  ColumnSpacing="8" RowSpacing="6">
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="X" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Row="0" Grid.Column="1" Minimum="-100000" Maximum="100000"
+                                               Increment="1" FormatString="0" Value="{Binding X}"
+                                               IsEnabled="{Binding IsCoordinatesEnabled}" />
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Y" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Row="1" Grid.Column="1" Minimum="-100000" Maximum="100000"
+                                               Increment="1" FormatString="0" Value="{Binding Y}"
+                                               IsEnabled="{Binding IsCoordinatesEnabled}" />
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Layer" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Row="2" Grid.Column="1" Minimum="-1000" Maximum="1000"
+                                               Increment="1" FormatString="0" Value="{Binding Layer}"
+                                               IsEnabled="{Binding IsCoordinatesEnabled}" />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                <CheckBox Grid.Column="0" Content="Lifetime" VerticalAlignment="Center"
+                                          IsChecked="{Binding UseLifetime}"
+                                          IsEnabled="{Binding IsUseLifetimeEnabled}" />
+                                <NumericUpDown Grid.Column="1" Minimum="-1" Maximum="100000" Increment="1"
+                                               FormatString="0" Value="{Binding MinutesLifetime}"
+                                               IsEnabled="{Binding IsMinutesLifetimeEnabled}" />
+                            </Grid>
+
+                            <Button Content="Create Command" HorizontalAlignment="Left"
+                                    Command="{Binding CreateCommand}" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </controls:EntityBrowserView.Actions>
+    </controls:EntityBrowserView>
+</UserControl>

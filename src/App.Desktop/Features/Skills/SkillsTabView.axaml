@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:App.Desktop.Controls"
+             xmlns:skills="clr-namespace:App.Desktop.Features.Skills"
+             x:Class="App.Desktop.Features.Skills.SkillsTabView"
+             x:Name="Root"
+             x:DataType="skills:SkillsTabViewModel"
+             Background="{DynamicResource WindowBackground}">
+    <controls:EntityBrowserView DataContext="{Binding Browser}">
+        <controls:EntityBrowserView.Actions>
+            <ScrollViewer DataContext="{Binding #Root.DataContext}">
+                <StackPanel Spacing="10" Margin="0,8,0,0">
+                    <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
+                            Background="{DynamicResource PanelBackground}" Padding="8" CornerRadius="3">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Skills" FontWeight="SemiBold" />
+
+                            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto"
+                                  ColumnSpacing="8" RowSpacing="6">
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Skill ID" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Row="0" Grid.Column="1" Minimum="1" Maximum="1000000000"
+                                               Increment="1" FormatString="0" Value="{Binding SkillId}" />
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Level" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Row="1" Grid.Column="1" Minimum="1" Maximum="999"
+                                               Increment="1" FormatString="0" Value="{Binding SkillLevel}" />
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Creature slot" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="10"
+                                               Increment="1" FormatString="0" Value="{Binding CreatureSlotIndex}" />
+                            </Grid>
+
+                            <TextBlock Text="Player skills" FontWeight="SemiBold" Margin="0,4,0,0" />
+                            <WrapPanel>
+                                <Button Content="Learn skill" Margin="0,0,6,6" Command="{Binding LearnSkill}" />
+                                <Button Content="Set skill level" Margin="0,0,6,6" Command="{Binding SetSkillLevel}" />
+                                <Button Content="Remove skill" Margin="0,0,6,6" Command="{Binding RemoveSkill}" />
+                                <Button Content="Learn all skill" Command="{Binding LearnAllSkill}" />
+                            </WrapPanel>
+
+                            <TextBlock Text="Creature skills" FontWeight="SemiBold" Margin="0,4,0,0" />
+                            <WrapPanel>
+                                <Button Content="Learn creature skill" Margin="0,0,6,0" Command="{Binding LearnCreatureSkill}" />
+                                <Button Content="Learn creature all skill" Command="{Binding LearnCreatureAllSkill}" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </controls:EntityBrowserView.Actions>
+    </controls:EntityBrowserView>
+</UserControl>

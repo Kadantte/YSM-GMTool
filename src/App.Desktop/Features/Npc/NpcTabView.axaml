@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:App.Desktop.Controls"
+             xmlns:npc="clr-namespace:App.Desktop.Features.Npc"
+             x:Class="App.Desktop.Features.Npc.NpcTabView"
+             x:Name="Root"
+             x:DataType="npc:NpcTabViewModel"
+             Background="{DynamicResource WindowBackground}">
+    <controls:EntityBrowserView DataContext="{Binding Browser}">
+        <controls:EntityBrowserView.Actions>
+            <ScrollViewer DataContext="{Binding #Root.DataContext}">
+                <StackPanel Spacing="10" Margin="0,8,0,0">
+                    <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
+                            Background="{DynamicResource PanelBackground}" Padding="8" CornerRadius="3">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="NPC" FontWeight="SemiBold" />
+
+                            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+                                  ColumnSpacing="8" RowSpacing="6">
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="NPC ID" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="2000000000"
+                                               Increment="1" FormatString="0" Value="{Binding NpcId}" />
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" VerticalAlignment="Center" />
+                                <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="True" Text="{Binding NpcName}" />
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Contact script" VerticalAlignment="Center" />
+                                <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="True" Text="{Binding ContactScript}" />
+
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="X" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Row="3" Grid.Column="1" Minimum="-1000000" Maximum="1000000"
+                                               Increment="1" FormatString="0" Value="{Binding NpcX}" />
+
+                                <TextBlock Grid.Row="4" Grid.Column="0" Text="Y" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Row="4" Grid.Column="1" Minimum="-1000000" Maximum="1000000"
+                                               Increment="1" FormatString="0" Value="{Binding NpcY}" />
+
+                                <TextBlock Grid.Row="5" Grid.Column="0" Text="Layer" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Row="5" Grid.Column="1" Minimum="-1000" Maximum="1000"
+                                               Increment="1" FormatString="0" Value="{Binding Layer}" />
+                            </Grid>
+
+                            <CheckBox Content="Hide NPC" IsChecked="{Binding HideNpc}" />
+
+                            <WrapPanel>
+                                <Button Content="Add NPC to world" Margin="0,0,6,6" Command="{Binding AddNpcToWorld}" />
+                                <Button Content="Show / Hide NPC" Margin="0,0,6,6" Command="{Binding ShowHideNpc}" />
+                                <Button Content="Warp to NPC" Command="{Binding WarpToNpc}" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </controls:EntityBrowserView.Actions>
+    </controls:EntityBrowserView>
+</UserControl>
