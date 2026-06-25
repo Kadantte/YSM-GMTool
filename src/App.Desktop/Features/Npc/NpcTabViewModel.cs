@@ -70,7 +70,8 @@ public sealed class NpcTabViewModel : TabModuleViewModel
             normalizer: norm,
             searchableTextSelector: x => new[] { x.NpcTitle },
             secondarySearchTextSelector: x => x.ContactScript,
-            maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null)
+            maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null,
+            settingsHolder: settings)
         {
             Columns =
             [

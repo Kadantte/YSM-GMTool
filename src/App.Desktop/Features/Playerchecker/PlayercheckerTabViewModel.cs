@@ -79,7 +79,8 @@ public sealed class PlayercheckerTabViewModel : TabModuleViewModel
                 searchByAccount: mode == SearchMode.ById,
                 connection.Tokens(),
                 ct),
-            maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null)
+            maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null,
+            settingsHolder: settings)
         {
             Columns =
             [

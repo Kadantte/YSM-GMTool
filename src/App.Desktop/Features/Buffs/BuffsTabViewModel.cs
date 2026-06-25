@@ -73,7 +73,8 @@ public sealed class BuffsTabViewModel : TabModuleViewModel
                 ? new object?[] { x.IconFileName ?? string.Empty, x.StateId, x.BuffName }
                 : new object?[] { x.StateId, x.BuffName },
             normalizer: norm,
-            maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null)
+            maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null,
+            settingsHolder: settings)
         {
             Columns = iconsOn
                 ?

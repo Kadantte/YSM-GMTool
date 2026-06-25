@@ -66,7 +66,8 @@ public sealed class SummonsTabViewModel : TabModuleViewModel
                 : new object?[] { x.SummonId, x.SummonName, x.CardName ?? string.Empty },
             normalizer: norm,
             searchableTextSelector: x => new[] { x.SummonName, x.CardName },
-            maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null)
+            maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null,
+            settingsHolder: settings)
         {
             Columns = iconsOn
                 ?

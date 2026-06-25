@@ -74,7 +74,8 @@ public sealed class MonsterTabViewModel : TabModuleViewModel
             },
             normalizer: norm,
             searchableTextSelector: x => new[] { x.Name, x.Location },
-            maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null)
+            maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null,
+            settingsHolder: settings)
         {
             Columns =
             [

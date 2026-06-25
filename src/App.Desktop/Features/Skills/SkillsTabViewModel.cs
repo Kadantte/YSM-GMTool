@@ -77,7 +77,8 @@ public sealed class SkillsTabViewModel : TabModuleViewModel
                 ? new object?[] { x.IconFileName ?? string.Empty, x.SkillId, x.Skillname }
                 : new object?[] { x.SkillId, x.Skillname },
             normalizer: norm,
-            maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null)
+            maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null,
+            settingsHolder: settings)
         {
             Columns = iconsOn
                 ?

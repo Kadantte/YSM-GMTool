@@ -75,7 +75,8 @@ public sealed class ItemsTabViewModel : TabModuleViewModel
                 ? new object?[] { x.IconFileName ?? string.Empty, x.ItemId, x.NameEn }
                 : new object?[] { x.ItemId, x.NameEn },
             normalizer: norm,
-            maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null)
+            maxRowsSelector: () => settings.Current.LimitSelectQueries ? 1000 : (int?)null,
+            settingsHolder: settings)
         {
             Columns = iconsOn
                 ?
