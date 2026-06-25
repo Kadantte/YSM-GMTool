@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 
 namespace App.Desktop.Infrastructure;
 
@@ -10,8 +9,6 @@ public partial class DialogWindow : Window
     {
         InitializeComponent();
     }
-
-    private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
     public DialogWindow Configure(string title, string message, bool showCancel)
     {

@@ -24,7 +24,12 @@
                     </StackPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate x:DataType="modules:ITabModule">
+                    <ContentControl Content="{Binding}" />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
         </TabControl>
-        <Border Grid.Column="1" Background="{DynamicResource SidebarBackground}" />
+        <shell:SidebarView Grid.Column="1" DataContext="{Binding Sidebar}" />
     </Grid>
 </Window>
