@@ -5,7 +5,7 @@
              mc:Ignorable="d"
              x:CompileBindings="False"
              x:Class="App.Desktop.Controls.EntityBrowserView">
-    <Grid ColumnDefinitions="*,Auto,Auto" Margin="6">
+    <Grid ColumnDefinitions="42*,Auto,58*" Margin="6">
         <!-- Left: data grid -->
         <DataGrid x:Name="RecordsGrid"
                   Grid.Column="0"
@@ -17,6 +17,10 @@
                   AutoGenerateColumns="False"
                   HeadersVisibility="Column"
                   MinWidth="320"
+                  FontSize="12"
+                  RowHeight="{Binding RowHeight}"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   ItemsSource="{Binding Rows}"
                   SelectedItem="{Binding SelectedRow, Mode=TwoWay}" />
 
@@ -28,8 +32,7 @@
 
         <!-- Right: search + actions -->
         <StackPanel Grid.Column="2"
-                    Width="360"
-                    MinWidth="360"
+                    MinWidth="300"
                     Margin="8,0,0,0"
                     Spacing="8">
             <TextBox x:Name="SearchBox"

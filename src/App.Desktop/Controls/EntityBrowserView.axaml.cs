@@ -53,14 +53,28 @@ public partial class EntityBrowserView : UserControl
 
     private void OnDataContextChanged(object? sender, EventArgs e)
     {
+        if (_browser is not null)
+        {
+            _browser.ColumnsChanged -= OnColumnsChanged;
+        }
+
         _browser = DataContext as IEntityBrowser;
         if (_browser is null)
         {
             return;
         }
 
+        _browser.ColumnsChanged += OnColumnsChanged;
         BuildColumns(_browser.Columns);
         SyncSearchModeRadios(_browser.SearchMode);
+    }
+
+    private void OnColumnsChanged(object? sender, EventArgs e)
+    {
+        if (_browser is not null)
+        {
+            BuildColumns(_browser.Columns);
+        }
     }
 
     private void BuildColumns(IReadOnlyList<BrowserColumn> columns)
@@ -102,6 +116,9 @@ public partial class EntityBrowserView : UserControl
 
     private DataGridColumn BuildImageColumn(BrowserColumn column, int index)
     {
+        // Scale icons to the row height (minus padding) so they fill the configured row.
+        var iconSize = Math.Max(8, (_browser?.RowHeight ?? column.ImageSize) - 4);
+
         var imageColumn = new DataGridTemplateColumn
         {
             Header = column.Header,
@@ -111,13 +128,13 @@ public partial class EntityBrowserView : UserControl
             {
                 var image = new Image
                 {
-                    Width = column.ImageSize,
-                    Height = column.ImageSize,
+                    Width = iconSize,
+                    Height = iconSize,
                     Stretch = Avalonia.Media.Stretch.None,
                 };
 
                 var key = row?[index] as string ?? row?[index]?.ToString();
-                image.Source = IconCache.Resolve(key, column.ImageSize) as Bitmap;
+                image.Source = IconCache.Resolve(key, iconSize) as Bitmap;
                 return image;
             }),
         };
