@@ -1,16 +1,10 @@
-using App.Core.Abstractions;
 using App.Desktop.Infrastructure;
 
 namespace App.Desktop.Services;
 
-public sealed class CommandDispatcher(IClipboardService clipboard, ICommandHistoryService history, IAppSettingsHolder settings) : ICommandDispatcher
+public sealed class CommandDispatcher(IClipboardService clipboard, IAppSettingsHolder settings) : ICommandDispatcher
 {
-    public async Task DispatchAsync(string luaCommand)
-    {
-        var final = ApplyRunPrefix(luaCommand);
-        history.Add(final);                 // <-- the fix: record every dispatched command
-        await clipboard.SetTextAsync(final);
-    }
+    public Task DispatchAsync(string luaCommand) => clipboard.SetTextAsync(ApplyRunPrefix(luaCommand));
 
     private string ApplyRunPrefix(string command)
     {

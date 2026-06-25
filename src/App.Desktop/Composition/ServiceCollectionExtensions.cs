@@ -22,7 +22,6 @@ public static class ServiceCollectionExtensions
         s.AddSingleton<IAppSettingsService>(_ => new JsonAppSettingsService(settingsFile));
         s.AddSingleton<INameNormalizer, SearchNameNormalizer>();
         s.AddSingleton<IConnectionStringBuilderService, DefaultConnectionStringBuilderService>();
-        s.AddSingleton<ICommandHistoryService, CommandHistoryService>();
         s.AddSingleton<ILocalCacheService>(_ => new LocalCacheService(appDir));
         s.AddSingleton<DbConnectionFactory>();
         s.AddSingleton<IGameDataRepository, GameDataRepository>();
