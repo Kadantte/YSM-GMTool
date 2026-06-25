@@ -6,7 +6,6 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 
 namespace App.Desktop.Controls;
@@ -42,8 +41,6 @@ public partial class EntityBrowserView : UserControl
         get => GetValue(ActionsProperty);
         set => SetValue(ActionsProperty, value);
     }
-
-    private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {

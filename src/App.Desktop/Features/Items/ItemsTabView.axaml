@@ -1,0 +1,116 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:App.Desktop.Controls"
+             xmlns:items="clr-namespace:App.Desktop.Features.Items"
+             x:Class="App.Desktop.Features.Items.ItemsTabView"
+             x:Name="Root"
+             x:DataType="items:ItemsTabViewModel"
+             Background="{DynamicResource WindowBackground}">
+    <controls:EntityBrowserView DataContext="{Binding Browser}">
+        <controls:EntityBrowserView.Actions>
+            <TabControl DataContext="{Binding #Root.DataContext}">
+                <!-- Item -->
+                <TabItem Header="Item">
+                    <ScrollViewer>
+                        <StackPanel Spacing="10" Margin="0,8,0,0">
+                            <!-- Give / Insert -->
+                            <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
+                                    Background="{DynamicResource PanelBackground}" Padding="8" CornerRadius="3">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Give / Insert" FontWeight="SemiBold" />
+
+                                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                                          ColumnSpacing="8" RowSpacing="6">
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Item ID" VerticalAlignment="Center" />
+                                        <NumericUpDown Grid.Row="0" Grid.Column="1" Minimum="1" Maximum="1000000000"
+                                                       Increment="1" FormatString="0" Value="{Binding ItemId}" />
+
+                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" VerticalAlignment="Center" />
+                                        <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="True" Text="{Binding ItemName}" />
+
+                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Amount" VerticalAlignment="Center" />
+                                        <NumericUpDown Grid.Row="2" Grid.Column="1" Minimum="1" Maximum="99999"
+                                                       Increment="1" FormatString="0" Value="{Binding Amount}" />
+
+                                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Enhance" VerticalAlignment="Center" />
+                                        <NumericUpDown Grid.Row="3" Grid.Column="1" Minimum="0" Maximum="999"
+                                                       Increment="1" FormatString="0" Value="{Binding Enhance}" />
+
+                                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Level" VerticalAlignment="Center" />
+                                        <NumericUpDown Grid.Row="4" Grid.Column="1" Minimum="1" Maximum="999"
+                                                       Increment="1" FormatString="0" Value="{Binding Level}" />
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                        <CheckBox Grid.Column="0" Content="Statusflag" VerticalAlignment="Center"
+                                                  IsChecked="{Binding UseStatusFlag}" />
+                                        <NumericUpDown Grid.Column="1" Minimum="0" Maximum="999999" Increment="1"
+                                                       FormatString="0" Value="{Binding StatusFlagValue}"
+                                                       IsEnabled="{Binding UseStatusFlag}" />
+                                    </Grid>
+
+                                    <WrapPanel>
+                                        <Button Content="Add yourself" Margin="0,0,6,0" Command="{Binding AddYourself}" />
+                                        <Button Content="Give other player" Command="{Binding GiveOtherPlayer}" />
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Modify Equipped Item -->
+                            <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
+                                    Background="{DynamicResource PanelBackground}" Padding="8" CornerRadius="3">
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Modify Equipped Item" FontWeight="SemiBold" />
+
+                                    <TextBlock Text="Targeted Wear-Slot" />
+                                    <ComboBox HorizontalAlignment="Stretch"
+                                              ItemsSource="{Binding WearSlots}"
+                                              SelectedItem="{Binding WearSlot}" />
+
+                                    <StackPanel Orientation="Horizontal" Spacing="12">
+                                        <RadioButton GroupName="ItemsTarget" Content="Own"
+                                                     IsChecked="{Binding !ApplyToOther}" />
+                                        <RadioButton GroupName="ItemsTarget" Content="Other"
+                                                     IsChecked="{Binding ApplyToOther}" />
+                                    </StackPanel>
+
+                                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto"
+                                          ColumnSpacing="8" RowSpacing="6">
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Level" VerticalAlignment="Center" />
+                                        <NumericUpDown Grid.Row="0" Grid.Column="1" Minimum="1" Maximum="999"
+                                                       Increment="1" FormatString="0" Value="{Binding ModifyLevel}" />
+
+                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Enhance" VerticalAlignment="Center" />
+                                        <NumericUpDown Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="999"
+                                                       Increment="1" FormatString="0" Value="{Binding ModifyEnhance}" />
+
+                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Itemcode" VerticalAlignment="Center" />
+                                        <NumericUpDown Grid.Row="2" Grid.Column="1" Minimum="1" Maximum="1000000000"
+                                                       Increment="1" FormatString="0" Value="{Binding ModifyItemCode}" />
+                                    </Grid>
+
+                                    <WrapPanel>
+                                        <Button Content="Edit level" Margin="0,0,6,6" Command="{Binding EditLevel}" />
+                                        <Button Content="Edit Enhance" Margin="0,0,6,6" Command="{Binding EditEnhance}" />
+                                        <Button Content="Change appearance" Margin="0,0,6,6" Command="{Binding ChangeAppearance}" />
+                                        <Button Content="Change itemcode" Command="{Binding ChangeItemCode}" />
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- Disabled placeholders (parity, no feature loss) -->
+                <TabItem Header="Random Option" IsEnabled="False">
+                    <TextBlock Text="Coming soon." Margin="8"
+                               Foreground="{DynamicResource MutedForeground}" />
+                </TabItem>
+                <TabItem Header="Itemuseflag" IsEnabled="False">
+                    <TextBlock Text="Coming soon." Margin="8"
+                               Foreground="{DynamicResource MutedForeground}" />
+                </TabItem>
+            </TabControl>
+        </controls:EntityBrowserView.Actions>
+    </controls:EntityBrowserView>
+</UserControl>

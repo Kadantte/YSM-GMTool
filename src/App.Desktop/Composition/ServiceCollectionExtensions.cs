@@ -33,6 +33,7 @@ public static class ServiceCollectionExtensions
         s.AddSingleton<IAppSettingsHolder, AppSettingsHolder>();
         s.AddSingleton<IPlayerContext, PlayerContext>();
         s.AddSingleton<ICommandDispatcher, CommandDispatcher>();
+        s.AddSingleton<ConnectionStringResolver>();
 
         // Shell
         s.AddSingleton<Shell.MainWindow>();
