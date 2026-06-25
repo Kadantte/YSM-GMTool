@@ -1,6 +1,5 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:i="https://github.com/projektanker/icons.avalonia"
         xmlns:shell="clr-namespace:App.Desktop.Shell"
         xmlns:modules="clr-namespace:App.Desktop.Modules"
         x:Class="App.Desktop.Shell.MainWindow"
@@ -12,16 +11,13 @@
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource WindowBackground}"
         Foreground="{DynamicResource Foreground}">
-    <Grid ColumnDefinitions="*,310">
-        <TabControl Grid.Column="0"
-                    ItemsSource="{Binding Tabs}"
+    <DockPanel>
+        <shell:TopBarView DockPanel.Dock="Top" DataContext="{Binding TopBar}" />
+        <TabControl ItemsSource="{Binding Tabs}"
                     SelectedItem="{Binding SelectedTab}">
             <TabControl.ItemTemplate>
                 <DataTemplate x:DataType="modules:ITabModule">
-                    <StackPanel Orientation="Horizontal" Spacing="6">
-                        <i:Icon Value="{Binding IconKey}" />
-                        <TextBlock Text="{Binding Title}" VerticalAlignment="Center" />
-                    </StackPanel>
+                    <TextBlock Text="{Binding Title}" />
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
@@ -30,6 +26,5 @@
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
-        <shell:SidebarView Grid.Column="1" DataContext="{Binding Sidebar}" />
-    </Grid>
+    </DockPanel>
 </Window>

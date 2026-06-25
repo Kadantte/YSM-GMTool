@@ -38,7 +38,7 @@ public static class ServiceCollectionExtensions
         // Shell
         s.AddSingleton<Shell.MainWindow>();
         s.AddSingleton<Shell.ShellViewModel>();
-        s.AddSingleton<Shell.SidebarViewModel>();
+        s.AddSingleton<Shell.TopBarViewModel>();
 
         // Settings + About
         s.AddTransient<Features.Settings.SettingsViewModel>();

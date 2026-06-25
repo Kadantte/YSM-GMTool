@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive;
 using System.Threading.Tasks;
 using App.Core.Abstractions;
 using App.Core.Enums;
@@ -9,41 +8,30 @@ using App.Core.Models;
 using App.Desktop.Infrastructure;
 using App.Desktop.Modules;
 using App.Desktop.Services;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using ReactiveUI;
 using Serilog;
 
 namespace App.Desktop.Shell;
 
 /// <summary>
-/// Root view model for the shell window: the ordered tab list, the right sidebar, and the
-/// Settings/About commands. On construction it loads persisted settings, applies the
-/// <c>YSM_DB_*</c> environment overrides, seeds the settings holder, and configures the icon cache.
+/// Root view model for the shell window: the ordered tab list and the top command bar. On
+/// construction it loads persisted settings, applies the <c>YSM_DB_*</c> environment overrides,
+/// seeds the settings holder, and configures the icon cache.
 /// </summary>
 public sealed class ShellViewModel : ReactiveObject
 {
-    private readonly IDialogService _dialog;
     private ITabModule? _selectedTab;
 
     public ShellViewModel(
         IEnumerable<ITabModule> modules,
-        SidebarViewModel sidebar,
+        TopBarViewModel topBar,
         IAppSettingsService settingsService,
         IAppSettingsHolder settingsHolder,
-        IConnectionStringBuilderService connectionStringBuilder,
-        IDialogService dialog)
+        IConnectionStringBuilderService connectionStringBuilder)
     {
-        _dialog = dialog;
-        Sidebar = sidebar;
+        TopBar = topBar;
         Tabs = modules.OrderBy(m => m.Order).ToList();
         SelectedTab = Tabs.FirstOrDefault();
-
-        OpenSettings = ReactiveCommand.CreateFromTask(() => OpenWindowAsync("App.Desktop.Features.Settings.SettingsWindow"));
-        OpenAbout = ReactiveCommand.CreateFromTask(() => OpenWindowAsync("App.Desktop.Features.About.AboutWindow"));
-        OpenSettings.ThrownExceptions.Subscribe(ex => Log.Warning(ex, "Open settings failed."));
-        OpenAbout.ThrownExceptions.Subscribe(ex => Log.Warning(ex, "Open about failed."));
 
         InitializeSettings(settingsService, settingsHolder, connectionStringBuilder);
     }
@@ -56,11 +44,7 @@ public sealed class ShellViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _selectedTab, value);
     }
 
-    public SidebarViewModel Sidebar { get; }
-
-    public ReactiveCommand<Unit, Unit> OpenSettings { get; }
-
-    public ReactiveCommand<Unit, Unit> OpenAbout { get; }
+    public TopBarViewModel TopBar { get; }
 
     private void InitializeSettings(
         IAppSettingsService settingsService,
@@ -120,33 +104,6 @@ public sealed class ShellViewModel : ReactiveObject
             {
                 settings.Connection = parsed;
             }
-        }
-    }
-
-    /// <summary>
-    /// Opens a window resolved by full type name. The Settings/About windows are added in Phase 10;
-    /// resolving by name keeps the shell decoupled from those types. Until they exist, this is a no-op
-    /// surfaced to the user as an info dialog.
-    /// </summary>
-    private async Task OpenWindowAsync(string windowTypeName)
-    {
-        var windowType = Type.GetType(windowTypeName);
-        if (windowType is null)
-        {
-            await _dialog.ShowInfoAsync("GM Tool", "This window is not available yet.");
-            return;
-        }
-
-        var owner = (Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.MainWindow;
-        var window = (Window)(Program.Services.GetService(windowType) ?? Activator.CreateInstance(windowType)!);
-
-        if (owner is not null)
-        {
-            await window.ShowDialog(owner);
-        }
-        else
-        {
-            window.Show();
         }
     }
 }
