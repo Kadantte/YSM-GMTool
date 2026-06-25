@@ -1,0 +1,78 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:App.Desktop.Controls"
+             xmlns:warp="clr-namespace:App.Desktop.Features.Warp"
+             x:Class="App.Desktop.Features.Warp.WarpTabView"
+             x:Name="Root"
+             x:DataType="warp:WarpTabViewModel"
+             Background="{DynamicResource WindowBackground}">
+    <controls:EntityBrowserView DataContext="{Binding Browser}">
+        <controls:EntityBrowserView.Actions>
+            <ScrollViewer DataContext="{Binding #Root.DataContext}">
+                <StackPanel Spacing="10" Margin="0,8,0,0">
+                    <!-- Selected Warp -->
+                    <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
+                            Background="{DynamicResource PanelBackground}" Padding="8" CornerRadius="3">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Selected Warp" FontWeight="SemiBold" />
+
+                            <Grid ColumnDefinitions="Auto,*,Auto,*" ColumnSpacing="8">
+                                <TextBlock Grid.Column="0" Text="X" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Column="1" Minimum="-1000000" Maximum="1000000"
+                                               Increment="1" FormatString="0"
+                                               IsReadOnly="True" Value="{Binding SelectedX}" />
+
+                                <TextBlock Grid.Column="2" Text="Y" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Column="3" Minimum="-1000000" Maximum="1000000"
+                                               Increment="1" FormatString="0"
+                                               IsReadOnly="True" Value="{Binding SelectedY}" />
+                            </Grid>
+
+                            <Button Content="Warp" HorizontalAlignment="Stretch"
+                                    Command="{Binding Warp}" />
+
+                            <WrapPanel>
+                                <Button Content="Warp to you" Margin="0,0,6,0"
+                                        Command="{Binding WarpToYou}" />
+                                <Button Content="Warp to someone"
+                                        Command="{Binding WarpToSomeone}" />
+                            </WrapPanel>
+
+                            <Button Content="OpenWorldmap" HorizontalAlignment="Stretch"
+                                    IsEnabled="False" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Manage Warps -->
+                    <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
+                            Background="{DynamicResource PanelAltBackground}" Padding="8" CornerRadius="3">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Manage Warps" FontWeight="SemiBold" />
+
+                            <Grid ColumnDefinitions="Auto,*,Auto,*" ColumnSpacing="8">
+                                <TextBlock Grid.Column="0" Text="X" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Column="1" Minimum="-1000000" Maximum="1000000"
+                                               Increment="1" FormatString="0" Value="{Binding AddX}" />
+
+                                <TextBlock Grid.Column="2" Text="Y" VerticalAlignment="Center" />
+                                <NumericUpDown Grid.Column="3" Minimum="-1000000" Maximum="1000000"
+                                               Increment="1" FormatString="0" Value="{Binding AddY}" />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                                <TextBlock Grid.Column="0" Text="Loc" VerticalAlignment="Center" />
+                                <TextBox Grid.Column="1" Watermark="Location name"
+                                         Text="{Binding LocationName}" />
+                            </Grid>
+
+                            <WrapPanel>
+                                <Button Content="Add" Margin="0,0,6,0" Command="{Binding Add}" />
+                                <Button Content="Remove selected" Command="{Binding RemoveSelected}" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </controls:EntityBrowserView.Actions>
+    </controls:EntityBrowserView>
+</UserControl>
