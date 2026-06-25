@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:App.Desktop.Controls"
+             xmlns:pc="clr-namespace:App.Desktop.Features.Playerchecker"
+             x:Class="App.Desktop.Features.Playerchecker.PlayercheckerTabView"
+             x:Name="Root"
+             x:DataType="pc:PlayercheckerTabViewModel"
+             Background="{DynamicResource WindowBackground}">
+    <Grid RowDefinitions="2*,Auto,*">
+        <!-- Top: character browser + action buttons -->
+        <controls:EntityBrowserView Grid.Row="0" DataContext="{Binding Browser}">
+            <controls:EntityBrowserView.Actions>
+                <ScrollViewer DataContext="{Binding #Root.DataContext}">
+                    <StackPanel Spacing="10" Margin="0,8,0,0">
+                        <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
+                                Background="{DynamicResource PanelBackground}" Padding="8" CornerRadius="3">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Characters" FontWeight="SemiBold" />
+                                <Button Content="Load All Characters" HorizontalAlignment="Stretch"
+                                        Command="{Binding LoadAllCharacters}" />
+                                <Button Content="Load Online Characters" HorizontalAlignment="Stretch"
+                                        Command="{Binding LoadOnlineCharacters}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border BorderBrush="{DynamicResource Border}" BorderThickness="1"
+                                Background="{DynamicResource PanelAltBackground}" Padding="8" CornerRadius="3">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Selected Character" FontWeight="SemiBold" />
+                                <Button Content="Load inventory" HorizontalAlignment="Stretch"
+                                        Command="{Binding LoadInventory}" />
+                                <Button Content="Load WH" HorizontalAlignment="Stretch"
+                                        Command="{Binding LoadWarehouse}" />
+                                <Button Content="Open infos" HorizontalAlignment="Stretch"
+                                        Command="{Binding OpenInfos}" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </controls:EntityBrowserView.Actions>
+        </controls:EntityBrowserView>
+
+        <GridSplitter Grid.Row="1" Height="5" ResizeDirection="Rows"
+                      HorizontalAlignment="Stretch"
+                      Background="{DynamicResource Border}" />
+
+        <!-- Bottom: inventory / warehouse grid -->
+        <Grid Grid.Row="2" RowDefinitions="Auto,*" Margin="6,4,6,6">
+            <TextBlock Grid.Row="0"
+                       Text="{Binding InventoryTitle}"
+                       Foreground="{DynamicResource MutedForeground}"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,4" />
+            <DataGrid x:Name="InventoryGrid"
+                      Grid.Row="1"
+                      IsReadOnly="True"
+                      SelectionMode="Extended"
+                      CanUserSortColumns="True"
+                      CanUserReorderColumns="False"
+                      CanUserResizeColumns="True"
+                      AutoGenerateColumns="False"
+                      HeadersVisibility="Column"
+                      ItemsSource="{Binding Inventory}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Item ID" Binding="{Binding ItemId}" Width="90" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding ItemName}" Width="*" />
+                    <DataGridTextColumn Header="Count" Binding="{Binding Count}" Width="70" />
+                    <DataGridTextColumn Header="Level" Binding="{Binding Level}" Width="70" />
+                    <DataGridTextColumn Header="Enhance" Binding="{Binding Enhance}" Width="75" />
+                    <DataGridTextColumn Header="Wear" Binding="{Binding WearInfo}" Width="60" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</UserControl>
