@@ -1,4 +1,5 @@
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.IO;
 using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,9 +14,9 @@ using ReactiveUI;
 namespace App.Desktop.Features.Playerchecker;
 
 /// <summary>
-/// Playerchecker tab: live (never cached) character search with SQL-side filtering plus an
-/// inventory/warehouse grid. Ported from the WinForms <c>PlayerCheckerActionsControl</c> +
-/// <c>MainForm</c> playerchecker handlers.
+/// Playerchecker tab: live (never cached) character search with SQL-side filtering. The selected
+/// character's inventory / warehouse opens in a separate pop-out window (with optional item icons).
+/// Ported from the WinForms <c>PlayerCheckerActionsControl</c> + <c>MainForm</c> playerchecker handlers.
 /// </summary>
 public sealed class PlayercheckerTabViewModel : TabModuleViewModel
 {
@@ -24,6 +25,8 @@ public sealed class PlayercheckerTabViewModel : TabModuleViewModel
     private readonly IGameDataRepository _repo;
     private readonly ConnectionStringResolver _connection;
     private readonly IDialogService _dlg;
+    private readonly IAppSettingsHolder _settings;
+    private readonly IInventoryWindowService _inventoryWindow;
 
     private PlayerRecord? _selectedPlayer;
 
@@ -34,8 +37,6 @@ public sealed class PlayercheckerTabViewModel : TabModuleViewModel
     public override int Order => 10;
 
     public EntityBrowserViewModel<PlayerRecord> Browser { get; }
-
-    public ObservableCollection<InventoryItemRecord> Inventory { get; } = [];
 
     public ReactiveCommand<Unit, Unit> LoadAllCharacters { get; }
 
@@ -52,11 +53,14 @@ public sealed class PlayercheckerTabViewModel : TabModuleViewModel
         INameNormalizer norm,
         IAppSettingsHolder settings,
         ConnectionStringResolver connection,
-        IDialogService dlg)
+        IDialogService dlg,
+        IInventoryWindowService inventoryWindow)
     {
         _repo = repo;
         _connection = connection;
         _dlg = dlg;
+        _settings = settings;
+        _inventoryWindow = inventoryWindow;
 
         Browser = new EntityBrowserViewModel<PlayerRecord>(
             loadAllAsync: ct => _repo.GetPlayersAsync(connection.Provider, connection.Resolve(), connection.Tokens(), ct),
@@ -114,14 +118,6 @@ public sealed class PlayercheckerTabViewModel : TabModuleViewModel
         LoadWarehouse.ThrownExceptions.Subscribe(async ex => await _dlg.ShowErrorAsync("Failed to load warehouse.", ex.Message));
     }
 
-    private string _inventoryTitle = string.Empty;
-
-    public string InventoryTitle
-    {
-        get => _inventoryTitle;
-        set => this.RaiseAndSetIfChanged(ref _inventoryTitle, value);
-    }
-
     private async Task LoadAllCharactersAsync()
         => await Browser.LoadExternalAsync(
             ct => _repo.GetAllCharactersAsync(_connection.Provider, _connection.Resolve(), _connection.Tokens(), ct));
@@ -145,7 +141,7 @@ public sealed class PlayercheckerTabViewModel : TabModuleViewModel
             _connection.Tokens(),
             CancellationToken.None);
 
-        PopulateInventory(items, $"Inventory — {_selectedPlayer.PlayerName} ({items.Count} item(s))");
+        _inventoryWindow.Show($"Inventory — {_selectedPlayer.PlayerName} ({items.Count} item(s))", items, IconsEnabled());
     }
 
     private async Task LoadWarehouseAsync()
@@ -163,7 +159,7 @@ public sealed class PlayercheckerTabViewModel : TabModuleViewModel
             _connection.Tokens(),
             CancellationToken.None);
 
-        PopulateInventory(items, $"Warehouse — {_selectedPlayer.Account} ({items.Count} item(s))");
+        _inventoryWindow.Show($"Warehouse — {_selectedPlayer.Account} ({items.Count} item(s))", items, IconsEnabled());
     }
 
     private async Task OpenInfosAsync()
@@ -180,14 +176,8 @@ public sealed class PlayercheckerTabViewModel : TabModuleViewModel
             $"Name: {r.PlayerName}\nAccount: {r.Account}\nLevel: {r.Level}\nJob: {r.JobName}\nStatus: {r.OnlineStatus}");
     }
 
-    private void PopulateInventory(System.Collections.Generic.IReadOnlyList<InventoryItemRecord> items, string title)
-    {
-        Inventory.Clear();
-        foreach (var item in items)
-        {
-            Inventory.Add(item);
-        }
-
-        InventoryTitle = title;
-    }
+    private bool IconsEnabled()
+        => _settings.Current.EnableEntityIcons
+            && !string.IsNullOrWhiteSpace(_settings.Current.EntityIconsPath)
+            && Directory.Exists(_settings.Current.EntityIconsPath);
 }

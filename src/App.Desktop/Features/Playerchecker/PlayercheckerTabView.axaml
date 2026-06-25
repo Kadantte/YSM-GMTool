@@ -6,74 +6,37 @@
              x:Name="Root"
              x:DataType="pc:PlayercheckerTabViewModel"
              Background="{DynamicResource WindowBackground}">
-    <Grid RowDefinitions="2*,Auto,*">
-        <!-- Top: character browser + action buttons -->
-        <controls:EntityBrowserView Grid.Row="0" DataContext="{Binding Browser}">
-            <controls:EntityBrowserView.Actions>
-                <ScrollViewer DataContext="{Binding #Root.DataContext}">
-                    <StackPanel Spacing="8" Margin="0,8,0,0">
+    <controls:EntityBrowserView DataContext="{Binding Browser}">
+        <controls:EntityBrowserView.Actions>
+            <ScrollViewer DataContext="{Binding #Root.DataContext}">
+                <StackPanel Spacing="8" Margin="0,8,0,0">
 
-                        <!-- Characters -->
-                        <TextBlock Classes="sectionHeader" Text="Characters" />
-                        <Border Classes="sectionDivider" />
+                    <!-- Characters -->
+                    <TextBlock Classes="sectionHeader" Text="Characters" />
+                    <Border Classes="sectionDivider" />
 
-                        <WrapPanel>
-                            <Button Classes="primary" Content="Load All Characters" Margin="0,0,6,6"
-                                    Command="{Binding LoadAllCharacters}" />
-                            <Button Content="Load Online Characters" Margin="0,0,6,6"
-                                    Command="{Binding LoadOnlineCharacters}" />
-                        </WrapPanel>
+                    <WrapPanel>
+                        <Button Classes="primary" Content="Load All Characters" Margin="0,0,6,6"
+                                Command="{Binding LoadAllCharacters}" />
+                        <Button Content="Load Online Characters" Margin="0,0,6,6"
+                                Command="{Binding LoadOnlineCharacters}" />
+                    </WrapPanel>
 
-                        <!-- Selected Character -->
-                        <TextBlock Classes="sectionHeader" Text="Selected Character" Margin="0,8,0,4" />
-                        <Border Classes="sectionDivider" />
+                    <!-- Selected Character -->
+                    <TextBlock Classes="sectionHeader" Text="Selected Character" Margin="0,8,0,4" />
+                    <Border Classes="sectionDivider" />
 
-                        <WrapPanel>
-                            <Button Content="Load inventory" Margin="0,0,6,6"
-                                    Command="{Binding LoadInventory}" />
-                            <Button Content="Load WH" Margin="0,0,6,6"
-                                    Command="{Binding LoadWarehouse}" />
-                            <Button Content="Open infos" Margin="0,0,6,6"
-                                    Command="{Binding OpenInfos}" />
-                        </WrapPanel>
+                    <WrapPanel>
+                        <Button Content="Load inventory" Margin="0,0,6,6"
+                                Command="{Binding LoadInventory}" />
+                        <Button Content="Load WH" Margin="0,0,6,6"
+                                Command="{Binding LoadWarehouse}" />
+                        <Button Content="Open infos" Margin="0,0,6,6"
+                                Command="{Binding OpenInfos}" />
+                    </WrapPanel>
 
-                    </StackPanel>
-                </ScrollViewer>
-            </controls:EntityBrowserView.Actions>
-        </controls:EntityBrowserView>
-
-        <GridSplitter Grid.Row="1" Height="5" ResizeDirection="Rows"
-                      HorizontalAlignment="Stretch"
-                      Background="{DynamicResource Border}" />
-
-        <!-- Bottom: inventory / warehouse grid -->
-        <Grid Grid.Row="2" RowDefinitions="Auto,*" Margin="6,4,6,6">
-            <TextBlock Grid.Row="0"
-                       Classes="sectionHeader"
-                       Text="{Binding InventoryTitle}"
-                       Margin="0,0,0,4" />
-            <DataGrid x:Name="InventoryGrid"
-                      Grid.Row="1"
-                      IsReadOnly="True"
-                      SelectionMode="Extended"
-                      CanUserSortColumns="True"
-                      CanUserReorderColumns="False"
-                      CanUserResizeColumns="True"
-                      AutoGenerateColumns="False"
-                      HeadersVisibility="Column"
-                      FontSize="12"
-                      ScrollViewer.VerticalScrollBarVisibility="Visible"
-                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                      ItemsSource="{Binding Inventory}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Item ID" Binding="{Binding ItemId}" Width="Auto" MinWidth="90" />
-                    <DataGridTextColumn Header="Name" Binding="{Binding ItemName}" Width="*" MinWidth="160" />
-                    <DataGridTextColumn Header="Count" Binding="{Binding Count}" Width="Auto" MinWidth="80" />
-                    <DataGridTextColumn Header="Level" Binding="{Binding Level}" Width="Auto" MinWidth="75" />
-                    <DataGridTextColumn Header="Enhance" Binding="{Binding Enhance}" Width="Auto" MinWidth="95" />
-                    <DataGridTextColumn Header="Wear" Binding="{Binding WearInfo}" Width="Auto" MinWidth="80" />
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
-    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </controls:EntityBrowserView.Actions>
+    </controls:EntityBrowserView>
 </UserControl>

@@ -19,4 +19,6 @@ public sealed class InventoryItemRecord
     public int RandomOptionSid { get; init; }
 
     public int SummonCode { get; init; }
+
+    public string? IconFileName { get; init; }
 }

@@ -33,6 +33,7 @@ public static class ServiceCollectionExtensions
         s.AddSingleton<IPlayerContext, PlayerContext>();
         s.AddSingleton<ICommandDispatcher, CommandDispatcher>();
         s.AddSingleton<ConnectionStringResolver>();
+        s.AddSingleton<IInventoryWindowService, InventoryWindowService>();
 
         // Shell
         s.AddSingleton<Shell.MainWindow>();
