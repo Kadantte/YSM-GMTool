@@ -11,11 +11,6 @@ public sealed class GameDataRepository(IQueryStore queryStore, DbConnectionFacto
     private readonly IQueryStore _queryStore = queryStore;
     private readonly DbConnectionFactory _connectionFactory = connectionFactory;
 
-    static GameDataRepository()
-    {
-        DefaultTypeMap.MatchNamesWithUnderscores = true;
-    }
-
     public Task<IReadOnlyList<PlayerRecord>> GetPlayersAsync(
         DatabaseProvider provider,
         string connectionString,
