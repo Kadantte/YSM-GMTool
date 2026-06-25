@@ -1,0 +1,161 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:settings="clr-namespace:App.Desktop.Features.Settings"
+        x:Class="App.Desktop.Features.Settings.SettingsWindow"
+        x:DataType="settings:SettingsViewModel"
+        Title="Settings"
+        Width="640"
+        Height="640"
+        MinWidth="560"
+        MinHeight="540"
+        WindowStartupLocation="CenterOwner"
+        Icon="/Assets/Logo.ico"
+        Background="{DynamicResource WindowBackground}"
+        Foreground="{DynamicResource Foreground}">
+    <Grid Margin="14" RowDefinitions="*,Auto,Auto">
+        <TabControl Grid.Row="0">
+            <!-- Connection -->
+            <TabItem Header="Connection">
+                <ScrollViewer>
+                    <StackPanel Spacing="8" Margin="4,8,4,4">
+                        <Grid ColumnDefinitions="160,*" RowDefinitions="Auto" ColumnSpacing="8">
+                            <TextBlock Text="Provider" VerticalAlignment="Center" />
+                            <ComboBox Grid.Column="1" HorizontalAlignment="Stretch"
+                                      ItemsSource="{Binding Providers}"
+                                      SelectedItem="{Binding Provider}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="160,*" ColumnSpacing="8">
+                            <TextBlock Text="Server" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding Server}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="160,*" ColumnSpacing="8">
+                            <TextBlock Text="Port" VerticalAlignment="Center" />
+                            <NumericUpDown Grid.Column="1" Minimum="1" Maximum="65535"
+                                           Increment="1" FormatString="0" Value="{Binding Port}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="160,*" ColumnSpacing="8">
+                            <TextBlock Text="Database" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding Database}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="160,*" ColumnSpacing="8">
+                            <TextBlock Text="User ID" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding UserId}"
+                                     IsEnabled="{Binding SqlAuthEnabled}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="160,*" ColumnSpacing="8">
+                            <TextBlock Text="Password" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" PasswordChar="•" Text="{Binding Password}"
+                                     IsEnabled="{Binding SqlAuthEnabled}" />
+                        </Grid>
+                        <CheckBox Content="Integrated security"
+                                  IsChecked="{Binding IntegratedSecurity}"
+                                  IsEnabled="{Binding IsMsSql}" />
+                        <CheckBox Content="Encrypt"
+                                  IsChecked="{Binding Encrypt}"
+                                  IsEnabled="{Binding IsMsSql}" />
+                        <CheckBox Content="Trust server certificate"
+                                  IsChecked="{Binding TrustServerCertificate}"
+                                  IsEnabled="{Binding IsMsSql}" />
+                        <Grid ColumnDefinitions="160,*" ColumnSpacing="8">
+                            <TextBlock Text="Arcadia database" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding ArcadiaName}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="160,*" ColumnSpacing="8">
+                            <TextBlock Text="Telecaster database" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding TelecasterName}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="160,*" ColumnSpacing="8">
+                            <TextBlock Text="Auth database" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding AuthName}" />
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Table Names -->
+            <TabItem Header="Table Names">
+                <ScrollViewer>
+                    <StackPanel Spacing="8" Margin="4,8,4,4">
+                        <Grid ColumnDefinitions="180,*" ColumnSpacing="8">
+                            <TextBlock Text="Accounts table" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding AccountsName}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="180,*" ColumnSpacing="8">
+                            <TextBlock Text="Character resource" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding CharacterResource}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="180,*" ColumnSpacing="8">
+                            <TextBlock Text="Monster resource" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding MonsterResource}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="180,*" ColumnSpacing="8">
+                            <TextBlock Text="String resource" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding StringResource}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="180,*" ColumnSpacing="8">
+                            <TextBlock Text="Item resource" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding ItemResource}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="180,*" ColumnSpacing="8">
+                            <TextBlock Text="Skill resource" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding SkillResource}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="180,*" ColumnSpacing="8">
+                            <TextBlock Text="State resource" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding StateResource}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="180,*" ColumnSpacing="8">
+                            <TextBlock Text="NPC resource" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding NpcResource}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="180,*" ColumnSpacing="8">
+                            <TextBlock Text="Summon resource" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding SummonResource}" />
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- General -->
+            <TabItem Header="General">
+                <ScrollViewer>
+                    <StackPanel Spacing="10" Margin="4,8,4,4">
+                        <CheckBox Content="Limit Select queries (max 1000 rows)"
+                                  IsChecked="{Binding LimitSelectQueries}" />
+                        <CheckBox Content="Use local cache for entity browsers"
+                                  IsChecked="{Binding UseLocalCache}" />
+                        <CheckBox Content="Enable entity icons (Items, Skills, Buffs, Summons)"
+                                  IsChecked="{Binding EnableEntityIcons}" />
+                        <Grid ColumnDefinitions="120,*,Auto" ColumnSpacing="8">
+                            <TextBlock Text="Icons folder" VerticalAlignment="Center" />
+                            <TextBox Grid.Column="1" Text="{Binding EntityIconsPath}"
+                                     Watermark="Select icons directory..."
+                                     IsEnabled="{Binding EnableEntityIcons}" />
+                            <Button Grid.Column="2" Content="Browse..."
+                                    Command="{Binding Browse}"
+                                    IsEnabled="{Binding EnableEntityIcons}" />
+                        </Grid>
+                        <Button Content="Export to local cache"
+                                HorizontalAlignment="Left"
+                                Command="{Binding ExportCache}" />
+                        <TextBlock Text="{Binding CacheStatus}"
+                                   Foreground="{DynamicResource MutedForeground}"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <TextBlock Grid.Row="1"
+                   Text="{Binding Status}"
+                   Foreground="{DynamicResource MutedForeground}"
+                   TextWrapping="Wrap"
+                   Margin="2,10,2,8" />
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+            <Button Content="Test connection" Command="{Binding TestConnection}" />
+            <Button Content="Save" MinWidth="84" IsDefault="True" Command="{Binding Save}" />
+            <Button Content="Cancel" MinWidth="84" IsCancel="True" Command="{Binding Cancel}" />
+        </StackPanel>
+    </Grid>
+</Window>

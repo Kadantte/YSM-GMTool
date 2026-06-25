@@ -40,6 +40,11 @@ public static class ServiceCollectionExtensions
         s.AddSingleton<Shell.ShellViewModel>();
         s.AddSingleton<Shell.SidebarViewModel>();
 
+        // Settings + About
+        s.AddTransient<Features.Settings.SettingsViewModel>();
+        s.AddTransient<Features.Settings.SettingsWindow>();
+        s.AddTransient<Features.About.AboutWindow>();
+
         s.AddTabModules(typeof(ServiceCollectionExtensions).Assembly);
         return s;
     }
