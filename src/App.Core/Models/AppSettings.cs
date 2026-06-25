@@ -29,6 +29,8 @@ public sealed class AppSettings
 
     public List<WarpLocationSettings> WarpLocations { get; set; } = [];
 
+    public int RowHeight { get; set; } = 26;
+
     public AppSettings Clone() => new()
     {
         Provider = Provider,
@@ -42,6 +44,7 @@ public sealed class AppSettings
         UseLocalCache = UseLocalCache,
         EnableEntityIcons = EnableEntityIcons,
         EntityIconsPath = EntityIconsPath,
-        WarpLocations = WarpLocations is null ? [] : [.. WarpLocations.Select(static x => x.Clone())]
+        WarpLocations = WarpLocations is null ? [] : [.. WarpLocations.Select(static x => x.Clone())],
+        RowHeight = RowHeight
     };
 }
