@@ -1,6 +1,6 @@
 using App.Core.Enums;
 
-namespace App.Core.Interfaces;
+namespace App.Core.Abstractions;
 
 public interface IQueryStore
 {

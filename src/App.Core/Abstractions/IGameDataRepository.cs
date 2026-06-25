@@ -1,7 +1,7 @@
 using App.Core.Enums;
 using App.Core.Models.Entities;
 
-namespace App.Core.Interfaces;
+namespace App.Core.Abstractions;
 
 public interface IGameDataRepository
 {
