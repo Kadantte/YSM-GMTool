@@ -1,5 +1,7 @@
+using App.Core.Abstractions;
 using App.Desktop.Composition;
 using App.Desktop.Infrastructure;
+using App.Desktop.Services;
 using Avalonia;
 using Avalonia.ReactiveUI;
 using Dapper;
@@ -43,6 +45,19 @@ internal static class Program
         resolver.InitializeSplat();
         resolver.InitializeReactiveUI();
         Services = collection.BuildServiceProvider();
+
+        // Load + seed settings synchronously BEFORE any view model is constructed. The shell and tab
+        // VMs resolve when the main window is built (in App.OnFrameworkInitializationCompleted), so the
+        // settings holder and icon cache must already be populated; otherwise icon-state and row-height
+        // snapshots taken at VM construction would be wrong (see #3 icon/column misalignment).
+        var holder = Services.GetRequiredService<IAppSettingsHolder>();
+        var settingsService = Services.GetRequiredService<IAppSettingsService>();
+        var connectionStringBuilder = Services.GetRequiredService<IConnectionStringBuilderService>();
+        var settings = settingsService.LoadAsync().GetAwaiter().GetResult();
+        SettingsBootstrap.EnsureDefaults(settings);
+        SettingsBootstrap.ApplyEnvironmentDefaults(settings, connectionStringBuilder);
+        holder.Set(settings);
+        IconCache.Configure(settings.EnableEntityIcons, settings.EntityIconsPath);
 
         try
         {
