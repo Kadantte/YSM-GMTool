@@ -239,6 +239,15 @@ public sealed class SettingsViewModel : ReactiveObject
     private string _entityIconsPath = string.Empty;
     public string EntityIconsPath { get => _entityIconsPath; set => this.RaiseAndSetIfChanged(ref _entityIconsPath, value); }
 
+    private int _rowHeight = 26;
+
+    /// <summary>Data-grid row height (pixels), clamped 18–48.</summary>
+    public int RowHeight
+    {
+        get => _rowHeight;
+        set => this.RaiseAndSetIfChanged(ref _rowHeight, Math.Clamp(value, 18, 48));
+    }
+
     private string _cacheStatus = string.Empty;
     public string CacheStatus { get => _cacheStatus; set => this.RaiseAndSetIfChanged(ref _cacheStatus, value); }
 
@@ -286,6 +295,7 @@ public sealed class SettingsViewModel : ReactiveObject
         UseLocalCache = _working.UseLocalCache;
         EnableEntityIcons = _working.EnableEntityIcons;
         EntityIconsPath = _working.EntityIconsPath ?? string.Empty;
+        RowHeight = _working.RowHeight;
     }
 
     private void WriteToWorking()
@@ -317,6 +327,7 @@ public sealed class SettingsViewModel : ReactiveObject
         _working.UseLocalCache = UseLocalCache;
         _working.EnableEntityIcons = EnableEntityIcons;
         _working.EntityIconsPath = EntityIconsPath.Trim();
+        _working.RowHeight = RowHeight;
 
         _working.ConnectionString = _connectionStringBuilder.Build(_working.Provider, _working.Connection);
     }
