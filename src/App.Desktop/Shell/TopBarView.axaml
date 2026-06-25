@@ -28,7 +28,7 @@
             <!-- Manage players -->
             <Button Grid.Column="5" Width="30" Margin="6,0" VerticalAlignment="Center"
                     ToolTip.Tip="Manage players">
-                <i:Icon Value="fa-solid fa-user-plus" />
+                <i:Icon Value="fa-solid fa-user-plus" FontSize="16" Foreground="{DynamicResource IconColor}" />
                 <Button.Flyout>
                     <Flyout>
                         <StackPanel Width="220" Spacing="6">
@@ -52,10 +52,10 @@
             <!-- Settings / About -->
             <StackPanel Grid.Column="7" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
                 <Button Width="30" ToolTip.Tip="Settings" Command="{Binding OpenSettings}">
-                    <i:Icon Value="fa-solid fa-gear" />
+                    <i:Icon Value="fa-solid fa-gear" FontSize="16" Foreground="{DynamicResource IconColor}" />
                 </Button>
                 <Button Width="30" ToolTip.Tip="About" Command="{Binding OpenAbout}">
-                    <i:Icon Value="fa-solid fa-circle-info" />
+                    <i:Icon Value="fa-solid fa-circle-info" FontSize="16" Foreground="{DynamicResource IconColor}" />
                 </Button>
             </StackPanel>
         </Grid>
