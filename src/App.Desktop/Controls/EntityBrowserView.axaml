@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:CompileBindings="False"
+             x:Class="App.Desktop.Controls.EntityBrowserView">
+    <Grid ColumnDefinitions="*,Auto,Auto" Margin="6">
+        <!-- Left: data grid -->
+        <DataGrid x:Name="RecordsGrid"
+                  Grid.Column="0"
+                  IsReadOnly="True"
+                  SelectionMode="Extended"
+                  CanUserSortColumns="False"
+                  CanUserReorderColumns="False"
+                  CanUserResizeColumns="True"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="Column"
+                  MinWidth="320"
+                  ItemsSource="{Binding Rows}"
+                  SelectedItem="{Binding SelectedRow, Mode=TwoWay}" />
+
+        <GridSplitter x:Name="MainSplitter"
+                      Grid.Column="1"
+                      Width="5"
+                      ResizeDirection="Columns"
+                      Background="{DynamicResource Border}" />
+
+        <!-- Right: search + actions -->
+        <StackPanel Grid.Column="2"
+                    Width="360"
+                    MinWidth="360"
+                    Margin="8,0,0,0"
+                    Spacing="8">
+            <TextBox x:Name="SearchBox"
+                     Watermark="Search..."
+                     Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+            <RadioButton x:Name="ByIdRadio"
+                         GroupName="SearchMode"
+                         Content="{Binding ByIdLabel}"
+                         IsVisible="{Binding IdSearchEnabled}" />
+            <RadioButton x:Name="ByNameRadio"
+                         GroupName="SearchMode"
+                         Content="{Binding ByNameLabel}"
+                         IsChecked="True" />
+            <RadioButton x:Name="ByContactRadio"
+                         GroupName="SearchMode"
+                         Content="{Binding SecondaryLabel}"
+                         IsVisible="{Binding SecondarySearchEnabled}" />
+
+            <CheckBox x:Name="RealtimeCheck"
+                      Content="Realtime filtering"
+                      IsVisible="{Binding RealtimeVisible}"
+                      IsChecked="{Binding RealtimeEnabled, Mode=TwoWay}" />
+
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="Search" Command="{Binding Filter}" />
+                <Button x:Name="LoadAllButton"
+                        Content="Load All"
+                        Command="{Binding LoadAll}"
+                        IsVisible="{Binding LoadAllVisible}" />
+            </StackPanel>
+
+            <TextBlock Text="{Binding Status}"
+                       Foreground="{DynamicResource MutedForeground}"
+                       TextWrapping="Wrap" />
+
+            <ContentControl x:Name="ActionsHost" />
+        </StackPanel>
+    </Grid>
+</UserControl>
